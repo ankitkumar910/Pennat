@@ -1,8 +1,4 @@
-import {
-	createBrowserRouter,
-	createHashRouter,
-	RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -22,7 +18,7 @@ import InstallPWA from "./components/InstallPWA";
 
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
-	const router = createHashRouter([
+	const router = createBrowserRouter([
 		{
 			path: "/",
 			element: (
@@ -128,13 +124,16 @@ function App() {
 		<div
 			className={`${isDark ? "dark" : ""}
 		*:dark:bg-[#121212]
-		*:dark:text-[#E0E0E0]`}>
+		*:dark:text-[#E0E0E0]
+		
+		dark:bg-black
+		`}>
 			<Toaster position="top-center" />
 			<InstallPWA />
 
 			<dataContext.Provider value={[articlesData, setArticlesData]}>
 				<userContext.Provider value={[userInfo]}>
-					<themeContext.Provider value={setIsDark}>
+					<themeContext.Provider value={[isDark, setIsDark]}>
 						<RouterProvider router={router}></RouterProvider>
 					</themeContext.Provider>
 				</userContext.Provider>

@@ -8,7 +8,7 @@ import parse from "html-react-parser";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
-	console.log(article);
+	//console.log(article);
 
 	const [userInfo] = useContext(userContext);
 
@@ -19,12 +19,12 @@ function ArticleCard({ article }) {
 
 	async function handleDelete() {
 		if (article && article.id) {
-			console.log("calling supabase");
+			console.log("calling supabase for article delete🧧");
 			const supabaseRes = await supabase
 				.from("ArticleTable")
 				.delete()
 				.eq("id", article.id);
-			console.log(supabaseRes);
+			//console.log(supabaseRes);
 
 			if (supabaseRes.status == "204") {
 				setArticles((p) => {
@@ -35,7 +35,7 @@ function ArticleCard({ article }) {
 		}
 	}
 	return (
-		<div className=" h-fit w-[80vw] sm:w-[60vw]  my-2 rounded-md dark:border-[#1F1B24]  px-2 pt-1 pb-4  border border-gray-200 shadow-xs">
+		<div className=" h-fit   w-full sm:w-[60vw] py-4  dark:bg-[#141414] sm:border sm:mt-1 sm:rounded-sm dark:border-[#1F1B24]  px-2    border-b border-gray-50 ">
 			<div className="  flex justify-between mx-1">
 				<div className=" flex flex-row items-center ">
 					<img

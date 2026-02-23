@@ -23,7 +23,7 @@ function ArticlePage() {
 	}, [articlesData, navi]);
 
 	return (
-		<div>
+		<div className="mt-9">
 			{articlesData?.length && (
 				<div className="flex justify-center  flex-col items-center w-full box-border pb-8 
 				">

@@ -39,62 +39,75 @@ function ArticleWriter() {
 			console.log(data);
 			toast("Successfuly, Added.✅");
 
-			let writerForm = document.getElementById('writerForm');
+			let writerForm = document.getElementById("writerForm");
 			writerForm.reset();
-		
 		}
 	}
 	let navigate = useNavigate();
 	return (
 		<div
-			className="w-[86vw] 
-		sticky
-		top-80
-		mx-auto
-	
-		sm:w-[60vw]
-		
+			className="
+			w-screen
+			box-border
+			min-h-screen
+			flex
+			fixed
+			items-center
+			
+		z-600
 		">
-			<form onSubmit={handleSubmit} id="writerForm">
-				<div className="flex  justify-between ">
-					<div className="flex items-center">
-						<ArrowLeft
-							size={24}
-							className="hover:bg-gray-200 rounded-full p-1 hidden hover:cursor-pointer"
-							onClick={() => {
-								navigate("/home");
-							}}
-						/>
-						<div className="hidden">
-							<p className="text-xl px-2">Write article</p>
+			<div
+				id="article_Writer"
+				className="bg-transparent
+				rounded-sm
+			p-4  
+			h-2/6
+			w-[85%]
+			sticky
+			mb-98
+			border mx-auto
+			backdrop-blur-3xl">
+				<form onSubmit={handleSubmit} id="writerForm">
+					<div className="flex  justify-between ">
+						<div className="flex items-center">
+							<ArrowLeft
+								size={24}
+								className="hover:bg-gray-200 rounded-full p-1 hidden hover:cursor-pointer"
+								onClick={() => {
+									navigate("/home");
+								}}
+							/>
+							<div className="hidden">
+								<p className="text-xl px-2">Write article</p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className="overflow-y-auto my-1 box-border border border-gray-300 rounded-xl 	dark:border-[#1F1B24] shadow">
-					<div className="border-b 	dark:border-[#1F1B24] border-b-gray-100">
-						<input
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							type="text"
-							placeholder="What is title ?"
-							className=" p-2 pl-4  w-full text-lg outline-0 text-bold "
-							required={true}
-						/>
-					</div>
-					<Tiptap fun={fun} />
-				</div>
-				<div>
-					{Html && title?.length > 4 && (
-						<div
-							className="bg-blue-600 w-fit  px-4 py-2 text-white rounded-4xl border-0 absolute bottom-1 right-1 cursor-pointer"
-							onClick={handleSubmit}>
-							<button type="submit" className="cursor-pointer">
-								Publish
-							</button>
+					<div className="overflow-y-auto my-1 box-border  m-1 rounded-sm border-gray-300  	dark:border-[#1F1B24] ">
+						<div className="border-b 	dark:border-[#1F1B24]">
+							<input
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								type="text"
+								placeholder="What is title ?"
+								className=" p-2 pl-4  w-full text-lg outline-0 text-bold "
+								required={true}
+							/>
 						</div>
-					)}
-				</div>
-			</form>
+						<Tiptap fun={fun} />
+					</div>
+					<div>
+						{Html && title?.length > 4 && (
+							<div
+								className="bg-blue-600 w-fit  px-4 py-2 text-white rounded-4xl border-0 absolute bottom-1 right-1 cursor-pointer"
+								onClick={handleSubmit}>
+								<button type="submit" className="cursor-pointer">
+									Publish
+								</button>
+							</div>
+						)}
+					</div>
+				</form>
+			</div>
 		</div>
 	);
 }

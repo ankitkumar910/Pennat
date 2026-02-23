@@ -45,9 +45,9 @@ export default function InstallPWA() {
 
 	return (
 		<div
-			className="mt-60 fixed bottom-4 right-2 px-5 py-4 bg-black rounded-full border-0 shadow-2xl z-20 text-white hover:bg-gray-900 hover:cursor-pointer"
+			className="mt-60  fixed bottom-4 left-2 px-3 py-3 border rounded-full   shadow-2xl z-20 text-white hover:bg-gray-900 hover:cursor-pointer bg-black "
 			onClick={handleInstallClick}>
-			<span className="absolute -top-2 right-1 bg-white rounded-full">
+			<span className="absolute -top-2 right-0  bg-gray-700 rounded-full">
 				<X
 					size={16}
 					onClick={(e) => {
@@ -58,9 +58,9 @@ export default function InstallPWA() {
 				/>
 			</span>
 
-			<div className="flex  items-center">
+			<div className="flex  items-center  text-gray-300">
 				<ArrowDownToLine size={18} />
-				<span className="pl-2"> Install App</span>
+				<span className="pl-2 text-sm text-gray-500"> Install App</span>
 			</div>
 		</div>
 	);

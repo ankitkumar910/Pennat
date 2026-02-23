@@ -1,14 +1,20 @@
 import { Pen, Pencil, User } from "lucide-react";
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Switch } from "@/components/ui/switch";
+import { themeContext } from "../context/Context";
 
 function NavbarPage() {
 	const naviagtors = useNavigate();
+	const [isDark, setIsDark] = useContext(themeContext);
 
 	return (
-		<nav className="flex   w-full justify-between px-4 fixed 
-		dark:bg-[#121212]
-		top-0  z-2  py-2">
+		<nav
+			className="flex   w-full justify-between px-4 fixed 
+			backdrop-blur-sm
+			border-b
+		dark:bg-black
+		top-0  z-2  py-1">
 			<div>
 				<h1 className="font-bold text-3xl pl-2">Pennat</h1>
 			</div>
@@ -18,12 +24,9 @@ function NavbarPage() {
              justify-evenly  
              *:p-2
               *:px-3
-            [&>li:hover]:bg-slate-900
+          
              *:my-1
-              *:rounded-full
-
-             [&>li:hover]:text-white
-               [&>li:hover]:cursor-pointer">
+              *:rounded-full items-center [&>li:hover]:cursor-pointer">
 					{/* <li>
 							<label
 							className="flex flex-col sm:flex-row items-center text-xs sm:text-[1rem]"
@@ -37,6 +40,18 @@ function NavbarPage() {
 						</li> */}
 					{/* <li>For You</li> */}
 					{/* <li>Following</li> */}
+
+					<li className="">
+						<span
+							className="flex flex-col sm:flex-row items-center text-xs sm:text-[1rem]"
+							onClick={() => {
+								setIsDark((p) => !p);
+							}}>
+							{" "}
+							<Switch checked={isDark} className={"p-0 border"} />
+							<span className="mx-2 wrap-anywhere">Change Theme</span>
+						</span>
+					</li>
 					<li
 						onClick={() => {
 							naviagtors("/profile");

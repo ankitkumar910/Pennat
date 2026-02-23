@@ -1,41 +1,72 @@
 import NavbarPage from "./NavbarPage";
 import ArticlePage from "./ArticlePage";
 import AddArticle from "./AddArticle";
-import { Switch } from "@/components/ui/switch";
+
 
 import FieldInput from "./ui/FieldInput";
 import ArticleWriter from "./ArticleWriter";
-import { useContext } from "react";
-import { themeContext } from "../context/Context";
+import { useEffect, useState } from "react";
+
+import { FilePenLine } from "lucide-react";
 
 function Home() {
-	const setIsDark = useContext(themeContext);
+	
+	const [write, setWriter] = useState();
+
+	useEffect(() => {
+		const callB = (e) => {
+			let articleWriter = document.getElementById("article_Writer");
+			let articleButton = document.getElementById("article_Button");
+			let target = e.target;
+
+			e.stopPropagation();
+
+			if (articleButton?.contains(target)) {
+				//console.log("Clciked on Button");
+				setWriter(true);
+			}
+			if (write == true && !articleWriter?.contains(target)) {
+				//console.log("Clciked on writer");
+				setWriter(false);
+			}
+		};
+		document.addEventListener("click", callB);
+
+		return () => {
+			document.removeEventListener("click", callB);
+		};
+	}, [write]);
+
 	return (
-		<div className="w-full box-border h-fit  min-h-screen dark:bg-[#1F1B24]">
+		<div className="w-full  -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">
 			<NavbarPage />
 
 			<div
 				className="
-			mt-15 overflow-auto"
+			    mt-15 overflow-auto"
 				id="writer">
-				<ArticleWriter />
+				{write && <ArticleWriter />}
+				<div
+					hidden={write}
+					className="border-0 bg-black bottom-2 right-2 fixed justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-full my-2 py-1 
+					
+					mb-4 ">
+					<div
+						id="article_Button"
+						className="h-full w-full px-4 flex justify-between items-center py-3 outline-0"
+						placeholder="">
+						<FilePenLine color="white" />
+						<span className="p-1 text-white">Write Article</span>
+					</div>
+				</div>
 			</div>
 
 			<div className="box-border">
 				<ArticlePage />
 			</div>
-			<div className=" flex justify-end pr-4  items-center pb-4">
-				<div className="border flex items-center rounded-xl shadow-2xl p-2">
-					<div
-					   className="inline"
-						onClick={() => {
-							setIsDark((p) => !p);
-						}}>
-						<Switch />
-					</div>{" "}
-					<span className="pb-1 px-1">Dark Mode</span>
-				</div>
-			</div>
+
+
+		
 		</div>
 	);
 }
