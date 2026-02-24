@@ -1,77 +1,102 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import userDp from "../assets/user.png";
 import { dataContext, userContext } from "../context/Context";
-import { Ellipsis, Trash } from "lucide-react";
+import { Ellipsis, Trash2 } from "lucide-react";
 import supabase from "../config/supabaseClient";
 import { NavLink } from "react-router-dom";
 import parse from "html-react-parser";
 
 function ArticleCard({ article }) {
-	const { name, username, profile_img } = article.UserTable;
-	//console.log(article);
+    const { name, username, profile_img } = article.UserTable;
+    const [userInfo] = useContext(userContext);
+    const [, setArticles] = useContext(dataContext);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const [userInfo] = useContext(userContext);
+    let author_id = article?.author_id;
+    let user_id = userInfo?.user_id;
 
-	const [, setArticles] = useContext(dataContext);
+    async function handleDelete() {
+        if (article?.id) {
+            const { status } = await supabase
+                .from("ArticleTable")
+                .delete()
+                .eq("id", article.id);
 
-	let author_id = article?.author_id;
-	let user_id = userInfo?.user_id;
+            if (status === 204) {
+                setArticles((p) => p.filter((el) => el.id !== article.id));
+            }
+        }
+    }
 
-	async function handleDelete() {
-		if (article && article.id) {
-			console.log("calling supabase for article delete🧧");
-			const supabaseRes = await supabase
-				.from("ArticleTable")
-				.delete()
-				.eq("id", article.id);
-			//console.log(supabaseRes);
+    return (
+        <div className="w-full sm:w-[60vw] max-w-2xl mx-auto py-6 px-4 mb-4 bg-white dark:bg-[#141414] sm:border border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all hover:shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
+            
+            
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-3">
+                    <img
+                        src={profile_img || userDp}
+                        alt={name}
+                        className="size-10 rounded-full object-cover ring-1 ring-gray-100 dark:ring-gray-800"
+                    />
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-none">
+                            {name}
+                        </span>
+                        <NavLink 
+                            to={`/${username}`} 
+                            className="text-xs text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors mt-1"
+                        >
+                            @{username}
+                        </NavLink>
+                    </div>
+                </div>
 
-			if (supabaseRes.status == "204") {
-				setArticles((p) => {
-					console.log("updating");
-					return p.filter((el) => el.id != article.id);
-				});
-			}
-		}
-	}
-	return (
-		<div className=" h-fit   w-full sm:w-[60vw] py-4  dark:bg-[#141414] sm:border sm:mt-1 sm:rounded-sm dark:border-[#1F1B24]  px-2    border-b border-gray-50 ">
-			<div className="  flex justify-between mx-1">
-				<div className=" flex flex-row items-center ">
-					<img
-						src={profile_img || userDp}
-						alt="user-img"
-						className="size-9 mx-2 my-1 rounded-full"
-					/>
-					<div className="">
-						<p className="text-[12px]">{name}</p>
-						<p className="text-[10px] hover:bg-gray-500 rounded-full mx-0 hover:px-1 cursor-pointer">
-							<NavLink to={`/${username}`}>@{username}</NavLink>
-						</p>
-					</div>
-				</div>
+              
+                {user_id === author_id && (
+                    <div className="relative">
+                        <button 
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="p-1.5 rounded-full text-gray-400 hover:bg-gray-100 dark:hover:bg-[#252525] transition-colors cursor-pointer"
+                        >
+                            <Ellipsis size={20} />
+                        </button>
 
-				<div className="relative [&>ul]:hidden [&:hover>ul]:block cursor-pointer hidden">
-					<Ellipsis />
+                        {isMenuOpen && (
+                            <div className="absolute right-0 mt-2 w-36 bg-white dark:bg-[#1F1B24] border border-gray-200 dark:border-gray-800 rounded-lg shadow-xl z-10 py-1">
+                                <button
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                                    onClick={handleDelete}
+                                >
+                                    <Trash2 size={14} />
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
 
-					<ul className="bg-white  p-1 absolute rounded-md border-gray-500 ">
-						{user_id === author_id && (
-							<li
-								className="flex border items-center px-2 -mt-2 -ml-2 py-1 text-red-900 rounded-md hover:bg-red-400"
-								onClick={handleDelete}>
-								<Trash className="inline" size={"16px"} />
-								Delete
-							</li>
-						)}
-					</ul>
-				</div>
-			</div>
-			<div className="px-4 py-2 text-lg font-semibold my-0">
-				{article.title}
-			</div>
-			<div className="px-4">{parse(article.body)}</div>
-		</div>
-	);
+          
+            <div className="space-y-2">
+                <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-snug">
+                    {article.title}
+                </h2>
+                
+             
+                <div className="text-[15px] leading-relaxed text-gray-600 dark:text-gray-400 line-clamp-3 prose-p:m-0 prose-headings:text-lg">
+                    {parse(article.body)}
+                </div>
+            </div>
+
+            
+            {/* <div className="mt-4 flex items-center gap-4 text-xs text-gray-400">
+                <span>{new Date(article.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                <span className="flex items-center gap-1">•</span>
+                <span className="hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer">Read more</span>
+            </div> */}
+        </div>
+    );
 }
 
 export default ArticleCard;

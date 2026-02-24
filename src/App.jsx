@@ -3,7 +3,7 @@ import { Spinner } from "@/components/ui/spinner";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Home from "./components/Home";
-import ProfilePage from "./components/ProfilePage";
+
 import Auth from "./components/Auth";
 import { useEffect, useState } from "react";
 import supabase from "./config/supabaseClient";
@@ -76,7 +76,7 @@ function App() {
 			path: "/profile",
 			element: (
 				<>
-					<ProfilePage />
+					<Profile />
 				</>
 			),
 		},

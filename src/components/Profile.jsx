@@ -1,204 +1,199 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ChevronLeft, LoaderCircle, PencilIcon } from "lucide-react";
 import supabase from "../config/supabaseClient";
-import { cover_placeholder } from "../../public/resource";
+import { userContext } from "../context/Context";
 import userDp from "../assets/user.png";
-import {
-	ChevronLeft,
-	Circle,
-	ImageUp,
-	LoaderCircle,
-	PencilIcon,
-	WheatIcon,
-	X,
-} from "lucide-react";
-import ImageUpdater from "./ImageUpdater";
+import { cover_placeholder } from "../../public/resource";
 
+// Components
+import ImageUpdater from "./ImageUpdater";
 import ProfileImageUpdater from "./ProfileEditor";
 import UserProfilePosts from "./UserProfilePosts";
 import ProfileFooter from "./ProfileFooter";
 
 function Profile() {
-	const { username } = useParams();
+    // 1. Context and Params
+    const { username: urlUsername } = useParams();
+    const [currentUser] = useContext(userContext);
 
-	let [userInfo, setUserInfo] = useState();
+    // 2. Local State
+    const [profileData, setProfileData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [failed, setFailed] = useState(false);
+    
+    const [ImgEditor, setImgEditor] = useState(false);
+    const [popup, SetPopup] = useState(false);
+    
+    // UI States (Synced with profileData)
+    const [cover, setCover] = useState(cover_placeholder);
+    const [profileImg, setProfileImg] = useState(userDp);
+    const [about, setAbout] = useState("");
 
-	useEffect(() => {
-		async function loaddata() {
-			const res = await supabase
-				.from("UserTable")
-				.select("*,ArticleTable(*)")
-				.eq("username", username)
-				.single();
+    // 3. Logic: Decide which data to load
+    useEffect(() => {
+        async function fetchProfile() {
+            setLoading(true);
+            
+            // Scenario A: Viewing someone else's profile (or own profile via URL)
+            if (urlUsername) {
+                const res = await supabase
+                    .from("UserTable")
+                    .select("*, ArticleTable(*)")
+                    .eq("username", urlUsername)
+                    .single();
 
-			if (res.error) return;
+                if (res.error) {
+                    setFailed(true);
+                } else {
+                    setProfileData(res.data);
+                    setFailed(false);
+                }
+            } 
+            // Scenario B: Viewing own profile page (no username in URL)
+            else if (currentUser) {
+                setProfileData(currentUser);
+                setFailed(false);
+            }
+            
+            setLoading(false);
+        }
 
-			if (res.data) setUserInfo(res.data);
-		}
+        fetchProfile();
+    }, [urlUsername, currentUser]);
 
-		loaddata();
-	}, [setUserInfo, username]);
+    // 4. Update UI visuals when profileData changes
+    useEffect(() => {
+        if (profileData) {
+            setCover(profileData.cover_img || cover_placeholder);
+            setProfileImg(profileData.profile_img || userDp);
+            setAbout(profileData.about || "");
+        }
+    }, [profileData]);
 
-	const [ImgEditor, setImgEditor] = useState(false);
-	const [loaded, setLoaded] = useState(false);
-	const [failed, setFailed] = useState(false);
-	const [popup, SetPopup] = useState(false);
+    // 5. Permission Check: Is this the logged-in user's own profile?
+    const isOwnProfile = currentUser?.user_id === profileData?.user_id;
 
-	const [cover, setCover] = useState(cover_placeholder);
-	const [profileImg, setProfileImg] = useState(userDp);
-	const [about, setAbout] = useState("");
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center dark:bg-black">
+                <div className="flex items-center gap-2 text-gray-600">
+                    <LoaderCircle size={24} className="animate-spin" />
+                    <span>Loading profile...</span>
+                </div>
+            </div>
+        );
+    }
 
-	useEffect(() => {
-		function loader() {
-			if (userInfo !== null && userInfo !== undefined) {
-				setCover(userInfo.cover_img || cover_placeholder);
-				setProfileImg(userInfo.profile_img || userDp);
-				setAbout(userInfo.about || "");
-				setLoaded(true);
-				setFailed(false);
-			} else {
-				setLoaded(false);
-			}
-		}
+    if (failed || !profileData) {
+        return (
+            <div className="min-h-screen flex items-center justify-center dark:bg-black">
+                <div className="bg-orange-100 p-4 rounded-xl border border-orange-200 text-orange-700">
+                    User not found or something went wrong.
+                </div>
+            </div>
+        );
+    }
 
-		loader();
-	}, [userInfo]);
+    return (
+        <div className="relative dark:text-gray-400 dark:bg-black bg-white pb-1 box-border w-full min-h-screen">
+            
+            {/* Navigation & Edit Controls */}
+            <div className="absolute w-full z-10 p-4">
+                <div className="w-full flex justify-between items-center">
+                    <button
+                        onClick={() => window.history.back()}
+                        className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer"
+                    >
+                        <ChevronLeft />
+                    </button>
 
-	const name = userInfo?.name || "";
-	const user_name = userInfo?.username || "";
+                    {/* Only show Edit Pencil if it's the user's own profile */}
+                    {isOwnProfile && (
+                        <button 
+                            onClick={() => SetPopup(true)}
+                            className="p-3 rounded-full dark:bg-[#1F1B24] bg-gray-100 shadow-lg hover:-rotate-12 transition cursor-pointer"
+                        >
+                            <PencilIcon size={16} />
+                        </button>
+                    )}
+                </div>
+            </div>
 
-	if (!loaded && !failed) {
-		return (
-			<div className="min-h-screen 
-			dark:bg-[#1F1B24]
-			dark:*:text-gray-100
-			
-			flex items-center justify-center">
-				<div className="flex items-center gap-2 text-gray-600">
-					<LoaderCircle size={24} className="animate-spin" />
-					<span>Loading profile...</span>
-				</div>
-			</div>
-		);
-	}
+            {/* Cover Image */}
+            <div className="w-full overflow-hidden bg-gray-100 max-h-60 dark:bg-[#1F1B24] h-52 flex justify-center">
+                <img
+                    src={cover}
+                    alt="cover"
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
-	if (failed) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="bg-orange-200 w-fit p-4 rounded-xl border border-red-400 text-red-700">
-					Something went wrong loading the profile.
-				</div>
-			</div>
-		);
-	}
+            {/* Profile Info Section */}
+            <div className="-mt-20 max-w-xl mx-auto px-4 relative z-20">
+                <div className="flex flex-col items-center">
+                    <div className="relative group">
+                        <img
+                            src={profileImg}
+                            alt="profile"
+                            className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-[#1F1B24] shadow-xl object-cover"
+                        />
+                        {/* Edit Profile Image Button (Only for owner) */}
+                        {isOwnProfile && (
+                            <button 
+                                onClick={() => setImgEditor(true)}
+                                className="absolute bottom-1 right-1 p-2 bg-white dark:bg-[#1F1B24] rounded-full shadow-md border dark:border-gray-700 transition transform hover:scale-110 cursor-pointer"
+                            >
+                                <PencilIcon size={14} />
+                            </button>
+                        )}
+                    </div>
 
-	return (
-		<div className="min-h-screen py-60 w-full ">
-			<button
-				onClick={() => history.back()}
-				className="fixed top-5  z-10 cursor-pointer rounded-full bg-white dark:bg-[#1F1B24] backdrop-blur 
-               p-2 shadow hover:scale-105 transition">
-				<ChevronLeft  />
-			</button>
+                    <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {profileData.name}
+                    </h2>
+                    <p className="text-sm text-gray-500">@{profileData.username}</p>
+                    
+                    {about && (
+                        <div className="mt-4 text-center">
+                            <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">About</p>
+                            <p className="text-gray-700 dark:text-gray-400 leading-relaxed max-w-sm">
+                                {about}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
 
-			<button className="fixed right-2 top-4 dark:bg-[#1F1B24] bg-gray-200 z-20 rounded-4xl py-3 px-2 ">
-				<PencilIcon
-					height={"16px"}
-					onClick={() => {
-						SetPopup((p) => !p);
-					}}
-					className="hover:-rotate-8 cursor-pointer "
-				/>
-			</button>
+            {/* Modals */}
+            {popup && isOwnProfile && (
+                <ImageUpdater
+                    setCover={setCover}
+                    SetPopup={SetPopup}
+                    cover={cover}
+                    user_id={profileData.user_id}
+                />
+            )}
 
-			{cover && (
-				<div className="w-full overflow-x-hidden bg-gray-100 max-h-50 rounded-b-sm p-2 h-50 flex justify-center bg-cover overflow-clip">
-					{" "}
-					<img
-						src={cover}
-						className=" max-w-full w-fit  rounded-b-sm scale-200 sm:scale-300 md:scale-600 lg:scale-700 overflow-hidden "
-					/>
-				</div>
-			)}
+            {ImgEditor && isOwnProfile && (
+                <ProfileImageUpdater
+                    profileImg={profileImg}
+                    setProfileImg={setProfileImg}
+                    setImgEditor={setImgEditor}
+                    user_id={profileData?.user_id}
+                />
+            )}
 
-			<div className="-mt-24 max-w-xl mx-auto px-4">
-				<div className="bg-transparent rounded p-6">
-					<div className="flex relative [&>button]:hidden [&:hover>button]:block flex-col items-center">
-						{profileImg && (
-							<>
-								<button className="absolute ml-18 bg-white rounded-4xl py-1 px-1 dark:bg-[#1F1B24]">
-									<PencilIcon
-										height={"16px"}
-										onClick={() => {
-											setImgEditor((p) => !p);
-										}}
-										className="hover:-rotate-8 cursor-pointer"
-									/>
-								</button>
-								<img
-									src={profileImg}
-									alt="user"
-									className="w-32 h-32 rounded-full ring-4 ring-white shadow-md object-cover"
-								/>
-							</>
-						)}
+            {/* Posts Section */}
+            <div className="mt-8 border-t dark:border-gray-800">
+                {profileData.ArticleTable && (
+                    <UserProfilePosts ArticleTable={profileData.ArticleTable} />
+                )}
+            </div>
 
-						{name && (
-							<h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-gray-100">{name}</h2>
-						)}
-
-						{user_name && <p className="text-sm  text-gray-500">@{user_name}</p>}
-					</div>
-
-					<div className="space-y-0">
-						{/* {email && (
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Email
-                </p>
-                <p className="text-gray-800 mt-1 break-all">{email}</p>
-              </div>
-            )} */}
-
-						{about && (
-							<div>
-								<p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-									About me
-								</p>
-								<p className="text-gray-700 mt-1 leading-relaxed    rounded">
-									{about}
-								</p>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
-
-			{popup && userInfo && (
-				<ImageUpdater
-					setCover={setCover}
-					SetPopup={SetPopup}
-					cover={cover}
-					user_id={userInfo.user_id}
-				/>
-			)}
-
-			{ImgEditor && (
-				<ProfileImageUpdater
-					profileImg={profileImg}
-					setProfileImg={setProfileImg}
-					setImgEditor={setImgEditor}
-					user_id={userInfo?.user_id}
-				/>
-			)}
-
-			{userInfo?.ArticleTable && (
-				<UserProfilePosts ArticleTable={userInfo?.ArticleTable} />
-			)}
-
-			<ProfileFooter/>
-		</div>
-	);
+            <ProfileFooter />
+        </div>
+    );
 }
 
 export default Profile;
