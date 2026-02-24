@@ -45,10 +45,11 @@ function NavbarPage() {
 						<span
 							className="flex flex-col sm:flex-row items-center text-xs sm:text-[1rem]"
 							onClick={() => {
-								setIsDark((p) => !p);
+								setIsDark((p) => (p == "light" ? "dark" : "light"));
+								localStorage.setItem("theme", "dark");
 							}}>
 							{" "}
-							<Switch checked={isDark} className={"p-0 border"} />
+							<Switch checked={isDark == "dark"} className={"p-0 border"} />
 							<span className="mx-2 wrap-anywhere">Change Theme</span>
 						</span>
 					</li>

@@ -3,8 +3,11 @@ import { ArrowDownToLine, Download, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function InstallPWA() {
+	let pwa = localStorage.getItem("pwa");
 	const [deferredPrompt, setDeferredPrompt] = useState(null);
-	const [showInstallButton, setShowInstallButton] = useState(localStorage.getItem('showPWA'));
+	const [showInstallButton, setShowInstallButton] = useState(
+		JSON.parse(pwa.toLowerCase())
+	);
 
 	useEffect(() => {
 		const handler = (e) => {
@@ -12,6 +15,8 @@ export default function InstallPWA() {
 			e.preventDefault();
 			// Stash the event so it can be triggered later
 			setDeferredPrompt(e);
+
+			if (pwa == "false") return;
 			setShowInstallButton(true);
 		};
 
@@ -38,30 +43,35 @@ export default function InstallPWA() {
 		}
 
 		setDeferredPrompt(null);
-		setShowInstallButton(false);
+		//setShowInstallButton(false);
 	};
 
-	if (!showInstallButton) return null;
+	console.log("pwa", showInstallButton);
+	console.log("show?", showInstallButton == false);
 
 	return (
-		<div
-			className="mt-60  fixed bottom-4 left-2 px-3 py-3 border rounded-full   shadow-2xl z-20 text-white hover:bg-gray-900 hover:cursor-pointer bg-black "
-			onClick={handleInstallClick}>
-			<span className="absolute -top-2 right-0  bg-gray-700 rounded-full">
-				<X
-					size={16}
-					onClick={(e) => {
-						e.stopPropagation();
-						setShowInstallButton(false);
-						localStorage.setItem('showPWA',true);
-					}}
-				/>
-			</span>
+		<>
+			{showInstallButton && (
+				<div
+					className="mt-60  fixed bottom-4 left-2 px-3 py-3 border rounded-full   shadow-2xl z-20 text-white hover:bg-gray-900 hover:cursor-pointer bg-black "
+					onClick={handleInstallClick}>
+					<span className="absolute -top-2 right-0  bg-gray-700 rounded-full">
+						<X
+							size={16}
+							onClick={(e) => {
+								e.stopPropagation();
+								setShowInstallButton(false);
+								localStorage.setItem("pwa", false);
+							}}
+						/>
+					</span>
 
-			<div className="flex  items-center  text-gray-300">
-				<ArrowDownToLine size={18} />
-				<span className="pl-2 text-sm text-gray-500"> Install App</span>
-			</div>
-		</div>
+					<div className="flex  items-center  text-gray-300">
+						<ArrowDownToLine size={18} />
+						<span className="pl-2 text-sm text-gray-500"> Install App</span>
+					</div>
+				</div>
+			)}
+		</>
 	);
 }

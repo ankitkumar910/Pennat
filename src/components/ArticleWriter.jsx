@@ -1,115 +1,124 @@
 import React, { useContext, useState } from "react";
 import Tiptap from "./Tiptap";
-
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/Context";
 import supabase from "../config/supabaseClient";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
-function ArticleWriter() {
-	const [userInfo] = useContext(userContext);
-	const user_id = userInfo?.user_id;
-	const [Html, setHtml] = useState("");
-	const [title, setTitle] = useState();
-	function fun(html) {
-		setHtml(html);
-	}
+function ArticleWriter({setWriter}) {
+  const [userInfo] = useContext(userContext);
+  const user_id = userInfo?.user_id;
 
-	function formReset(e) {
-		console.log(e);
-	}
-	async function handleSubmit() {
-		event.preventDefault();
+  const [html, setHtml] = useState("");
+  const [title, setTitle] = useState("");
 
-		if (!title || !Html) return;
-		const res = await supabase
-			.from("ArticleTable")
-			.insert({
-				author_id: user_id,
-				title: title,
-				body: Html,
-			})
-			.select();
-		let error = res?.error;
-		let data = res?.data;
+  const navigate = useNavigate();
 
-		if (error) throw new Error(error);
-		if (data) {
-			console.log(data);
-			toast("Successfuly, Added.✅");
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-			let writerForm = document.getElementById("writerForm");
-			writerForm.reset();
-		}
-	}
-	let navigate = useNavigate();
-	return (
-		<div
-			className="
-			w-screen
-			box-border
-			min-h-screen
-			flex
-			fixed
-			items-center
-			
-		z-600
-		">
+    if (!title || !html) {
+      toast("Title and content required");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("ArticleTable")
+      .insert({
+        author_id: user_id,
+        title: title,
+        body: html,
+      })
+      .select();
+
+    if (error) {
+      console.error(error);
+      toast("Something went wrong ❌");
+      return;
+    }
+
+    if (data) {
+      toast("Successfully Added ✅");
+      setTitle("");
+      setHtml("");
+      navigate("/home");
+    }
+  }
+
+  return (
+    <div 
+	  id="modalForm"
+	onClick={(e)=>{
+		
+		let modalForm = document.getElementById('modalForm');
+		let target = e.target;
+
+		if(!modalForm.contains(target)) setWriter(false);
+
+	}}
+	
+	className="fixed
+	inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="relative w-[95%] max-w-4xl h-[90vh] bg-white dark:bg-[#0f1011] rounded-xl shadow-2xl flex flex-col">
+
+        <form
+		 
+          onSubmit={handleSubmit}
+          className="flex flex-col h-full"
+        >
+         
+          <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center gap-2">
+              <ArrowLeft
+                size={22}
+                className="cursor-pointer hover:bg-gray-200 rounded-full p-1"
+                onClick={() => navigate("/home")}
+              />
+              <p className="text-lg font-semibold">Write Article</p>
+            </div>
+
 			<div
-				id="article_Writer"
-				className="bg-transparent
-				rounded-sm
-			p-4  
-			h-2/6
-			w-[85%]
-			sticky
-			mb-98
-			border mx-auto
-			backdrop-blur-3xl">
-				<form onSubmit={handleSubmit} id="writerForm">
-					<div className="flex  justify-between ">
-						<div className="flex items-center">
-							<ArrowLeft
-								size={24}
-								className="hover:bg-gray-200 rounded-full p-1 hidden hover:cursor-pointer"
-								onClick={() => {
-									navigate("/home");
-								}}
-							/>
-							<div className="hidden">
-								<p className="text-xl px-2">Write article</p>
-							</div>
-						</div>
-					</div>
-					<div className="overflow-y-auto my-1 box-border  m-1 rounded-sm border-gray-300  	dark:border-[#1F1B24] ">
-						<div className="border-b 	dark:border-[#1F1B24]">
-							<input
-								value={title}
-								onChange={(e) => setTitle(e.target.value)}
-								type="text"
-								placeholder="What is title ?"
-								className=" p-2 pl-4  w-full text-lg outline-0 text-bold "
-								required={true}
-							/>
-						</div>
-						<Tiptap fun={fun} />
-					</div>
-					<div>
-						{Html && title?.length > 4 && (
-							<div
-								className="bg-blue-600 w-fit  px-4 py-2 text-white rounded-4xl border-0 absolute bottom-1 right-1 cursor-pointer"
-								onClick={handleSubmit}>
-								<button type="submit" className="cursor-pointer">
-									Publish
-								</button>
-							</div>
-						)}
-					</div>
-				</form>
+			
+			>
+				<X className="hover:cursor-pointer" onClick={()=>setWriter(false)}/>
 			</div>
-		</div>
-	);
+          </div>
+
+          
+          <div className="border-b">
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              placeholder="What is the title?"
+              className="w-full p-4 text-lg outline-none"
+              required
+            />
+          </div>
+
+         
+          <div className="flex-1 overflow-y-auto">
+            <Tiptap setHtml={setHtml} />
+          </div>
+
+       
+          <div className="p-4 border-t flex justify-end">
+            <button
+              type="submit"
+              disabled={!html || title.length < 4}
+              className="bg-blue-600 dark:bg-blue-900 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition disabled:bg-gray-100 
+			  hover:cursor-pointer
+			  hover:disabled:cursor-not-allowed"
+            >
+              Publish
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default ArticleWriter;

@@ -117,12 +117,23 @@ function App() {
 
 		return () => {};
 	}, [articlesData]);
+	// theme handle
+	let theme = localStorage.getItem("theme");
 
-	const [isDark, setIsDark] = useState(false);
+	if (theme == null) {
+		localStorage.setItem("theme", "light");
+	}
+	const [isDark, setIsDark] = useState(localStorage.getItem("theme"));
+
+	//check for pwa
+	let isPwa = localStorage.getItem("pwa");
+	if (isPwa == null) {
+		localStorage.setItem("pwa", true);
+	}
 
 	return (
 		<div
-			className={`${isDark ? "dark" : ""}
+			className={`${isDark == "dark" ? "dark" : ""}
 		*:dark:bg-[#121212]
 		*:dark:text-[#E0E0E0]
 		
