@@ -4,9 +4,9 @@ import { AlertTriangleIcon } from "lucide-react"
 export function AlertColors({errorMsg}) {
   
   return (
-    <Alert className="max-w-md ml-6 border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
-      <AlertTriangleIcon />
-      <AlertTitle>Error Code. {errorMsg.status} </AlertTitle>
+    <Alert className="w-full sm:w-[80%] md:w-[30%] border-red-950 absolute right-12 bottom-12 bg-red-700 text-white m-0">
+      <AlertTriangleIcon size={20} />
+      <AlertTitle className="text-gray-400 ">Error Code. {errorMsg.status} </AlertTitle>
       <AlertDescription>
   
    {errorMsg.message}

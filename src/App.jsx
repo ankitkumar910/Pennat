@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -15,6 +15,7 @@ import { Toaster } from "sonner";
 import Loader from "./components/Loader";
 import NavbarPage from "./components/NavbarPage";
 import InstallPWA from "./components/InstallPWA";
+import UserControl from "./components/UserControl";
 
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
@@ -80,10 +81,19 @@ function App() {
 				</>
 			),
 		},
+			{
+			path: "/control",
+			element: (
+				<>
+					<UserControl/>
+				</>
+			),
+		},
 	]);
 
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
+	
 
 	useEffect(() => {
 		async function loadUser() {
@@ -99,10 +109,12 @@ function App() {
 					.single();
 
 				if (!error && data) {
+					console.log("Got DAta")
 					setUserInfo(data);
-					console.log(data);
+					console.log(data.session);
 				}
 				if (error) {
+				
 					console.log(error);
 				}
 			}

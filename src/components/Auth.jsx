@@ -1,23 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { dataContext } from "../context/Context";
+import { dataContext, userContext } from "../context/Context";
 import { LoaderCircle } from "lucide-react";
 
 function Auth() {
 	const [loading, setLoading] = useState(true);
 	const navi = useNavigate();
+	const [info] = useContext(userContext);
 
 	const [, setArticlesData] = useContext(dataContext);
 
 	useEffect(() => {
 		async function loadUser() {
 			try {
-				console.log("Load User called.");
-				console.log("Connecting supabase for user data 💡");
 				let { data, error } = await supabase.auth.getSession();
 
+				localStorage.setItem("userTokenPennat", data?.session?.access_token);
+
 				if (error || !data?.session) {
+					console.log(data.session.access_token);
+					console.log("Running this statement");
 					setLoading(false);
 					navi("/login");
 					return null;
@@ -28,7 +31,7 @@ function Auth() {
 					.select(
 						"id,title,author_id,body,UserTable(name,username,profile_img,user_id)"
 					);
-				console.log("Connecting supabase for articles data 💡");
+
 				if (response.error) {
 					console.error("Database error:", response.error);
 					alert("Error loading articles");
@@ -53,6 +56,7 @@ function Auth() {
 		loadUser();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+	if (!info) navi("/login");
 	return (
 		<div className="max-w-screen min-h-screen  box-border overflow-x-hidden">
 			{loading && (

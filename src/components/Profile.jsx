@@ -1,6 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { ChevronLeft, LoaderCircle, PencilIcon } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+	ChevronLeft,
+	ChevronRight,
+	Ellipsis,
+	LoaderCircle,
+	LogOut,
+	MoveRight,
+	PencilIcon,
+} from "lucide-react";
 import supabase from "../config/supabaseClient";
 import { userContext } from "../context/Context";
 import userDp from "../assets/user.png";
@@ -11,189 +19,249 @@ import ImageUpdater from "./ImageUpdater";
 import ProfileImageUpdater from "./ProfileEditor";
 import UserProfilePosts from "./UserProfilePosts";
 import ProfileFooter from "./ProfileFooter";
+import { AlertDialogBasic } from "./ui/AlertDialogBasic";
+
 
 function Profile() {
-    // 1. Context and Params
-    const { username: urlUsername } = useParams();
-    const [currentUser] = useContext(userContext);
+	// 1. Context and Params
+	const { username: urlUsername } = useParams();
+	const navigate = useNavigate();
+	const [currentUser] = useContext(userContext);
 
-    // 2. Local State
-    const [profileData, setProfileData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [failed, setFailed] = useState(false);
-    
-    const [ImgEditor, setImgEditor] = useState(false);
-    const [popup, SetPopup] = useState(false);
-    
-    // UI States (Synced with profileData)
-    const [cover, setCover] = useState(cover_placeholder);
-    const [profileImg, setProfileImg] = useState(userDp);
-    const [about, setAbout] = useState("");
+	// 2. Local State
+	const [profileData, setProfileData] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [failed, setFailed] = useState(false);
 
-    // 3. Logic: Decide which data to load
-    useEffect(() => {
-        async function fetchProfile() {
-            setLoading(true);
-            
-            // Scenario A: Viewing someone else's profile (or own profile via URL)
-            if (urlUsername) {
-                const res = await supabase
-                    .from("UserTable")
-                    .select("*, ArticleTable(*)")
-                    .eq("username", urlUsername)
-                    .single();
+	const [ImgEditor, setImgEditor] = useState(false);
+	const [popup, SetPopup] = useState(false);
 
-                if (res.error) {
-                    setFailed(true);
-                } else {
-                    setProfileData(res.data);
-                    setFailed(false);
-                }
-            } 
-            // Scenario B: Viewing own profile page (no username in URL)
-            else if (currentUser) {
-                setProfileData(currentUser);
-                setFailed(false);
-            }
-            
-            setLoading(false);
-        }
+	// UI States (Synced with profileData)
+	const [cover, setCover] = useState(cover_placeholder);
+	const [profileImg, setProfileImg] = useState(userDp);
+	const [about, setAbout] = useState("");
 
-        fetchProfile();
-    }, [urlUsername, currentUser]);
+	// 3. Logic: Decide which data to load
 
-    // 4. Update UI visuals when profileData changes
-    useEffect(() => {
-        if (profileData) {
-            setCover(profileData.cover_img || cover_placeholder);
-            setProfileImg(profileData.profile_img || userDp);
-            setAbout(profileData.about || "");
-        }
-    }, [profileData]);
+	const [info] = useContext(userContext);
+	if (!info) navigate("/login");
+	useEffect(() => {
+		async function fetchProfile() {
+			setLoading(true);
 
-    // 5. Permission Check: Is this the logged-in user's own profile?
-    const isOwnProfile = currentUser?.user_id === profileData?.user_id;
+			// Scenario A: Viewing someone else's profile (or own profile via URL)
+			if (urlUsername) {
+				const res = await supabase
+					.from("UserTable")
+					.select("*, ArticleTable(*)")
+					.eq("username", urlUsername)
+					.single();
 
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center dark:bg-black">
-                <div className="flex items-center gap-2 text-gray-600">
-                    <LoaderCircle size={24} className="animate-spin" />
-                    <span>Loading profile...</span>
-                </div>
-            </div>
-        );
-    }
+				if (res.error) {
+					setFailed(true);
+				} else {
+					setProfileData(res.data);
+					setFailed(false);
+				}
+			}
+			// Scenario B: Viewing own profile page (no username in URL)
+			else if (currentUser) {
+				setProfileData(currentUser);
+				setFailed(false);
+			}
 
-    if (failed || !profileData) {
-        return (
-            <div className="min-h-screen flex items-center justify-center dark:bg-black">
-                <div className="bg-orange-100 p-4 rounded-xl border border-orange-200 text-orange-700">
-                    User not found or something went wrong.
-                </div>
-            </div>
-        );
-    }
+			setLoading(false);
+		}
 
-    return (
-        <div className="relative dark:text-gray-400 dark:bg-black bg-white pb-1 box-border w-full min-h-screen">
-            
-            {/* Navigation & Edit Controls */}
-            <div className="absolute w-full z-10 p-4">
-                <div className="w-full flex justify-between items-center">
-                    <button
-                        onClick={() => window.history.back()}
-                        className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer"
-                    >
-                        <ChevronLeft />
-                    </button>
+		fetchProfile();
+	}, [urlUsername, currentUser]);
 
-                    {/* Only show Edit Pencil if it's the user's own profile */}
-                    {isOwnProfile && (
-                        <button 
-                            onClick={() => SetPopup(true)}
-                            className="p-3 rounded-full dark:bg-[#1F1B24] bg-gray-100 shadow-lg hover:-rotate-12 transition cursor-pointer"
-                        >
-                            <PencilIcon size={16} />
-                        </button>
-                    )}
-                </div>
-            </div>
+	// 4. Update UI visuals when profileData changes
+	useEffect(() => {
+		function myFunction() {
+			if (profileData) {
+				setCover(profileData.cover_img || cover_placeholder);
+				setProfileImg(profileData.profile_img || userDp);
+				setAbout(profileData.about || "");
+			}
+		}
+		myFunction();
+	}, [profileData]);
 
-            {/* Cover Image */}
-            <div className="w-full overflow-hidden bg-gray-100 max-h-60 dark:bg-[#1F1B24] h-52 flex justify-center">
-                <img
-                    src={cover}
-                    alt="cover"
-                    className="w-full h-full object-cover"
-                />
-            </div>
+	// 5. Permission Check: Is this the logged-in user's own profile?
+	const isOwnProfile = currentUser?.user_id === profileData?.user_id;
 
-            {/* Profile Info Section */}
-            <div className="-mt-20 max-w-xl mx-auto px-4 relative z-20">
-                <div className="flex flex-col items-center">
-                    <div className="relative group">
-                        <img
-                            src={profileImg}
-                            alt="profile"
-                            className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-[#1F1B24] shadow-xl object-cover"
-                        />
-                        {/* Edit Profile Image Button (Only for owner) */}
-                        {isOwnProfile && (
-                            <button 
-                                onClick={() => setImgEditor(true)}
-                                className="absolute bottom-1 right-1 p-2 bg-white dark:bg-[#1F1B24] rounded-full shadow-md border dark:border-gray-700 transition transform hover:scale-110 cursor-pointer"
-                            >
-                                <PencilIcon size={14} />
-                            </button>
-                        )}
-                    </div>
+	if (loading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center dark:bg-black">
+				<div className="flex items-center gap-2 text-gray-600">
+					<LoaderCircle size={24} className="animate-spin" />
+					<span>Loading profile...</span>
+				</div>
+			</div>
+		);
+	}
 
-                    <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {profileData.name}
-                    </h2>
-                    <p className="text-sm text-gray-500">@{profileData.username}</p>
-                    
-                    {about && (
-                        <div className="mt-4 text-center">
-                            <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">About</p>
-                            <p className="text-gray-700 dark:text-gray-400 leading-relaxed max-w-sm">
-                                {about}
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </div>
+	if (failed || !profileData) {
+		return (
+			<div className="min-h-screen flex items-center justify-center dark:bg-black">
+				<div className="bg-orange-100 p-4 rounded-xl border border-orange-200 text-orange-700">
+					User not found or something went wrong.
+				</div>
+			</div>
+		);
+	}
 
-            {/* Modals */}
-            {popup && isOwnProfile && (
-                <ImageUpdater
-                    setCover={setCover}
-                    SetPopup={SetPopup}
-                    cover={cover}
-                    user_id={profileData.user_id}
-                />
-            )}
+	async function handleLogOut() {
+		const res = await supabase.auth.signOut();
+		if (res.error) {
+			alert(`Can't LogOut.
+        Error : ${res.error.message}`);
+			return null;
+		}
 
-            {ImgEditor && isOwnProfile && (
-                <ProfileImageUpdater
-                    profileImg={profileImg}
-                    setProfileImg={setProfileImg}
-                    setImgEditor={setImgEditor}
-                    user_id={profileData?.user_id}
-                />
-            )}
+		navigate("/login");
+	}
+	return (
+		<div className="relative dark:text-gray-400 dark:bg-black bg-white pb-1 box-border w-full min-h-screen">
+			{/* Navigation & Edit Controls */}
+			<div className="absolute w-full z-10 p-4">
+				<div className="w-full flex justify-between items-center">
+					<button
+						onClick={() => window.history.back()}
+						className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer">
+						<ChevronLeft />
+					</button>
 
-            {/* Posts Section */}
-            <div className="mt-8 border-t dark:border-gray-800">
-                {profileData.ArticleTable && (
-                    <UserProfilePosts ArticleTable={profileData.ArticleTable} />
-                )}
-            </div>
+					{/* Only show Edit Pencil if it's the user's own profile */}
+					{isOwnProfile && (
+						<div
+							className="hover:*:block
+                        
+                        active:*:block
+                        p-2 relative dark:bg-[#000000] hover:dark:bg-[#2d2d2d] flex justify-end rounded-full">
+							{" "}
+							<Ellipsis size={24} className=" text-white" />
+							<ul
+								className="absolute right-10  w-fit min-w-[20vw]   sm:min-w-[10vw]  rounded-md dark:bg-[#1F1B24] bg-gray-100 shadow-lg transition cursor-pointer
+                            hidden
 
-            <ProfileFooter />
-        </div>
-    );
+p-1
+                            *:hover:border
+                            *:rounded-md
+                            *:hover:bg-gray-600
+                            ">
+								<li>
+									<button
+										className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
+										onClick={() => SetPopup(true)}>
+										<PencilIcon
+											size={14}
+											className="hover:-rotate-12 mx-1 mr-5"
+										/>{" "}
+										Edit
+									</button>
+								</li>
+
+								<li>
+									<button className="p-1 w-full px-4 whitespace-nowrap flex items-center   transition cursor-pointer hover:bg-red-800 rounded-md">
+										<LogOut size={14} className="mx-1" />
+										<AlertDialogBasic
+											className={` w-full`}
+											titleText={`Log Out  `}
+											handleLogOut={handleLogOut}
+										/>
+									</button>
+								</li>
+
+								<li>
+									<button
+										className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
+										onClick={() => navigate("/control")}>
+										<ChevronRight
+											size={14}
+											className="hover:-rotate-12 mx-1 mr-5"
+										/>{" "}
+										More
+									</button>
+								</li>
+							</ul>
+						</div>
+					)}
+				</div>
+			</div>
+
+			{/* Cover Image */}
+			<div className="w-full overflow-hidden bg-gray-100 max-h-60 dark:bg-[#1F1B24] h-52 flex justify-center">
+				<img src={cover} alt="cover" className="w-full h-full object-cover" />
+			</div>
+
+			{/* Profile Info Section */}
+			<div className="-mt-20 max-w-xl mx-auto px-4 relative z-20">
+				<div className="flex flex-col items-center">
+					<div className="relative group">
+						<img
+							src={profileImg}
+							alt="profile"
+							className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-[#1F1B24] shadow-xl object-cover"
+						/>
+						{/* Edit Profile Image Button (Only for owner) */}
+						{isOwnProfile && (
+							<button
+								onClick={() => setImgEditor(true)}
+								className="absolute bottom-1 right-1 p-2 bg-white dark:bg-[#1F1B24] rounded-full shadow-md border dark:border-gray-700 transition transform hover:scale-110 cursor-pointer">
+								<PencilIcon size={14} />
+							</button>
+						)}
+					</div>
+
+					<h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
+						{profileData.name}
+					</h2>
+					<p className="text-sm text-gray-500">@{profileData.username}</p>
+
+					{about && (
+						<div className="mt-4 text-center">
+							<p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">
+								About
+							</p>
+							<p className="text-gray-700 dark:text-gray-400 leading-relaxed max-w-sm">
+								{about}
+							</p>
+						</div>
+					)}
+				</div>
+			</div>
+
+			{/* Modals */}
+			{popup && isOwnProfile && (
+				<ImageUpdater
+					setCover={setCover}
+					SetPopup={SetPopup}
+					cover={cover}
+					user_id={profileData.user_id}
+				/>
+			)}
+
+			{ImgEditor && isOwnProfile && (
+				<ProfileImageUpdater
+					profileImg={profileImg}
+					setProfileImg={setProfileImg}
+					setImgEditor={setImgEditor}
+					user_id={profileData?.user_id}
+				/>
+			)}
+
+			{/* Posts Section */}
+			<div className="mt-8 border-t dark:border-gray-800">
+				{profileData.ArticleTable && (
+					<UserProfilePosts ArticleTable={profileData.ArticleTable} />
+				)}
+			</div>
+
+			<ProfileFooter />
+		</div>
+	);
 }
 
 export default Profile;
