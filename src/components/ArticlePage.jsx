@@ -1,23 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext} from "react";
 import ArticleCard from "./ArticleCard";
-import { useNavigate } from "react-router-dom";
+
 import { dataContext } from "../context/Context";
 import { LoaderCircle } from "lucide-react";
 
 function ArticlePage() {
 	const [articlesData] = useContext(dataContext);
 
-	let navi = useNavigate();
 
-	useEffect(() => {
-		setTimeout(() => {
-			if (!articlesData.length) {
-				console.log("articles data is empty.");
-				navi("/auth");
-				return;
-			}
-		}, 500);
-	}, [articlesData, navi]);
 
 	return (
 		<div className="mt-9">
