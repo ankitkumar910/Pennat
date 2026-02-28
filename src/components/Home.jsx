@@ -4,22 +4,24 @@ import AddArticle from "./AddArticle";
 
 import FieldInput from "./ui/FieldInput";
 import ArticleWriter from "./ArticleWriter";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { FilePenLine, LogIn, PenLine } from "lucide-react";
 import { userContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
-import Login from "./Login";
 
 function Home() {
 	const [write, setWriter] = useState(false);
-	const [info] = useContext(userContext);
+	const info = useContext(userContext);
 	const navi = useNavigate();
-	if (!info){
-		 navi("/login",true);
-		
-		 return <Login/>
-	}
+
+	useEffect(() => {
+		if (!info) {
+			navi("/login", { replace: true });
+		}
+	}, [info, navi]);
+
+	if (!info) return null;
 
 	return (
 		<div className="w-full overflow-x-clip  -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">

@@ -19,7 +19,7 @@ export function AlertDialogBasic({ titleText, handleLogOut }) {
 	return (
 		<AlertDialog >
 			<AlertDialogTrigger asChild>
-				<Button variant="gost"> <span className="pr-2"> {titleText ? titleText : "Show Dialog"}</span></Button>
+				<Button variant="gost"> <span className=""> {titleText ? titleText : "Show Dialog"}</span></Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent className={`${theme} bg-background text-foreground `}>
 				<AlertDialogHeader>

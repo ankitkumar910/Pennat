@@ -9,14 +9,14 @@ function ButtonDestructive({ text }) {
 
 function UserControl() {
 	return (
-		<div className="min-h-screen py-2 px-2">
+		<div className="min-h-screen py-2 px-2 ">
 			<div>
 				<label htmlFor="">
-					<p className="text-lg"> Account Deleteion </p>
+					<p className="text-lg font-semibold"> Account Deleteion </p>
 					<hr className="py-2" />
 					<p className="text-sm text-gray-400">
-						Delete your account will erase your data and articles and it is can
-						not be undone.
+						Deleting your account will erase your entire data permanently and this is can
+						not be recover later.
 					</p>
 					<br />
 					<AlertDialogDestructive />

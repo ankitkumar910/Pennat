@@ -44,7 +44,7 @@ function ArticleCard({ article }) {
                             {name}
                         </span>
                         <NavLink 
-                            to={`/${username}`} 
+                            to={`/profile/${username}`} 
                             className="text-xs text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors mt-1"
                         >
                             @{username}

@@ -5,33 +5,27 @@ import { dataContext, userContext } from "../context/Context";
 import { LoaderCircle } from "lucide-react";
 
 function Auth() {
-	const [loading, setLoading] = useState(true);
 	const navi = useNavigate();
-	const [info] = useContext(userContext);
 
 	const [, setArticlesData] = useContext(dataContext);
+	const [userInfo, isLoading] = useContext(userContext);
+	const [loading, setLoading] = useState(isLoading);
 
 	useEffect(() => {
 		async function loadUser() {
+			if (isLoading) return;
+
 			try {
-				let { data, error } = await supabase.auth.getSession();
-
-				localStorage.setItem("userTokenPennat", data?.session?.access_token);
-
-				if (error || !data?.session) {
-					console.log(data.session.access_token);
-					console.log("Running this statement");
+				if (!userInfo) {
 					setLoading(false);
 					navi("/login");
 					return null;
 				}
-
 				const response = await supabase
 					.from("ArticleTable")
 					.select(
 						"id,title,author_id,body,UserTable(name,username,profile_img,user_id)"
 					);
-
 				if (response.error) {
 					console.error("Database error:", response.error);
 					alert("Error loading articles");
@@ -39,7 +33,6 @@ function Auth() {
 					setLoading(false);
 					return null;
 				}
-
 				if (response.data) {
 					setArticlesData(response.data);
 					navi("/home", { replace: true });
@@ -54,9 +47,7 @@ function Auth() {
 			return null;
 		}
 		loadUser();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-	if (!info) navi("/login");
+	}, [navi, userInfo, setArticlesData, isLoading]);
 	return (
 		<div className="max-w-screen min-h-screen  box-border overflow-x-hidden">
 			{loading && (
@@ -78,7 +69,7 @@ function Auth() {
 				</div>
 			)}
 
-			{!loading && (
+			{loading && (
 				<div className="bg-orange-200 w-fit m-auto p-4 rounded-xl border border-red-400 text-red-700">
 					something went wrong.
 				</div>

@@ -21,7 +21,6 @@ import UserProfilePosts from "./UserProfilePosts";
 import ProfileFooter from "./ProfileFooter";
 import { AlertDialogBasic } from "./ui/AlertDialogBasic";
 
-
 function Profile() {
 	// 1. Context and Params
 	const { username: urlUsername } = useParams();
@@ -40,6 +39,7 @@ function Profile() {
 	const [cover, setCover] = useState(cover_placeholder);
 	const [profileImg, setProfileImg] = useState(userDp);
 	const [about, setAbout] = useState("");
+	const [control, setControl] = useState(false);
 
 	// 3. Logic: Decide which data to load
 
@@ -128,7 +128,7 @@ function Profile() {
 			<div className="absolute w-full z-10 p-4">
 				<div className="w-full flex justify-between items-center">
 					<button
-						onClick={() => window.history.back()}
+						onClick={() => navigate("/home", true)}
 						className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer">
 						<ChevronLeft />
 					</button>
@@ -136,17 +136,16 @@ function Profile() {
 					{/* Only show Edit Pencil if it's the user's own profile */}
 					{isOwnProfile && (
 						<div
-							className="hover:*:block
-                        
-                        active:*:block
-                        p-2 relative dark:bg-[#000000] hover:dark:bg-[#2d2d2d] flex justify-end rounded-full">
+						
+							onClick={() => {
+								setControl((p) => !p);
+							}}
+							className={`p-2  relative text-foreground dark:bg-[#000000]  flex justify-end rounded-full ${control && 'bg-background text-foreground'}`}>
 							{" "}
-							<Ellipsis size={24} className=" text-white" />
+							<Ellipsis size={24}  className={!control && 'text-amber-50'}/>
 							<ul
-								className="absolute right-10  w-fit min-w-[20vw]   sm:min-w-[10vw]  rounded-md dark:bg-[#1F1B24] bg-gray-100 shadow-lg transition cursor-pointer
-                            hidden
-
-p-1
+								hidden={!control}
+								className="absolute right-10  w-fit min-w-[20vw]   sm:min-w-[10vw]  rounded-md dark:bg-[#1F1B24] bg-gray-100 shadow-lg transition cursor-pointer p-1
                             *:hover:border
                             *:rounded-md
                             *:hover:bg-gray-600
@@ -164,14 +163,14 @@ p-1
 								</li>
 
 								<li>
-									<button className="p-1 w-full px-4 whitespace-nowrap flex items-center   transition cursor-pointer hover:bg-red-800 rounded-md">
+									<div className="p-1 w-full px-4 whitespace-nowrap flex items-center   transition cursor-pointer hover:bg-red-800 rounded-md">
 										<LogOut size={14} className="mx-1" />
 										<AlertDialogBasic
-											className={` w-full`}
+											className={`px-0`}
 											titleText={`Log Out  `}
 											handleLogOut={handleLogOut}
 										/>
-									</button>
+									</div>
 								</li>
 
 								<li>

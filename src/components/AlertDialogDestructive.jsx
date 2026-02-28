@@ -69,7 +69,7 @@ export function AlertDialogDestructive() {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button variant="destructive" className="bg-background cursor-pointer">
+				<Button variant="destructive" className="cursor-pointer text-sm">
 					<div>Delete your account</div>
 				</Button>
 			</AlertDialogTrigger>

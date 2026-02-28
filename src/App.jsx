@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -16,90 +16,92 @@ import Loader from "./components/Loader";
 import NavbarPage from "./components/NavbarPage";
 import InstallPWA from "./components/InstallPWA";
 import UserControl from "./components/UserControl";
+import { LoaderCircle } from "lucide-react";
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: (
+			<>
+				<Auth />
+			</>
+		),
+	},
+	{
+		path: "/write",
+		element: (
+			<>
+				<ArticleWriter />
+			</>
+		),
+		errorElement: <h2>Error Occurred.🙂</h2>,
+	},
+	{
+		path: "/profile/:username",
+		element: <Profile />,
+	},
+	{
+		path: "/auth",
+		element: (
+			<>
+				<Auth />
+			</>
+		),
+	},
+	{
+		path: "/home",
+		element: (
+			<>
+				<Home />
+			</>
+		),
+	},
+	{
+		path: "/login",
+		element: (
+			<>
+				<Login />
+			</>
+		),
+	},
+	{
+		path: "/signup",
+		element: (
+			<>
+				<Signup />
+			</>
+		),
+	},
+	{
+		path: "/profile",
+		element: (
+			<>
+				<Profile />
+			</>
+		),
+	},
+	{
+		path: "/control",
+		element: (
+			<>
+				<UserControl />
+			</>
+		),
+	},
+]);
 
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
-	const router = createBrowserRouter([
-		{
-			path: "/",
-			element: (
-				<>
-					<Auth />
-				</>
-			),
-		},
-		{
-			path: "/write",
-			element: (
-				<>
-					<ArticleWriter />
-				</>
-			),
-			errorElement: <h2>Error Occurred.🙂</h2>,
-		},
-		{
-			path: "/:username",
-			element: <Profile />,
-		},
-		{
-			path: "/auth",
-			element: (
-				<>
-					<Auth />
-				</>
-			),
-		},
-		{
-			path: "/home",
-			element: (
-				<>
-					<Home />
-				</>
-			),
-		},
-		{
-			path: "/login",
-			element: (
-				<>
-					<Login />
-				</>
-			),
-		},
-		{
-			path: "/signup",
-			element: (
-				<>
-					<Signup />
-				</>
-			),
-		},
-		{
-			path: "/profile",
-			element: (
-				<>
-					<Profile />
-				</>
-			),
-		},
-			{
-			path: "/control",
-			element: (
-				<>
-					<UserControl/>
-				</>
-			),
-		},
-	]);
 
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
-	
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function loadUser() {
-			console.log("Calling profile page");
 			let res = await supabase.auth.getUser();
-			if (res.data && res.data.user) {
+
+			if (res?.data?.user) {
 				let { id } = res.data.user;
 
 				let { data, error } = await supabase
@@ -108,27 +110,19 @@ function App() {
 					.eq("user_id", id)
 					.single();
 
-				if (!error && data) {
-					console.log("Got DAta")
-					setUserInfo(data);
-					console.log(data.session);
-				}
+				setUserInfo(data ?? null);
+
 				if (error) {
-				
+					//setLoading(true);
 					console.log(error);
+					return null;
 				}
 			}
+			setLoading(false);
 		}
 		loadUser();
-
-		return () => {};
 	}, []);
 
-	useEffect(() => {
-		console.log(articlesData);
-
-		return () => {};
-	}, [articlesData]);
 	// theme handle
 	let theme = localStorage.getItem("theme");
 
@@ -142,6 +136,16 @@ function App() {
 	if (isPwa == null) {
 		localStorage.setItem("pwa", true);
 	}
+
+	if (loading)
+		return (
+			<div className="min-h-screen flex items-center justify-center dark:bg-black">
+				<div className="flex items-center gap-2 text-gray-600">
+					<LoaderCircle size={24} className="animate-spin" />
+					<span>Loading profile...</span>
+				</div>
+			</div>
+		);
 
 	return (
 		<div
@@ -159,8 +163,8 @@ function App() {
 			<InstallPWA />
 
 			<dataContext.Provider value={[articlesData, setArticlesData]}>
-				<userContext.Provider value={[userInfo]}>
-					<themeContext.Provider value={[isDark, setIsDark,theme]}>
+				<userContext.Provider value={[userInfo,loading]}>
+					<themeContext.Provider value={[isDark, setIsDark, theme]}>
 						<RouterProvider router={router}></RouterProvider>
 					</themeContext.Provider>
 				</userContext.Provider>
