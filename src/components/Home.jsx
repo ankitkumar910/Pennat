@@ -12,14 +12,12 @@ import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 
 function Home() {
-
 	const [write, setWriter] = useState(false);
 	const [userInfo, isLoading] = useContext(userContext);
 	const navi = useNavigate();
 	const [, setArticlesData] = useContext(dataContext);
 
 	useEffect(() => {
-
 		if (isLoading) return;
 
 		if (!userInfo) {
@@ -27,11 +25,10 @@ function Home() {
 			return null;
 		} else {
 			async function loadeArticles() {
-
 				const response = await supabase
 					.from("ArticleTable")
 					.select(
-						"id,title,author_id,body,UserTable(name,username,profile_img,user_id)"
+						"article_id,id,title,author_id,body,UserTable(name,username,profile_img,user_id)"
 					);
 
 				if (response.error) {

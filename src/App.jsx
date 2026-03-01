@@ -18,6 +18,7 @@ import InstallPWA from "./components/InstallPWA";
 import UserControl from "./components/UserControl";
 import { LoaderCircle } from "lucide-react";
 import NotAllowed from "./components/NotAllowed";
+import ArticleReader from "./components/ArticleReader";
 
 const router = createBrowserRouter([
 	{
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
 		element: (
 			<>
 				<Auth />
+			</>
+		),
+	},
+	{
+		path: "/article",
+		element: (
+			<>
+				<ArticleReader />
 			</>
 		),
 	},
@@ -91,9 +100,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/*",
-		element: <>
-		<NotAllowed/>
-		</>,
+		element: (
+			<>
+				<NotAllowed />
+			</>
+		),
 		errorElement: <>Something Went Wrong.</>,
 	},
 ]);
