@@ -24,7 +24,9 @@ export default defineConfig({
 				"apple-touch-icon.png",
 				"masked-icon.svg",
 				"pwa-*.png", // you'll add these later
-			],
+			],workbox: {
+  globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,txt,xml}"],
+},
 
 			// Web App Manifest – customize these!
 			manifest: {

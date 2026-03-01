@@ -17,6 +17,7 @@ import NavbarPage from "./components/NavbarPage";
 import InstallPWA from "./components/InstallPWA";
 import UserControl from "./components/UserControl";
 import { LoaderCircle } from "lucide-react";
+import NotAllowed from "./components/NotAllowed";
 
 const router = createBrowserRouter([
 	{
@@ -88,7 +89,14 @@ const router = createBrowserRouter([
 			</>
 		),
 	},
-]).basename('/');
+	{
+		path: "/*",
+		element: <>
+		<NotAllowed/>
+		</>,
+		errorElement: <>Something Went Wrong.</>,
+	},
+]);
 
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
@@ -161,10 +169,9 @@ function App() {
 		`}>
 			<Toaster position="top-center" />
 			<InstallPWA />
-		
 
 			<dataContext.Provider value={[articlesData, setArticlesData]}>
-				<userContext.Provider value={[userInfo,loading]}>
+				<userContext.Provider value={[userInfo, loading]}>
 					<themeContext.Provider value={[isDark, setIsDark, theme]}>
 						<RouterProvider router={router}></RouterProvider>
 					</themeContext.Provider>
