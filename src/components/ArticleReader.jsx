@@ -163,11 +163,11 @@ function ArticleReader() {
 						<div className="flex-1">
 							<h3
 								className="text-xl font-bold mb-1 cursor-pointer hover:underline"
-								onClick={() => navigate(`/profile/${article.profiles?.id}`)}>
+								onClick={() =>  navigate(`/profile/${author?.username}`)}>
 								{author?.name || author?.username}
 							</h3>
 							<p className="text-gray-600 dark:text-gray-400 mb-3">
-								{author?.about || ""}
+								{author?.about || "Hey, I write on Pennat."}
 							</p>
 							{/* <button className="px-2 py-1 bg-background  border
               border-foreground  text-forground rounded-lg cursor-pointer active:bg-gray-700 hover:bg-blue-700">

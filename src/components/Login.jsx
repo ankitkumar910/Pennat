@@ -42,7 +42,8 @@ function Login() {
 				console.log(data);
 				setErrorMsg(null);
 				setSuccess(true);
-				navi("/auth");
+				
+				navi("/");
 			}
 		} catch (error) {
 			console.log(error);

@@ -116,6 +116,7 @@ function App() {
 	const [userInfo, setUserInfo] = useState();
 	const [loading, setLoading] = useState(true);
 
+
 	useEffect(() => {
 		async function loadUser() {
 			let res = await supabase.auth.getUser();

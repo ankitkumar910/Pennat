@@ -8,8 +8,9 @@ function Auth() {
 	const navi = useNavigate();
 
 	const [userInfo, isLoading] = useContext(userContext);
-
+	
 	useEffect(() => {
+		
 		async function loadUser() {
 			if (isLoading) return;
 
