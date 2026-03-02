@@ -19,6 +19,8 @@ import UserControl from "./components/UserControl";
 import { LoaderCircle } from "lucide-react";
 import NotAllowed from "./components/NotAllowed";
 import ArticleReader from "./components/ArticleReader";
+import ResetPassword from "./components/ResetPassword";
+import PasswordFlow from "./components/PasswordFlow";
 
 const router = createBrowserRouter([
 	{
@@ -99,6 +101,24 @@ const router = createBrowserRouter([
 		),
 	},
 	{
+		path: "/reset-password",
+		element: (
+			<>
+				<ResetPassword />
+			</>
+		),
+		errorElement: <>Something Went Wrong.</>,
+	},
+		{
+		path: "/flow",
+		element: (
+			<>
+				<PasswordFlow />
+			</>
+		),
+		errorElement: <>Something Went Wrong.</>,
+	},
+	{
 		path: "/*",
 		element: (
 			<>
@@ -120,21 +140,25 @@ function App() {
 		console.log("Running App.💡💡");
 
 		let res = await supabase.auth.getUser();
+		console.log("res",res);
 
 		try {
 			if (res?.data?.user) {
 				let { id } = res.data.user;
+				console.log(id)
 
 				let { data, error } = await supabase
 					.from("UserTable")
 					.select("*,ArticleTable(*)")
 					.eq("user_id", id)
-					.single();
+					;
 
 				if (error) {
 					console.error("Database error:", error);
+					console.log(error)
 					setUserInfo(null);
 				} else {
+					console.log(data)
 					setUserInfo(data);
 				}
 			}

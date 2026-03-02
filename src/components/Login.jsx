@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import supabase from "../config/supabaseClient";
 import { AlertBasic } from "./ui/AlertBasic";
 import { ExternalLink, LineChart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AlertColors } from "./ui/AlertColors";
 import { userContext } from "../context/Context";
 import { toast } from "sonner";
@@ -65,9 +65,9 @@ function Login() {
 
 			<div className="mt-16">
 				<p className="text-4xl m-3 font-bold font-[verdana] md:text-7xl sm:text-5xl p-2 text-white">
-					Welcome to new era. of digital jouranling
+					Welcome Back!
 				</p>
-				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit   rounded text-white">
+				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit   text-white">
 					Login to your account
 				</p>
 
@@ -89,8 +89,9 @@ function Login() {
 							required
 							title="Enter your email"
 							placeholder="pennat@exmple.com"
-							className="p-2 border rounded  bg-slate-300 min-w-56 text-black"
+							className="p-2 border rounded-sm  bg-slate-300 min-w-56 text-black"
 						/>
+						<br />
 						<br />
 						<label
 							htmlFor="password"
@@ -110,24 +111,31 @@ function Login() {
 							minLength={6}
 							maxLength={20}
 							title="enter your password"
-							className="p-2 border rounded  
+							className="p-2 border rounded-sm 
                  
                bg-slate-300 
               
                min-w-56 text-black"
 						/>{" "}
 						<br />
-						<p className="text-sm text-slate-200">
+						<p className="text-xs font-light wrap-anywhere text-slate-200">
 							Possibly your password had min. length 6, included
 							uppercase,lowercase,numbers and special symbols.
 						</p>
 					</div>
 
-					<button
-						type="submit"
-						className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border  text-white cursor-pointer">
-						Continue
-					</button>
+					<div className="flex items-center">
+						{" "}
+						<button
+							type="submit"
+							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer">
+							Continue
+						</button>
+						<p className="text-sm text-slate-200">
+
+							<NavLink to={'/flow'}>Forgot password?</NavLink>
+						</p>
+					</div>
 
 					{errorMsg && <AlertColors errorMsg={errorMsg} />}
 				</form>

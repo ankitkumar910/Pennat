@@ -99,15 +99,15 @@ function Signup() {
      bg-linear-to-r from-slate-900 to-slate-700
     
     min-h-screen max-w-screen bg-center bg-cover ">
-			<h1 className="text-3xl font-bold px-2 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
+			<h1 className="text-3xl font-bold pl-5 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
 				Pennat
 			</h1>
 
-			<div className="mt-16">
-				<p className="text-4xl m-3 font-bold font-[verdana] md:text-7xl sm:text-5xl p-2 text-white">
-					Welcome to new era. of digital jouranling
+			<div className="">
+				<p className="text-4xl m-3 font-bold font-[verdana] md:text-7xl sm:text-5xl p-2 text-foreground">
+					Welcome to new era of digital jouranling
 				</p>
-				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit   rounded text-white">
+				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit text-foreground">
 					Create an account.
 				</p>
 
@@ -116,7 +116,7 @@ function Signup() {
 						<div className="mx-12">
 							<label
 								htmlFor="email"
-								className="font-stretch-50% font-normal font-[verdana] text-black sm:text-white">
+								className="font-stretch-50% font-normal font-[verdana] text-foreground">
 								Enter your email
 							</label>{" "}
 							<br />
@@ -126,15 +126,16 @@ function Signup() {
 								id="email"
 								required
 								placeholder="pennat@exmple.com"
-								className="p-2 border rounded  
+								className="p-2 border rounded-sm
             bg-slate-300 
            
             min-w-56 text-black"
 							/>
 							<br />
+							<br />
 							<label
 								htmlFor="password"
-								className="font-stretch-50% font-normal  font-[verdana] text-black sm:text-white">
+								className="font-stretch-50% font-normal  font-[verdana] text-foregrounde">
 								Enter your password
 							</label>{" "}
 							<br />
@@ -146,14 +147,9 @@ function Signup() {
 								placeholder="Abcd1234$$@"
 								minLength={6}
 								maxLength={20}
-								className="p-2 border rounded  
-              
-            bg-slate-300 
-           
-            min-w-56 text-black"
-							/>{" "}
-							<br />
-							<p className="text-sm text-slate-200">
+								className="p-2 border rounded-sm bg-slate-300 min-w-56 text-black"
+							/><br />
+							<p className="text-sm text-foreground-600">
 								Min. length 6, include uppercase,lowercase,numbers and special
 								symbols
 							</p>
@@ -161,7 +157,7 @@ function Signup() {
 
 						<button
 							type="submit"
-							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border  text-white cursor-pointer ">
+							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer ">
 							Continue
 						</button>
 

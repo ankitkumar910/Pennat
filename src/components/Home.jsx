@@ -10,12 +10,13 @@ import { FilePenLine, LogIn, PenLine } from "lucide-react";
 import { dataContext, userContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
+import NoArticles from "./utils/NoArticles";
 
 function Home() {
 	const [write, setWriter] = useState(false);
 	const [userInfo, isLoading] = useContext(userContext);
 	const navi = useNavigate();
-	const [, setArticlesData] = useContext(dataContext);
+	const [articles, setArticlesData] = useContext(dataContext);
 
 	useEffect(() => {
 		if (isLoading) return;
@@ -74,7 +75,8 @@ function Home() {
 			</div>
 
 			<div className="box-border">
-				<ArticlePage />
+				{articles && <ArticlePage />}
+				{!articles && <NoArticles/>}
 			</div>
 		</div>
 	);
