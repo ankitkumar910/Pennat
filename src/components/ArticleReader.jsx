@@ -6,7 +6,7 @@ import { Bookmark, BookMarked, ChevronLeft, Heart, Share } from "lucide-react";
 import { toast } from "sonner";
 import Loader from "./Loader";
 import { Spinner } from "@/components/ui/spinner";
-import avtar, { authorImgPlaceholder, userDp } from "../../public/avtar";
+import { userDp } from "../../public/avtar";
 function ArticleReader() {
 	const navigate = useNavigate();
 	const [searchParam] = useSearchParams();
@@ -163,7 +163,7 @@ function ArticleReader() {
 						<div className="flex-1">
 							<h3
 								className="text-xl font-bold mb-1 cursor-pointer hover:underline"
-								onClick={() =>  navigate(`/profile/${author?.username}`)}>
+								onClick={() => navigate(`/profile/${author?.username}`)}>
 								{author?.name || author?.username}
 							</h3>
 							<p className="text-gray-600 dark:text-gray-400 mb-3">

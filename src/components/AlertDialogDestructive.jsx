@@ -69,10 +69,10 @@ export function AlertDialogDestructive() {
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
 				<Button variant="destructive" className="cursor-pointer text-sm">
-					<div>Delete your account</div>
+					<div onClick={()=>{toast("Sorry ! You are not allowed to delete your account currently.")}}>Delete your account</div>
 				</Button>
 			</AlertDialogTrigger>
-			<AlertDialogContent
+			{/* <AlertDialogContent
 				size="sm"
 				className={`${isDark} bg-background text-foreground border outline`}>
 				<AlertDialogHeader>
@@ -147,7 +147,7 @@ export function AlertDialogDestructive() {
 						</div>
 					)}
 				</AlertDialogFooter>
-			</AlertDialogContent>
+			</AlertDialogContent> */}
 		</AlertDialog>
 	);
 }

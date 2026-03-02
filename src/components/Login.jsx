@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import supabase from "../config/supabaseClient";
 import { AlertBasic } from "./ui/AlertBasic";
 import { ExternalLink, LineChart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AlertColors } from "./ui/AlertColors";
+import { userContext } from "../context/Context";
+import { toast } from "sonner";
 
 function Login() {
 	const [errorMsg, setErrorMsg] = useState(null);
@@ -11,6 +13,7 @@ function Login() {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const navi = useNavigate();
+	const [, , loadUser] = useContext(userContext);
 
 	async function handleSubmit() {
 		event.preventDefault();
@@ -42,8 +45,11 @@ function Login() {
 				console.log(data);
 				setErrorMsg(null);
 				setSuccess(true);
-				
-				navi("/");
+				toast("LoggedIn ✅");
+				await loadUser();
+				setTimeout(() => {
+					navi("/auth");
+				}, 1000);
 			}
 		} catch (error) {
 			console.log(error);
@@ -66,7 +72,7 @@ function Login() {
 				</p>
 
 				<form onSubmit={handleSubmit}>
-					<div className="mx-12">
+					<div className="mx-12 ">
 						<label
 							htmlFor="email"
 							className="font-stretch-50% font-normal font-[verdana] text-black sm:text-white">
@@ -74,7 +80,9 @@ function Login() {
 						</label>{" "}
 						<br />
 						<input
-						    onChange={()=>{setErrorMsg(null)}}
+							onChange={() => {
+								setErrorMsg(null);
+							}}
 							ref={emailRef}
 							type="email"
 							id="email"
@@ -91,7 +99,9 @@ function Login() {
 						</label>{" "}
 						<br />
 						<input
-						   onChange={()=>{setErrorMsg(null)}}
+							onChange={() => {
+								setErrorMsg(null);
+							}}
 							ref={passwordRef}
 							type="text"
 							id="password"
@@ -121,12 +131,7 @@ function Login() {
 
 					{errorMsg && <AlertColors errorMsg={errorMsg} />}
 				</form>
-				{success && (
-					<AlertBasic
-						title={"Logged in  successfully"}
-						desc={"Your profile information has been loaded."}
-					/>
-				)}
+
 				<br />
 				<p className="text-sm text-slate-200 ml-12">
 					Don't have an account?{" "}

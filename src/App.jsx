@@ -5,7 +5,7 @@ import Signup from "./components/Signup";
 import Home from "./components/Home";
 
 import Auth from "./components/Auth";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import supabase from "./config/supabaseClient";
 // eslint-disable-next-line no-unused-vars
 import { dataContext, userContext, themeContext } from "./context/Context";
@@ -116,11 +116,12 @@ function App() {
 	const [userInfo, setUserInfo] = useState();
 	const [loading, setLoading] = useState(true);
 
+	const loadUser = useCallback(async () => {
+		console.log("Running App.💡💡");
 
-	useEffect(() => {
-		async function loadUser() {
-			let res = await supabase.auth.getUser();
+		let res = await supabase.auth.getUser();
 
+		try {
 			if (res?.data?.user) {
 				let { id } = res.data.user;
 
@@ -130,18 +131,28 @@ function App() {
 					.eq("user_id", id)
 					.single();
 
-				setUserInfo(data ?? null);
-
 				if (error) {
-					//setLoading(true);
-					console.log(error);
-					return null;
+					console.error("Database error:", error);
+					setUserInfo(null);
+				} else {
+					setUserInfo(data);
 				}
 			}
+
+		} catch (error) {
+			alert("Error while Loading." + error)
+			console.log(error);
+			setUserInfo(null);
+		} finally {
 			setLoading(false);
 		}
-		loadUser();
 	}, []);
+
+	//load user dat first time
+
+	useEffect(() => {
+		loadUser();
+	}, [loadUser]);
 
 	// theme handle
 	let theme = localStorage.getItem("theme");
@@ -183,7 +194,7 @@ function App() {
 			<InstallPWA />
 
 			<dataContext.Provider value={[articlesData, setArticlesData]}>
-				<userContext.Provider value={[userInfo, loading]}>
+				<userContext.Provider value={[userInfo, loading,loadUser]}>
 					<themeContext.Provider value={[isDark, setIsDark, theme]}>
 						<RouterProvider router={router}></RouterProvider>
 					</themeContext.Provider>
