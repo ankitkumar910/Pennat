@@ -73,6 +73,7 @@ function Login() {
 						</label>{" "}
 						<br />
 						<input
+						    onChange={()=>{setErrorMsg(null)}}
 							ref={emailRef}
 							type="email"
 							id="email"
@@ -89,6 +90,7 @@ function Login() {
 						</label>{" "}
 						<br />
 						<input
+						   onChange={()=>{setErrorMsg(null)}}
 							ref={passwordRef}
 							type="text"
 							id="password"
