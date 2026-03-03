@@ -70,14 +70,5 @@ export default defineConfig({
 	},
 	base: "/",
 
-	server: {
-		allowedHosts:true,
-		host: true,
-		port: 5173,
-		strictPort: false,
-		hmr: {
-            // This ensures HMR works through the ngrok
-            clientPort: 443, 
-        },
-	},
+
 });

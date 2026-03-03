@@ -130,10 +130,8 @@ const router = createBrowserRouter([
 	},
 ]);
 
-
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
-	
 
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
@@ -180,13 +178,17 @@ function App() {
 	}, [loadUser]);
 
 	// theme handle
-	let theme = localStorage.getItem("theme");
 	updateStatusBar();
+	let theme = localStorage.getItem("theme");
 
 	if (theme == null) {
 		localStorage.setItem("theme", "light");
 	}
 	const [isDark, setIsDark] = useState(localStorage.getItem("theme"));
+
+	useEffect(() => {
+		updateStatusBar(isDark === "dark");
+	}, [isDark]);
 
 	//check for pwa
 	let isPwa = localStorage.getItem("pwa");
@@ -231,4 +233,3 @@ function App() {
 }
 
 export default App;
-

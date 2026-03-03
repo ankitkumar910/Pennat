@@ -46,9 +46,11 @@ function NavbarPage() {
 						<span
 							className="flex flex-col sm:flex-row items-center text-xs sm:text-[1rem]"
 							onClick={() => {
-								setIsDark((p) => (p == "light" ? "dark" : "light"));
-								localStorage.setItem("theme", isDark=="dark" ? "light" : "dark");
-								updateStatusBar();
+								setIsDark((prev) => {
+									const newTheme = prev === "dark" ? "light" : "dark";
+									localStorage.setItem("theme", newTheme);
+									return newTheme;
+								});
 							}}>
 							{" "}
 							<Switch checked={isDark == "dark"} className={"p-0 border"} />
