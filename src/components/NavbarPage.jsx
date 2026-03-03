@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
 import { themeContext } from "../context/Context";
+import { updateStatusBar } from "./Theme";
 
 function NavbarPage() {
 	const naviagtors = useNavigate();
@@ -47,6 +48,7 @@ function NavbarPage() {
 							onClick={() => {
 								setIsDark((p) => (p == "light" ? "dark" : "light"));
 								localStorage.setItem("theme", isDark=="dark" ? "light" : "dark");
+								updateStatusBar();
 							}}>
 							{" "}
 							<Switch checked={isDark == "dark"} className={"p-0 border"} />

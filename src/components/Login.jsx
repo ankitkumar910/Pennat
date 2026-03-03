@@ -58,24 +58,32 @@ function Login() {
 	}
 
 	return (
-		<div className="bg-linear-to-r from-slate-900 to-slate-700  min-h-screen max-w-screen bg-center bg-cover ">
-			<h1 className="text-3xl font-bold px-2 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
+		<div className="bg-linear-to-r from-slate-900 to-slate-800    min-h-screen max-w-screen bg-center bg-cover ">
+			<h1 className="text-2xl  font-bold px-2 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
 				Pennat
 			</h1>
 
 			<div className="mt-16">
-				<p className="text-4xl m-3 font-bold font-[verdana] md:text-7xl sm:text-5xl p-2 text-white">
-					Welcome Back!
+				<p className="text-5xl    mt-4 ml-4    font-extrabold font-fontVerdana md:text-7xl sm:text-5xl px-2 text-white">
+					Welcome{" "}
+					<span className="text-blue-600  ">
+						{" "}
+						<br />
+						back{" "}
+						<span className="inline-block -ml-2 mx-0 px-0 rotate-6 hover:rotate-0 transition-transform duration-300 cursor-default">
+							!
+						</span>
+					</span>
 				</p>
-				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit   text-white">
-					Login to your account
+				<p className="px-2 text-xl border-s-4 border-blue-600 mt-12  ml-12 font-norml font-sans my-4  w-fit   text-gray-400  ">
+					Log in to your digital desk.
 				</p>
 
 				<form onSubmit={handleSubmit}>
 					<div className="mx-12 ">
 						<label
 							htmlFor="email"
-							className="font-stretch-50% font-normal font-[verdana] text-black sm:text-white">
+							className="font-stretch-50% font-normal font-[verdana] text-white">
 							Enter your email
 						</label>{" "}
 						<br />
@@ -95,7 +103,7 @@ function Login() {
 						<br />
 						<label
 							htmlFor="password"
-							className="font-stretch-50% font-normal  font-[verdana] text-black sm:text-white">
+							className="font-stretch-50% font-normal  font-[verdana] text-white">
 							Enter your password
 						</label>{" "}
 						<br />
@@ -132,8 +140,7 @@ function Login() {
 							Continue
 						</button>
 						<p className="text-sm text-slate-200">
-
-							<NavLink to={'/flow'}>Forgot password?</NavLink>
+							<NavLink to={"/flow"}>Forgot password?</NavLink>
 						</p>
 					</div>
 

@@ -21,6 +21,7 @@ import NotAllowed from "./components/NotAllowed";
 import ArticleReader from "./components/ArticleReader";
 import ResetPassword from "./components/ResetPassword";
 import PasswordFlow from "./components/PasswordFlow";
+import { updateStatusBar } from "./components/Theme";
 
 const router = createBrowserRouter([
 	{
@@ -129,8 +130,10 @@ const router = createBrowserRouter([
 	},
 ]);
 
+
 function App() {
 	console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
+	
 
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
@@ -178,6 +181,7 @@ function App() {
 
 	// theme handle
 	let theme = localStorage.getItem("theme");
+	updateStatusBar();
 
 	if (theme == null) {
 		localStorage.setItem("theme", "light");
@@ -227,3 +231,4 @@ function App() {
 }
 
 export default App;
+

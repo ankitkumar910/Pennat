@@ -96,27 +96,28 @@ function Signup() {
 	return (
 		<div
 			className="
-     bg-linear-to-r from-slate-900 to-slate-700
+			h-screen
+     bg-linear-to-r from-slate-900 to-slate-800  
     
-    min-h-screen max-w-screen bg-center bg-cover ">
-			<h1 className="text-3xl font-bold pl-5 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
+    max-w-screen bg-center bg-cover ">
+			<h1 className="text-2xl font-bold pl-5 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
 				Pennat
 			</h1>
 
 			<div className="">
-				<p className="text-4xl m-3 font-bold font-[verdana] md:text-7xl sm:text-5xl p-2 text-foreground">
-					Welcome to new era of digital jouranling
+				<p className="text-5xl    ml-4   mt-4   font-extrabold font-fontVerdana md:text-7xl sm:text-5xl text-white">
+					Give your <span className="text-blue-600  text-7xl ">stories</span> a home.
 				</p>
-				<p className="px-2 text-2xl border-s-4 ml-12 font-semibold font-sans my-8 w-fit text-foreground">
-					Create an account.
+				<p className="px-2 text-xl border-s-4 border-blue-600 mt-8 ml-12 font-norml font-sans my-4  w-fit   text-gray-400  ">
+					Join a community of modern thinkers. Get started now.
 				</p>
 
-				{!showForm && (
+				{showForm && (
 					<form action="." onSubmit={handleSubmit}>
 						<div className="mx-12">
 							<label
 								htmlFor="email"
-								className="font-stretch-50% font-normal font-[verdana] text-foreground">
+								className="font-stretch-50% font-normal font-[verdana] text-white">
 								Enter your email
 							</label>{" "}
 							<br />
@@ -135,7 +136,7 @@ function Signup() {
 							<br />
 							<label
 								htmlFor="password"
-								className="font-stretch-50% font-normal  font-[verdana] text-foregrounde">
+								className="font-stretch-50% font-normal   font-[verdana] text-white">
 								Enter your password
 							</label>{" "}
 							<br />
@@ -148,8 +149,9 @@ function Signup() {
 								minLength={6}
 								maxLength={20}
 								className="p-2 border rounded-sm bg-slate-300 min-w-56 text-black"
-							/><br />
-							<p className="text-sm text-foreground-600">
+							/>
+							<br />
+							<p className="text-xs mt-2 text-gray-300">
 								Min. length 6, include uppercase,lowercase,numbers and special
 								symbols
 							</p>
@@ -170,12 +172,12 @@ function Signup() {
 						)}
 					</form>
 				)}
-				{showForm && (
+				{!showForm && (
 					<form action="." onSubmit={handleUserData}>
 						<div className="mx-12">
 							<label
 								htmlFor="fullname"
-								className="font-stretch-50% font-normal font-[verdana] text-black sm:text-white">
+								className="font-stretch-50% font-normal font-[verdana] text-white">
 								Enter your fullname
 							</label>{" "}
 							<br />
@@ -187,14 +189,12 @@ function Signup() {
 								pattern="[A-Za-z]+( [A-Za-z]+)*"
 								title="Enter a valid name (letters only, single space allowed)"
 								placeholder="John Doe"
-								className="p-2 border rounded  
-            bg-slate-300 
-              min-w-56 text-black"
+								className="p-2 border rounded-sm bg-slate-300 min-w-56 text-black"
 							/>
 							<br />
 							<label
 								htmlFor="username"
-								className="font-stretch-50% font-normal  font-[verdana] text-black sm:text-white">
+								className="font-stretch-50% font-normal font-[verdana] text-white">
 								Create an username
 							</label>{" "}
 							<br />
@@ -206,21 +206,17 @@ function Signup() {
 								placeholder="johne_doe1"
 								minLength={4}
 								pattern="[a-z0-9_]+"
-								className="p-2 border rounded  
-              
-            bg-slate-300 
-           
-            min-w-56 text-black"
+								className="p-2 border rounded-sm bg-slate-300 min-w-56 text-black"
 							/>{" "}
 							<br />
-							<p className="text-sm text-slate-200">
+							<p className="text-xs mt-2 text-gray-300">
 								Lowercase letters,numbers and _ is allowed.Keep it atleast four
 								character long.
 							</p>
 							<br />
 							<label
 								htmlFor="dob"
-								className="font-stretch-50% font-normal  font-[verdana] text-black sm:text-white">
+								className="font-stretch-50% text-normal font-[verdana] text-white">
 								Enter your DOB.
 							</label>{" "}
 							<br />
@@ -231,17 +227,14 @@ function Signup() {
 								required
 								placeholder="YYYY-MM-DD"
 								minLength={4}
-								className="p-2 border rounded  
-              
-            bg-slate-300 
-           
-            min-w-56 text-black"
+								
+								className="p-2 border rounded-sm bg-slate-300 min-w-56 text-black"
 							/>{" "}
 						</div>
 
 						<button
 							type="submit"
-							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border  text-white cursor-pointer">
+							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer">
 							Continue
 						</button>
 

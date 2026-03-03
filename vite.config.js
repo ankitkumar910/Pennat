@@ -24,9 +24,10 @@ export default defineConfig({
 				"apple-touch-icon.png",
 				"masked-icon.svg",
 				"pwa-*.png", // you'll add these later
-			],workbox: {
-  globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,txt,xml}"],
-},
+			],
+			workbox: {
+				globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,txt,xml}"],
+			},
 
 			// Web App Manifest – customize these!
 			manifest: {
@@ -68,4 +69,15 @@ export default defineConfig({
 		},
 	},
 	base: "/",
+
+	server: {
+		allowedHosts:true,
+		host: true,
+		port: 5173,
+		strictPort: false,
+		hmr: {
+            // This ensures HMR works through the ngrok
+            clientPort: 443, 
+        },
+	},
 });
