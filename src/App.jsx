@@ -21,7 +21,7 @@ import NotAllowed from "./components/NotAllowed";
 import ArticleReader from "./components/ArticleReader";
 import ResetPassword from "./components/ResetPassword";
 import PasswordFlow from "./components/PasswordFlow";
-import { updateStatusBar } from "./components/Theme";
+import { updateStatusBar, updateTheme } from "./components/Theme";
 
 const router = createBrowserRouter([
 	{
@@ -136,6 +136,7 @@ function App() {
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
 	const [loading, setLoading] = useState(true);
+	const [likedArcticles,setLikedArcticles] = useState(new Set());
 
 	const loadUser = useCallback(async () => {
 		console.log("Running App.💡💡");
@@ -188,6 +189,7 @@ function App() {
 
 	useEffect(() => {
 		updateStatusBar(isDark === "dark");
+		updateTheme();
 	}, [isDark]);
 
 	//check for pwa
@@ -198,8 +200,11 @@ function App() {
 
 	if (loading)
 		return (
-			<div className="min-h-screen flex items-center justify-center dark:bg-black">
-				<div className="flex items-center gap-2 text-gray-600">
+			<div
+				className={`${
+					isDark == "dark" ? "dark" : ""
+				} min-h-screen flex items-center justify-center bg-background`}>
+				<div className="flex items-center gap-2 text-foreground ">
 					<LoaderCircle size={24} className="animate-spin" />
 					<span>Hold tight...</span>
 				</div>
@@ -208,7 +213,9 @@ function App() {
 
 	return (
 		<div
-			className={`${isDark == "dark" ? "dark" : ""}
+			id="app"
+			className={`
+				${isDark == "dark" ? "dark" : ""}
 		*:dark:bg-[#121212]
 		*:dark:text-[#E0E0E0]
 		mx-0
@@ -221,7 +228,7 @@ function App() {
 			<Toaster position="top-center" />
 			<InstallPWA />
 
-			<dataContext.Provider value={[articlesData, setArticlesData]}>
+			<dataContext.Provider value={[articlesData, setArticlesData,likedArcticles,setLikedArcticles]}>
 				<userContext.Provider value={[userInfo, loading, loadUser]}>
 					<themeContext.Provider value={[isDark, setIsDark, theme]}>
 						<RouterProvider router={router}></RouterProvider>

@@ -4,4 +4,8 @@
   if (meta) meta.setAttribute('content', isDark ? '#0f172b' : '#ffffff');
 }
 
-export {updateStatusBar}
+function updateTheme(){
+    // const body= document.getElementById('app');
+    //   body.classList.toggle("dark");
+}
+export {updateStatusBar,updateTheme}

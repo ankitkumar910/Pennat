@@ -11,15 +11,16 @@
     content="Pennat is a blogging site to write, publish, and read blogs on technology, ideas, and personal experiences.">
   <meta name="keywords"
     content="pennat, pennat blog, penat, pennat.in,pennat.vercel.app,pennat project, blogging, blogs, write blogs, publish articles">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <meta name="theme-color" content="#0f172b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <meta name="theme-color" content="#0f172b">
 
 
 </head>
 
-<body >
+<body>
 
   <script>
     //Code for favicon Changing on the behave of system theme (dark/light)
@@ -28,7 +29,7 @@
       let faviconPath = isDark.matches ? '/favicon-dark.png' : '/favicon.png';
       let faviconLink = document.getElementById('favicon');
       //set favicon
-      if(faviconLink) faviconLink.href = faviconPath;
+      if (faviconLink) faviconLink.href = faviconPath;
     }
     isDark.addEventListener('change', () => {
       changeFavicon();
@@ -36,6 +37,8 @@
     changeFavicon();
   </script>
   <div id="root"></div>
+
+
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

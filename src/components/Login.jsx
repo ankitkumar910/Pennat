@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 function Login() {
 	const [errorMsg, setErrorMsg] = useState(null);
-	const [success, setSuccess] = useState();
+	const [,setSuccess] = useState();
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const navi = useNavigate();
@@ -45,7 +45,7 @@ function Login() {
 				console.log(data);
 				setErrorMsg(null);
 				setSuccess(true);
-				toast("LoggedIn ✅");
+				toast("Success! You logged in.");
 				await loadUser();
 				setTimeout(() => {
 					navi("/auth");
@@ -97,7 +97,7 @@ function Login() {
 							required
 							title="Enter your email"
 							placeholder="pennat@exmple.com"
-							className="p-2 border rounded-sm  bg-slate-300 min-w-56 text-black"
+							className="p-2 lowercase border rounded-sm  bg-slate-300 min-w-56 text-black"
 						/>
 						<br />
 						<br />
