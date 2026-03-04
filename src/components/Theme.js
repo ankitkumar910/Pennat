@@ -4,4 +4,4 @@ function updateStatusBar(isDark) {
 	if (meta) meta.setAttribute("content", isDark ? "#000000" : "#ffffff");
 }
 
-export { updateStatusBar };
+export {updateStatusBar}
