@@ -8,6 +8,7 @@ import Loader from "./Loader";
 import { Spinner } from "@/components/ui/spinner";
 import { userDp } from "../../public/avtar";
 import { userContext } from "../context/Context";
+import CommentCard from "./CommentCard";
 function ArticleReader() {
 	const navigate = useNavigate();
 	const [userInfo] = useContext(userContext);
@@ -22,6 +23,7 @@ function ArticleReader() {
 	const [commentCount, setCommentCount] = useState(null);
 	let temporaryCount = useRef(0); //hold totalCount;
 	const [commentList, setCommentList] = useState([]);
+	const [canComment, setCanComment] = useState(true);
 
 	useEffect(() => {
 		if (!articleId) {
@@ -29,6 +31,7 @@ function ArticleReader() {
 			return null;
 		}
 		const fetchArticle = async () => {
+			console.log("Calling Api 🔥🔥");
 			try {
 				const { data, error } = await supabase
 					.from("ArticleTable")
@@ -88,48 +91,101 @@ function ArticleReader() {
 	}
 
 	async function handleComment() {
-		setCommentCount((prev) => prev + 1);
-		const dummyComment = {
-			id : crypto.randomUUID(),
-			comment : commentRef.current.value,
+		setCanComment(false);
 
-		}
-		setCommentList(prev => [dummyComment,...prev]);
-		if (!userId) return;
-		const { data, error } = await supabase
-			.from("CommentTable")
-			.insert([
-				{
-					article_id: article?.article_id,
-					user_id: userId,
-					comment: commentRef.current.value,
-				},
-			])
-			.select()
-			.single();
+		let commentText = commentRef.current.value + "";
+		let newString = commentText.trim();
 
-		if (error) {
-			toast("Comment Not Posted.");
-			setCommentCount((p) => p - 1);
-			console.log(error);
-			return;
-		} else if (data) {
-			temporaryCount.current = temporaryCount.current + 1;
-			const { data: countData, error: countError } = await supabase
-				.from("ArticleTable")
-				.update([{ comment_count: temporaryCount.current }])
-				.eq("article_id", article?.article_id)
-				.select();
+		if (newString.length) {
+			const dummyComment = {
+				id: crypto.randomUUID(),
+				comment: commentText,
+			};
+			setCommentCount((prev) => prev + 1);
+			setCommentList((prev) => [dummyComment, ...prev]);
+			if (!userId) return;
+			const { data, error } = await supabase
+				.from("CommentTable")
+				.insert([
+					{
+						article_id: article?.article_id,
+						user_id: userId,
+						comment: newString,
+					},
+				])
+				.select()
+				.single();
 
-			if (countError) {
-				toast("Error while updating comment count.");
-				console.log(countError);
+			if (error) {
+				toast("Comment Not Posted.");
 				setCommentCount((p) => p - 1);
+				console.log(error);
+				return;
+			} else if (data) {
+				temporaryCount.current = temporaryCount.current + 1;
+				const { data: countData, error: countError } = await supabase
+					.from("ArticleTable")
+					.update([{ comment_count: temporaryCount.current }])
+					.eq("article_id", article?.article_id)
+					.select();
+
+				if (countError) {
+					toast("Error while updating comment count.");
+					console.log(countError);
+					setCommentCount((p) => p - 1);
+					return;
+				}
+
+				if (countData) {
+					toast("Comment  Posted.");
+				}
+			}
+		}
+
+		setCanComment(true);
+		commentRef.current.value = null;
+	}
+
+	async function deleteComment(commentId, comment) {
+		console.log("Comment Id " + commentId + " Deleted.");
+		console.log(comment);
+		// Quick Ui update
+		temporaryCount.current = temporaryCount.current - 1;
+		setCommentCount((p) => p - 1);
+		setCommentList((prev) => prev.filter((com) => com.id != comment.id));
+
+		const { data: CommentTableData, error: CommentTableError } = await supabase
+			.from("CommentTable")
+			.delete()
+			.eq("comment_id", comment.comment_id)
+			.select();
+
+		if (CommentTableError) {
+			toast("Error occurred, while deleting comment.");
+
+			setCommentCount((p) => p + 1);
+			setCommentList((prev) => [comment, ...prev]);
+			return;
+		}
+
+		if (CommentTableData) {
+			const { data: commentCountData, error: commentCountError } =
+				await supabase
+					.from("ArticleTable")
+					.update({ comment_count: temporaryCount.current })
+					.select()
+					.eq("article_id", article.article_id);
+
+			if (commentCountError) {
+				toast("Error while updating comment count.");
+				temporaryCount.current = temporaryCount.current + 1;
+				setCommentCount((p) => p + 1);
+				setCommentList((prev) => [comment, ...prev]);
 				return;
 			}
 
-			if (countData) {
-				toast("Comment  Posted.");
+			if (commentCountData) {
+				toast("Comment Deleted.");
 			}
 		}
 	}
@@ -243,27 +299,40 @@ function ArticleReader() {
 							ref={commentRef}
 							placeholder="Write a comment..."
 							className="w-full p-4 border border-gray-300 dark:border-gray-700 rounded-lg
-	                     bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+	                     bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600"
 							rows="3"
 						/>
-						<button
-							className="mt-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+					<div className="w-full flex justify-end">
+							<button
+							disabled={!canComment}
+							className="mt-2 px-6 py-2 bg-gray-400 dark:bg-gray-800 border  rounded-lg hover:bg-gray-700 disabled:bg-gray-400"
 							onClick={handleComment}>
-							Post Comment
+							{canComment ? "Post Comment" : "Please Wait.."}
 						</button>
 					</div>
+					</div>
 
-					<div className="text-gray-500 dark:text-gray-400">
-						
-						{commentList && (
-							<div>
+					<div className="text-gray-500 p-2 dark:text-gray-400">
+						{commentList.length > 0 && (
+							<div className="w-full rounded-md bg-gray-200 p-1">
 								{commentList.map((comment) => {
-									return <div key={comment.id}
-									className="my-2 bg-gray-800 border p-4"
-									>{comment.comment}</div>;
+									return (
+										<CommentCard
+											deleteComment={deleteComment}
+											setCommentList={setCommentList}
+											key={comment.id}
+											comment={comment}
+										/>
+									);
 								})}
 							</div>
 						)}
+
+						{!commentList.length && <div className="p-2 text-center">
+							 
+							 No Comments. Be the first to comment.
+							
+							</div>}
 					</div>
 				</div>
 
