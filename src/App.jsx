@@ -22,7 +22,6 @@ import ArticleReader from "./components/ArticleReader";
 import ResetPassword from "./components/ResetPassword";
 import PasswordFlow from "./components/PasswordFlow";
 
-
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -131,23 +130,17 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
-
 	const [articlesData, setArticlesData] = useState([]);
 	const [userInfo, setUserInfo] = useState();
 	const [loading, setLoading] = useState(true);
-	const [likedArcticles,setLikedArcticles] = useState(new Set());
+	const [likedArcticles, setLikedArcticles] = useState(new Set());
 
 	const loadUser = useCallback(async () => {
-		
-
 		let res = await supabase.auth.getUser();
-		
 
 		try {
 			if (res?.data?.user) {
 				let { id } = res.data.user;
-				
 
 				let { data, error } = await supabase
 					.from("UserTable")
@@ -155,11 +148,9 @@ function App() {
 					.eq("user_id", id)
 					.single();
 				if (error) {
-				
 					console.log(error);
 					setUserInfo(null);
 				} else {
-					
 					setUserInfo(data);
 				}
 			}
@@ -182,11 +173,22 @@ function App() {
 
 	let theme = localStorage.getItem("theme");
 
-	if (theme == null) {
-		localStorage.setItem("theme", "light");
-	}
+	
 	const [isDark, setIsDark] = useState(localStorage.getItem("theme"));
 
+	useEffect(() => {
+		let statusBar = document.getElementById("statusBar");
+
+		if (isDark == "dark" && statusBar != null) {
+			statusBar.setAttribute("content", "#000000");
+		} else if (isDark == "light" && statusBar != null) {
+			statusBar.setAttribute("content", "#ffffff");
+		}
+	}, [isDark]);
+
+	if (isDark == null) {
+		localStorage.setItem("theme", "light");
+	}
 
 	//check for pwa
 	let isPwa = localStorage.getItem("pwa");
@@ -224,7 +226,13 @@ function App() {
 			<Toaster position="top-center" />
 			<InstallPWA />
 
-			<dataContext.Provider value={[articlesData, setArticlesData,likedArcticles,setLikedArcticles]}>
+			<dataContext.Provider
+				value={[
+					articlesData,
+					setArticlesData,
+					likedArcticles,
+					setLikedArcticles,
+				]}>
 				<userContext.Provider value={[userInfo, loading, loadUser]}>
 					<themeContext.Provider value={[isDark, setIsDark, theme]}>
 						<RouterProvider router={router}></RouterProvider>
