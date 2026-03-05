@@ -1,9 +1,7 @@
 import { Eclipse, EclipseIcon, Ellipsis } from "lucide-react";
 import React, { useState } from "react";
 
-function CommentCard({ comment, deleteComment }) {
-	let user_id = comment.user_id;
-
+function CommentCard({ comment, deleteComment, user_id }) {
 	const [menuOpen, setMenuOpen] = useState();
 	function handleDelete(e) {
 		e.stopPropagation();
@@ -13,16 +11,16 @@ function CommentCard({ comment, deleteComment }) {
 	return (
 		<div className="   py-4 px-8">
 			<div className="flex justify-end ">
-				<div
-					className="relative
+				{user_id == comment.user_id && (
+					<div
+						className="relative
                 ">
-					<Ellipsis
-						className="cursor-pointer"
-						onClick={() => {
-							setMenuOpen((p) => !p);
-						}}
-					/>
-					{user_id == comment.user_id && (
+						<Ellipsis
+							className="cursor-pointer"
+							onClick={() => {
+								setMenuOpen((p) => !p);
+							}}
+						/>
 						<div className="absolute    right-6 top-2 p-1">
 							<ul>
 								<li className={`${menuOpen ? "" : "hidden"} transition `}>
@@ -34,8 +32,8 @@ function CommentCard({ comment, deleteComment }) {
 								</li>
 							</ul>
 						</div>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 			<div className="border-b border-b-gray-300 py-4">{comment.comment}</div>
 		</div>

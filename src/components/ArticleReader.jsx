@@ -302,14 +302,14 @@ function ArticleReader() {
 	                     bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600"
 							rows="3"
 						/>
-					<div className="w-full flex justify-end">
+						<div className="w-full flex justify-end">
 							<button
-							disabled={!canComment}
-							className="mt-2 px-6 py-2 bg-gray-400 dark:bg-gray-800 border  rounded-lg hover:bg-gray-700 disabled:bg-gray-400"
-							onClick={handleComment}>
-							{canComment ? "Post Comment" : "Please Wait.."}
-						</button>
-					</div>
+								disabled={!canComment}
+								className="mt-2 px-6 py-2 bg-gray-400 dark:bg-gray-800 border  rounded-lg hover:bg-gray-700 disabled:bg-gray-400"
+								onClick={handleComment}>
+								{canComment ? "Post Comment" : "Please Wait.."}
+							</button>
+						</div>
 					</div>
 
 					<div className="text-gray-500 p-2 dark:text-gray-400">
@@ -318,6 +318,7 @@ function ArticleReader() {
 								{commentList.map((comment) => {
 									return (
 										<CommentCard
+											user_id={userId}
 											deleteComment={deleteComment}
 											setCommentList={setCommentList}
 											key={comment.id}
@@ -328,11 +329,11 @@ function ArticleReader() {
 							</div>
 						)}
 
-						{!commentList.length && <div className="p-2 text-center">
-							 
-							 No Comments. Be the first to comment.
-							
-							</div>}
+						{!commentList.length && (
+							<div className="p-2 text-center">
+								No Comments. Be the first to comment.
+							</div>
+						)}
 					</div>
 				</div>
 
