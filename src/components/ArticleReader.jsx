@@ -15,7 +15,6 @@ function ArticleReader() {
 	const userId = userInfo?.user_id;
 	const [searchParam] = useSearchParams();
 	const commentRef = useRef();
-
 	const articleId = searchParam.get("id");
 	const [article, setArticle] = useState(null);
 	const [author, setAuthor] = useState(null);
@@ -24,6 +23,7 @@ function ArticleReader() {
 	let temporaryCount = useRef(0); //hold totalCount;
 	const [commentList, setCommentList] = useState([]);
 	const [canComment, setCanComment] = useState(true);
+	const [showBtn, setShowBtn] = useState();
 
 	useEffect(() => {
 		if (!articleId) {
@@ -45,8 +45,24 @@ function ArticleReader() {
 				setCommentCount(data?.comment_count);
 				console.log(data);
 				temporaryCount.current = data?.comment_count;
-				setCommentList(data?.CommentTable);
+
 				setAuthor(data.UserTable);
+
+				let { data: commentData, error: commentError } = await supabase
+					.from("CommentTable")
+					.select("*,UserTable(username,profile_img)")
+					.eq("article_id", data.article_id);
+
+				if (commentError) {
+					console.log(commentError);
+					return;
+				}
+
+				if (commentData) {
+					console.log("Here is Comment Data");
+					setCommentList(commentData);
+					console.log(commentData);
+				}
 			} catch (error) {
 				console.error("Error:", error);
 
@@ -58,6 +74,14 @@ function ArticleReader() {
 
 		fetchArticle();
 	}, [articleId]);
+
+	useEffect(() => {
+		if (commentRef.current?.value) {
+			setShowBtn(true);
+		} else {
+			setShowBtn(false);
+		}
+	}, [commentRef.current?.value]);
 
 	const formatDate = (date) => {
 		return new Date(date).toLocaleDateString("en-US", {
@@ -190,6 +214,19 @@ function ArticleReader() {
 		}
 	}
 
+	// return <div>
+
+	// 	<div className="h-24 w-24 bg-red-800 justify-self-center self-center
+	// 	hover:bg-green-400
+	// 	transition
+	// 	hover:translate-x-1
+	// 	hover:animate-pulse
+	// hover:skew-z-12
+	// hover:rotate-x-60
+	// 	hover:rotate-180
+	// 	duration-700
+	// 	"></div>
+	// </div>
 	return (
 		<div className="min-h-screen bg-white dark:bg-gray-900">
 			<div className="max-w-4xl mx-auto px-4 pt-8">
@@ -201,23 +238,13 @@ function ArticleReader() {
 				</button>
 			</div>
 
-			{/* {article.cover_image && (
-				<div className="max-w-5xl mx-auto px-4 mt-6">
-					<img
-						src={article.cover_image}
-						alt={article.title}
-						className="w-full h-96 object-cover rounded-2xl"
-					/>
-				</div>
-			)} */}
-
 			<article className=" max-w-3xl mx-auto px-4 py-8">
 				{/* Title */}
-				<h1 className=" text-2xl md:text-5xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+				<h1 className=" text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
 					{article?.title}
 				</h1>
 
-				<div className="flex items-center gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+				<div className="flex flex-col  items-start gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
 					<div className="flex-1">
 						<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
 							<span>{formatDate(article.created_at)}</span>
@@ -229,6 +256,35 @@ function ArticleReader() {
 									<span>{article.view_count} views</span>
 								</>
 							)}
+							<span className="mr-1 text-xl mb-1">•</span>
+							<span className="flex items-center">
+								<Heart size={12} />
+
+								<span className="font-semibold mx-1">
+									{article.likes || "Like"}
+								</span>
+							</span>
+						</div>
+					</div>
+
+					<div className="  rounded-xl">
+						<div className="flex items-center gap-1">
+							<img
+								src={author?.profile_img || userDp}
+								alt={author?.username}
+								className="h-10 rounded-full object-cover cursor-pointer"
+								onClick={() => navigate(`/profile/${author?.username}`)}
+							/>
+							<div className="flex-1">
+								<h3
+									className="font-bold -mb-1 cursor-pointer hover:underline"
+									onClick={() => navigate(`/profile/${author?.username}`)}>
+									{author?.name || author?.username}
+								</h3>
+								<p className="text-gray-600 text-xs dark:text-gray-400 ">
+									{author?.about || "Hey, I write on Pennat."}
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -238,14 +294,14 @@ function ArticleReader() {
 					{parse(article.body)}
 				</div>
 
-				{/* <div className="flex items-center gap-3 py-8 border-y border-gray-200 dark:border-gray-700">
+				{/* <div className="flex items-center gap-3 py-8 border-gray-200 dark:border-gray-700">
 				
 					<button
 						className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300
 	                         dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
 						<Heart size={18} />
-						<span className="text-sm">Like</span>
-						<span className="font-semibold">{article.like_count || ""}</span>
+					
+						<span className="font-semibold">{article.likes || "Like"}</span>
 					</button>
 
 				
@@ -266,55 +322,48 @@ function ArticleReader() {
 				</div> */}
 
 				{/* Author*/}
-				<div className="mt-12 p-6 bg-gray-50 dark:bg-[#0d0d0d] rounded-xl">
-					<div className="flex items-start gap-4">
-						<img
-							src={author?.profile_img || userDp}
-							alt={author?.username}
-							className="w-16 h-16 rounded-full object-cover cursor-pointer"
-							onClick={() => navigate(`/profile/${author?.username}`)}
-						/>
-						<div className="flex-1">
-							<h3
-								className="text-xl font-bold mb-1 cursor-pointer hover:underline"
-								onClick={() => navigate(`/profile/${author?.username}`)}>
-								{author?.name || author?.username}
-							</h3>
-							<p className="text-gray-600 dark:text-gray-400 mb-3">
-								{author?.about || "Hey, I write on Pennat."}
-							</p>
-							{/* <button className="px-2 py-1 bg-background  border
-              border-foreground  text-forground rounded-lg cursor-pointer active:bg-gray-700 hover:bg-blue-700">
-								Following
-							</button> */}
-						</div>
-					</div>
-				</div>
 
 				<div className="mt-12">
-					<h2 className="text-sm  mb-2 ml-2">Comments ({commentCount})</h2>
+					<h2 className="text-lg font-bold  mb-2  ml-2 ">
+						{commentCount ?? ""} {commentCount > 1 ? "Comments" : "Comment"}{" "}
+					</h2>
 
-					<div className="mb-8">
+					<div>
 						<textarea
+							onChange={(e) => {
+								if (e.target.value) {
+									setShowBtn(true);
+								} else {
+									setShowBtn(false);
+								}
+							}}
 							ref={commentRef}
 							placeholder="Write a comment..."
-							className="w-full p-4 border border-gray-300 dark:border-gray-700 rounded-lg
-	                     bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600"
-							rows="3"
+							className=" 
+							block
+						field-sizing-content
+							overflow-x-clip
+							h-fit
+							w-full px-2 py-0 focus:py-1 border-b border-gray-300 dark:border-gray-700 rounded-xs
+	                     focus:outline-none  "
 						/>
-						<div className="w-full flex justify-end">
+						<div className="w-full mt-1 flex justify-end">
 							<button
 								disabled={!canComment}
-								className="mt-2 px-6 py-2 bg-gray-400 dark:bg-gray-800 border  rounded-lg hover:bg-gray-700 disabled:bg-gray-400"
+								className={`transition  duration-700 ${
+									showBtn ? "opacity-100 block" : "opacity-0 collapse"
+								}
+								outline-0
+								px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700 dark:border-0 disabled:bg-gray-400`}
 								onClick={handleComment}>
 								{canComment ? "Post Comment" : "Please Wait.."}
 							</button>
 						</div>
 					</div>
 
-					<div className="text-gray-500 p-2 dark:text-gray-400">
+					<div className="text-gray-500  dark:text-gray-400">
 						{commentList.length > 0 && (
-							<div className="w-full rounded-md bg-gray-200 p-1">
+							<div className="w-full rounded-md dark:bg-[#111112]  p-1">
 								{commentList.map((comment) => {
 									return (
 										<CommentCard
