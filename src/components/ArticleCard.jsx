@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,  useState } from "react";
 import userDp from "../assets/user.png";
 import { dataContext, userContext } from "../context/Context";
 import {

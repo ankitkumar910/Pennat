@@ -1,7 +1,7 @@
 import React from "react";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
-import NoConnection from "/NoConnection.json?url";
 import InternetStatus from "./InternetStatus";
+import path  from "../assets/NoConnection.json";
 
 function Offline() {
 	let isOnline = InternetStatus();
@@ -17,7 +17,7 @@ function Offline() {
 				loop
 				speed={2}
 				className="h-40 m-0 sm:h-54 md:h-60"
-				src={NoConnection}></Player>
+				src={path}></Player>
 		</div>
 	);
 }

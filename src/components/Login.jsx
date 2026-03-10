@@ -18,7 +18,7 @@ function Login() {
 	useEffect(() => {
 		if (userInfo) {
 			console.log("Navigatting");
-			navi("/home", {
+			navi("/", {
 				replace: true,
 			});
 			return;
