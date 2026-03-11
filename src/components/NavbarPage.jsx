@@ -22,7 +22,7 @@ function NavbarPage() {
 		dark:bg-black
 		top-0  z-2  py-1">
 			<div>
-				<h1 className="font-bold text-3xl mb-4 pl-2">Pennat</h1>
+				<h1 className="font-bold text-3xl  pl-2">Pennat</h1>
 			</div>
 			<div className="relative ">
 				<div
