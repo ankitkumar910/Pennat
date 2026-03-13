@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 
-export function SearchButton() {
+export function SearchButton({ SetSearchQuery }) {
 	const naviagtors = useNavigate();
 
 	const [open, setOpen] = React.useState(false);
@@ -23,11 +23,13 @@ export function SearchButton() {
 	);
 
 	function goSearch(text) {
+		if (SetSearchQuery) {
+			SetSearchQuery(text);
+		}
 		naviagtors(`/search?q=${text}`, {
-			replace: true,
+			replace: false,
 		});
 
-	
 		setOpen(false);
 	}
 

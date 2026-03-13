@@ -1,13 +1,14 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import ArticleCard from "./ArticleCard";
 
 import { dataContext } from "../context/Context";
 import { LoaderCircle } from "lucide-react";
 
-function ArticlePage() {
-	const [articlesData] = useContext(dataContext);
+function ArticlePage({ articles }) {
+	let [articlesData] = useContext(dataContext);
 
-
+	if (articles) articlesData = articles;
+	console.log(articles)
 
 	return (
 		<div className="mt-3">

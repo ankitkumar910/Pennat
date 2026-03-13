@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { themeContext } from "../context/Context";
 import { SearchButton } from "./SearchButton";
 
-function NavbarPage() {
+function NavbarPage({SetSearchQuery}) {
 	const naviagtors = useNavigate();
 	const [isDark, setIsDark] = useContext(themeContext);
 	const [showMenu, setShowMenu] = useState(false);
@@ -29,12 +29,12 @@ function NavbarPage() {
 			
 		dark:bg-black
 		top-0  z-2  ">
-			<NavLink to={'/home'}>
+			<NavLink to={'/home'} >
 				<h1 className="font-bold text-3xl mb-2 pl-2">Pennat</h1>
 			</NavLink>
 			<div className="relative right-0">
 				<div className="flex flex-row items-center ">
-					<SearchButton />
+					<SearchButton SetSearchQuery={SetSearchQuery}/>
 
 					<span
 						onClick={() => {
