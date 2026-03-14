@@ -48,7 +48,7 @@ function SearchPage() {
 
 	if (loading)
 		return (
-			<div className="h-full w-full">
+			<div className="h-screen w-full">
 				<div className="min-h-full flex items-center justify-center">
 					<div className="flex items-center gap-2 text-gray-600">
 						<LoaderCircle size={24} className="animate-spin" />
