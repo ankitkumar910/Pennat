@@ -11,10 +11,10 @@ function ArticlePage({ articles }) {
 	console.log(articles)
 
 	return (
-		<div className="mt-3">
+		<div className="mt-3 h-full min-h-screen w-full">
 			{articlesData?.length ? (
 				<div
-					className="flex justify-center  flex-col items-center w-full box-border pb-8 
+					className="flex  justify-center  flex-col items-center w-full box-border pb-8 
 				">
 					{articlesData &&
 						articlesData.map((el) => <ArticleCard key={el.id} article={el} />)}
@@ -26,7 +26,7 @@ function ArticlePage({ articles }) {
 				<div className="min-h-screen flex items-center justify-center">
 					<div className="flex items-center gap-2 text-gray-600">
 						<LoaderCircle size={24} className="animate-spin" />
-						<span>Loading profile...</span>
+						<span>Loading...</span>
 					</div>
 				</div>
 			)}

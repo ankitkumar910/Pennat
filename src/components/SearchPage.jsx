@@ -9,7 +9,6 @@ import { Player } from "@lottiefiles/react-lottie-player";
 
 function SearchPage() {
 	const [searchParams] = useSearchParams();
-
 	const [searchQuery, SetSearchQuery] = useState(searchParams.get("q"));
 	const [articles, setArticles] = useState([]);
 	const [loading, setLoading] = useState();
@@ -49,8 +48,8 @@ function SearchPage() {
 
 	if (loading)
 		return (
-			<div className="h-screen w-screen">
-				<div className="min-h-screen flex items-center justify-center">
+			<div className="h-full w-full">
+				<div className="min-h-full flex items-center justify-center">
 					<div className="flex items-center gap-2 text-gray-600">
 						<LoaderCircle size={24} className="animate-spin" />
 						<span>Loading..</span>
@@ -60,13 +59,13 @@ function SearchPage() {
 		);
 
 	return (
-		<div>
+		<div className="w-full ">
 			<NavbarPage SetSearchQuery={SetSearchQuery} />
 			{!loading && !articles.length && (
-				<div className="h-screen w-screen">
+				<div className="h-full w-full">
 					<div className="min-h-screen flex items-center justify-center">
 						<div className="flex items-center gap-2 text-gray-600">
-							<div className="select-none h-screen w-screen flex flex-col items-center justify-center  ">
+							<div className="select-none h-full w-full flex flex-col items-center justify-center  ">
 								<Player
 									autoplay
 									className="h-50 m-0  sm:h-54   md:h-60"
@@ -83,13 +82,15 @@ function SearchPage() {
 					</div>
 				</div>
 			)}
-			<div className="h-screen w-screen flex mt-12 justify-center">
-				{articles && (
-					<div>
+			<div className="h-full  w-full flex mt-12 justify-center">
+				{articles.length>0 && (
+					<div className="w-full h-full">
 						<ArticlePage articles={articles} />
 					</div>
 				)}
 			</div>
+
+		
 		</div>
 	);
 }

@@ -132,11 +132,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/search",
-		element: (
-			<>
-				<SearchPage />
-			</>
-		),
+		element: <SearchPage />,
 		errorElement: <>Something Went Wrong.</>,
 	},
 	{
@@ -242,12 +238,17 @@ function App() {
 		*:dark:bg-[#121212]
 		*:dark:text-[#E0E0E0]
 		mx-0
-		
+		max-w-lvw
 		*:mx-0
 		*:my:0
-overflow-y-auto 
+		box-border
+		
+	dark:bg-black
+
 		*:box-border
-		dark:bg-black
+		min-h-screen
+		
+		
 		`}>
 			<Toaster position="top-center" />
 			<InstallPWA />

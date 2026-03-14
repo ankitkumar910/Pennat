@@ -142,8 +142,9 @@ function ArticleCard({ article }) {
 		setIsLiking(false);
 	}
 
+	// 
 	return (
-		<div className="w-full sm:w-[60vw] max-w-2xl mx-auto py-6 px-4 bg-white dark:bg-[#141414] sm:border sm:mt-2 border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all hover:shadow-[0_2px_15px_rgba(0,0,0,0.1)]">
+		<div className="w-full bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all hover:shadow-[0_2px_15px_rgba(0,0,0,0.1)]">
 			<div className="flex justify-between items-center mb-4">
 				<div className="flex items-center gap-3">
 					<img

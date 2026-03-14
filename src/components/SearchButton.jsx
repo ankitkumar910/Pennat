@@ -44,7 +44,7 @@ export function SearchButton({ SetSearchQuery }) {
 			<CommandDialog
 				open={open}
 				onOpenChange={setOpen}
-				className="top-9  left-[48%] sm:left-1/2  ">
+				className="top-9    sm:left-1/2  ">
 				<Command>
 					<CommandInput
 						onKeyDown={(e) => {

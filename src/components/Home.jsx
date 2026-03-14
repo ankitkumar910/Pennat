@@ -78,7 +78,7 @@ function Home() {
 					onClick={() => {
 						setWriter(true);
 					}}
-					className="border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed justify-center sm:mx-auto mx-6 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
+					className="border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
 					
 					mb-4  ">
 					<div
