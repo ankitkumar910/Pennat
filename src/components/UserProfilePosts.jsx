@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ArticleCard from "./ArticleCard";
 import ProfilePostCard from "./ProfilePostCard";
+import { BookText } from "lucide-react";
 
 function UserProfilePosts({ ArticleTable }) {
 	const [articles, setArticle] = useState(ArticleTable);
@@ -24,8 +25,8 @@ function UserProfilePosts({ ArticleTable }) {
 
 	return (
 		<div>
-			<p className="text-xs  font-semibold uppercase tracking-wider text-gray-400 border-t pt-2 border-t-gray-200 mx-10 dark:border-[#2f3136]">
-				My articles
+			<p className="  font-semibold  tracking-wider text-gray-400  pt-4 pb-1 pl-1 text-sm  flex items-center dark:border-[#2f3136]">
+			 <BookText size={16}/> <span className="pl-1"> Articles </span>
 			</p>
 
 			<div

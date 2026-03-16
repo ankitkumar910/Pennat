@@ -20,12 +20,14 @@ import ProfileImageUpdater from "./ProfileEditor";
 import UserProfilePosts from "./UserProfilePosts";
 import ProfileFooter from "./ProfileFooter";
 import { AlertDialogBasic } from "./ui/AlertDialogBasic";
+import { toast } from "sonner";
 
 function Profile() {
 	// 1. Context and Params
 	const { username: urlUsername } = useParams();
 	const navigate = useNavigate();
 	const [currentUser] = useContext(userContext);
+	const [isFollow, setFollow] = useState(false);
 	// 2. Local State
 	const [profileData, setProfileData] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -39,6 +41,8 @@ function Profile() {
 	const [profileImg, setProfileImg] = useState(userDp);
 	const [about, setAbout] = useState("");
 	const [control, setControl] = useState(false);
+	const [follower, setFollower] = useState(0);
+	const [following, setFollowing] = useState(0);
 
 	// 3. Logic: Decide which data to load
 
@@ -96,6 +100,76 @@ function Profile() {
 	// 5. Permission Check: Is this the logged-in user's own profile?
 	const isOwnProfile = currentUser?.user_id === profileData?.user_id;
 
+	//check follow
+	useEffect(() => {
+		if (!isOwnProfile && !loading) {
+			console.log("Calling supabase to get follow status.");
+			async function loadFollowState() {
+				const { data: stateData, error: stateError } = await supabase
+					.from("FollowTable")
+					.select()
+					.eq("follower_id", currentUser?.user_id)
+					.eq("following_id", profileData?.user_id);
+
+				if (stateError) {
+					setFollow(false);
+					toast("Can't load profile.");
+					console.log(stateError);
+				}
+
+				if (stateData?.length < 1) {
+					setFollow(false);
+				} else if (stateData?.length > 0) {
+					setFollow(true);
+				}
+			}
+
+			loadFollowState();
+		}
+	}, [isOwnProfile, loading]);
+
+	//load follower count
+	useEffect(() => {
+		if (!profileData) return;
+		async function loadFollower() {
+			const { count, error: followerError } = await supabase
+				.from("FollowTable")
+				.select("*", { count: "exact", head: true })
+				.eq("following_id", profileData?.user_id);
+
+			if (followerError) {
+				toast("Error while loading follower count");
+				console.log(followerError);
+				return;
+			}
+			console.log("COunt", count);
+			setFollower(count ?? 0);
+		}
+
+		loadFollower();
+	}, [profileData]);
+
+	//load following count
+	useEffect(() => {
+		if (!profileData) return;
+		async function loadFollower() {
+			const { count, error: followingError } = await supabase
+				.from("FollowTable")
+				.select("*", { count: "exact", head: true })
+				.eq("follower_id", profileData?.user_id);
+
+			if (followingError) {
+				toast("Error while loading following count");
+				console.log(followingError);
+				return;
+			}
+			console.log("COunt", count);
+			setFollowing(count ?? 0);
+		}
+
+		loadFollower();
+	}, [profileData]);
+
 	if (loading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center dark:bg-black">
@@ -128,8 +202,43 @@ function Profile() {
 		localStorage.removeItem("theme");
 		navigate("/login");
 	}
+
+	async function handleFollow() {
+		setFollow(true);
+		setFollower((p) => p + 1);
+		const { error: followError } = await supabase.from("FollowTable").insert({
+			follower_id: currentUser?.user_id,
+			following_id: profileData?.user_id,
+		});
+
+		if (followError) {
+			setFollow(false);
+			toast("Something went wrong.");
+			console.log(followError);
+			setFollower((p) => p - 1);
+			return;
+		}
+	}
+
+	async function handleUnfollow() {
+		setFollow(false);
+		setFollower((p) => p - 1);
+		const { error: unfollowError } = await supabase
+			.from("FollowTable")
+			.delete()
+			.eq("follower_id", currentUser?.user_id)
+			.eq("following_id", profileData?.user_id);
+
+		if (unfollowError) {
+			setFollow(true);
+			toast("Something went wrong.");
+			console.log(unfollowError);
+			setFollower((p) => p + 1);
+			return;
+		}
+	}
 	return (
-		<div className="relative  dark:text-gray-400 bg-white dark:bg-black  pb-1 box-border w-full min-h-screen">
+		<div className="relative  dark:text-gray-400 bg-white dark:bg-black  pb-1 box-border w-full min-h-screen ">
 			{/* Navigation & Edit Controls */}
 			<div className="absolute w-full z-10 p-4">
 				<div className="w-full flex justify-between items-center">
@@ -199,17 +308,21 @@ function Profile() {
 
 			{/* Cover Image */}
 			<div className="w-full p-0.5  sm:p-0 max-h-60 h-52 flex   ">
-				<img src={cover} alt="cover" className="min-w-full rounded-md sm:rounded-none   object-cover" />
+				<img
+					src={cover}
+					alt="cover"
+					className="min-w-full rounded-md sm:rounded-none   object-cover"
+				/>
 			</div>
 
 			{/* Profile Info Section */}
-			<div className="-mt-13 w-full  px-4   flex flex-col justify-start max-w-xl mx-auto  ">
+			<div className="-mt-13 w-full md:w-1/2  px-4 flex flex-col justify-start  mx-auto  ">
 				<div className="flex w-full items-center justify-between mx-2">
-					<div className="relative group pl-8">
+					<div className="relative group pl-4">
 						<img
 							src={profileImg}
 							alt="profile"
-							className="w-25 h-25 rounded-full   object-cover"
+							className="w-25 h-25 rounded-full shadow-2xs  object-cover"
 						/>
 						{/* Edit Profile Image Button (Only for owner) */}
 						{isOwnProfile && (
@@ -222,8 +335,12 @@ function Profile() {
 					</div>
 
 					{!isOwnProfile && (
-						<div className="border p-2 mt-16 rounded-md mx-2 bg-foreground text-background  hover:text-foreground hover:font-semibold hover:bg-gray-500 transition-all duration-400  shadow-2xs cursor-pointer">
-							Follow
+						<div
+							onClick={isFollow ? handleUnfollow : handleFollow}
+							className={`border p-2 mt-16 rounded-md mx-2 
+								${!isFollow ? "bg-foreground text-background" : "bg-background text-foreground"}
+							  hover:text-foreground  hover:bg-gray-500 transition-all duration-400  shadow-2xs cursor-pointer`}>
+							{isFollow ? "Following" : "Follow"}
 						</div>
 					)}
 				</div>
@@ -245,18 +362,18 @@ function Profile() {
 						</p>
 					</div>
 				)}
-				<div className=" pl-4 md:pl-16 md:mt-4 text-xs  flex gap-8  mt-2  ">
+				<div className=" pl-4  md:mt-4 text-xs  flex gap-8  mt-2  ">
 					<div className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="followers">
 							Followers
 						</label>
-						<p className="font-semibold">44M</p>
+						<p className="font-semibold">{follower}</p>
 					</div>
 					<div className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="following">
 							Following
 						</label>
-						<p className="font-semibold">4K</p>
+						<p className="font-semibold">{following}</p>
 					</div>
 				</div>
 			</div>
@@ -281,7 +398,7 @@ function Profile() {
 			)}
 
 			{/* Posts Section */}
-			<div className="mt-8 border-t dark:border-gray-800">
+			<div className="mt-8 px-6 sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
 				{profileData.ArticleTable && (
 					<UserProfilePosts ArticleTable={profileData.ArticleTable} />
 				)}
