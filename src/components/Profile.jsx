@@ -311,7 +311,7 @@ function Profile() {
 				<img
 					src={cover}
 					alt="cover"
-					className="min-w-full rounded-md sm:rounded-none   object-cover"
+					className="min-w-full rounded-none   object-cover"
 				/>
 			</div>
 
