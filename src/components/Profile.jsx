@@ -244,7 +244,7 @@ function Profile() {
 				<div className="w-full flex justify-between items-center">
 					<button
 						onClick={() => navigate("/home", true)}
-						className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer">
+						className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer  ">
 						<ChevronLeft />
 					</button>
 
@@ -254,14 +254,14 @@ function Profile() {
 							onClick={() => {
 								setControl((p) => !p);
 							}}
-							className={`p-2  relative text-foreground dark:bg-[#000000]  flex justify-end rounded-full ${
+							className={`p-2  relative text-foreground dark:bg-[#000000] bg-white flex justify-end rounded-full ${
 								control && "bg-background text-foreground"
 							}`}>
 							{" "}
-							<Ellipsis size={24} className={!control && "text-amber-50"} />
+							<Ellipsis size={24}  className={`${!control && "text-amber-50 "} rotate-90 text-foreground`} />
 							<ul
 								hidden={!control}
-								className="absolute z-50 right-10  w-fit min-w-[20vw]   sm:min-w-[10vw]  rounded-md dark:bg-[#1F1B24] bg-gray-100 shadow-lg transition cursor-pointer p-1
+								className="absolute z-50 right-12  w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
                             *:hover:border
                             *:rounded-md
                             *:hover:bg-gray-600
@@ -307,7 +307,7 @@ function Profile() {
 			</div>
 
 			{/* Cover Image */}
-			<div className="w-full p-0.5  sm:p-0 max-h-60 h-52 flex   ">
+			<div className="w-full p-0 sm:p-0 sm:max-h-60 sm:h-52 flex   h-30">
 				<img
 					src={cover}
 					alt="cover"
@@ -322,13 +322,13 @@ function Profile() {
 						<img
 							src={profileImg}
 							alt="profile"
-							className="w-25 h-25 rounded-full shadow-2xs  object-cover"
+							className="h-20 w-20 sm:w-25 sm:h-25 rounded-full shadow-2xs  object-cover"
 						/>
 						{/* Edit Profile Image Button (Only for owner) */}
 						{isOwnProfile && (
 							<button
 								onClick={() => setImgEditor(true)}
-								className="absolute bottom-1 right-1 p-2 bg-white dark:bg-[#1F1B24] rounded-full shadow-md border dark:border-gray-700 transition transform hover:scale-110 cursor-pointer">
+								className="absolute bottom-1 right-1 p-1 sm:p-2 bg-white dark:bg-[#1F1B24] rounded-full shadow-md border dark:border-gray-700 transition transform hover:scale-110 cursor-pointer">
 								<PencilIcon size={14} />
 							</button>
 						)}
@@ -345,7 +345,7 @@ function Profile() {
 					)}
 				</div>
 
-				<div className="flex pl-4 items-center mt-2">
+				<div className="flex pl-4 items-center mt-1 sm:mt-2">
 					<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
 						{profileData.name}
 					</h2>
@@ -398,7 +398,7 @@ function Profile() {
 			)}
 
 			{/* Posts Section */}
-			<div className="mt-8 px-6 sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
+			<div className="mt-8  px-6  sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
 				{profileData.ArticleTable && (
 					<UserProfilePosts ArticleTable={profileData.ArticleTable} />
 				)}

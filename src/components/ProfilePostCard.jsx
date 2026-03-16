@@ -31,7 +31,8 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 				e.preventDefault();
 				setOpenMenuId(isOpen ? null : article.id);
 			}}
-			className="group relative flex flex-col w-full my-1 min-h-45 bg-white dark:bg-[#1A1A1A] border border-gray-100 dark:border-[#2A2A2A] rounded-xl overflow-hidden transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+			className="group relative flex flex-col w-full my-1 min-h-20 bg-white dark:bg-[#1A1A1A] border border-gray-100 dark:border-[#2A2A2A] 
+			rounded overflow-hidden transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
 			{/* Loading Overlay */}
 			{loader && (
 				<div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-[2px]">
@@ -41,7 +42,7 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 
 			{/* Top Action Bar */}
 			<div className="flex justify-between items-start p-4 pb-2">
-				<div className="p-2 rounded-lg bg-gray-50 dark:bg-[#252525] text-gray-400">
+				<div className="p-2 rounded-lg collapse bg-gray-50 dark:bg-[#252525] text-gray-400">
 					<BookOpen size={16} />
 				</div>
 
@@ -49,7 +50,8 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 					<div className="relative">
 						<button
 							onClick={() => setOpenMenuId(isOpen ? null : article.id)}
-							className="p-1.5 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#252525] transition-all cursor-pointer">
+							className="p-1.5 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100
+							 dark:hover:bg-[#252525] transition-all cursor-pointer">
 							<Ellipsis size={20} />
 						</button>
 

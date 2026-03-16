@@ -24,8 +24,8 @@ function UserProfilePosts({ ArticleTable }) {
 	}, []);
 
 	return (
-		<div>
-			<p className="  font-semibold  tracking-wider text-gray-400  pt-4 pb-1 pl-1 text-sm  flex items-center dark:border-[#2f3136]">
+		<div >
+			<p className=" mb-4 font-semibold  tracking-wider text-gray-400  pt-4 pb-1 pl-1 text-sm   flex items-center dark:border-[#2f3136]">
 			 <BookText size={16}/> <span className="pl-1"> Articles </span>
 			</p>
 

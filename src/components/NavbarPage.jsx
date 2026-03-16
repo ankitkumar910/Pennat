@@ -90,7 +90,18 @@ function NavbarPage({SetSearchQuery}) {
 					{/* <li>For You</li> */}
 					{/* <li>Following</li> */}
 
-					<li>
+				
+					<li
+						onClick={() => {
+							naviagtors("/profile");
+						}}>
+						<span className="flex items-center text-sm">
+							{" "}
+							<User size={16} className="p-0 mx-1" />
+							<span className="">Profile</span>
+						</span>
+					</li>
+						<li>
 						<span
 							className="flex w-40 items-center"
 							onClick={() => {
@@ -114,16 +125,6 @@ function NavbarPage({SetSearchQuery}) {
 									? "Switch to dark mode"
 									: "Switch to dark mode"}
 							</span>
-						</span>
-					</li>
-					<li
-						onClick={() => {
-							naviagtors("/profile");
-						}}>
-						<span className="flex items-center text-sm">
-							{" "}
-							<User size={16} className="p-0 mx-1" />
-							<span className="">Profile</span>
 						</span>
 					</li>
 				</ul>
