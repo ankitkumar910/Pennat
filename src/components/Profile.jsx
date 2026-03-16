@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -363,18 +363,18 @@ function Profile() {
 					</div>
 				)}
 				<div className=" pl-4  md:mt-4 text-xs  flex gap-8  mt-2  ">
-					<div className="flex flex-col justify-center items-center">
+					<NavLink to={'followers'} className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="followers">
 							Followers
 						</label>
 						<p className="font-semibold">{follower}</p>
-					</div>
-					<div className="flex flex-col justify-center items-center">
+					</NavLink>
+					<NavLink to={'following'} className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="following">
 							Following
 						</label>
 						<p className="font-semibold">{following}</p>
-					</div>
+					</NavLink>
 				</div>
 			</div>
 
@@ -405,6 +405,8 @@ function Profile() {
 			</div>
 
 			<ProfileFooter />
+
+			<Outlet />
 		</div>
 	);
 }

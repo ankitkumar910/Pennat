@@ -25,6 +25,8 @@ import { CalculateTime } from "./utils/CalculateTime";
 import Offline from "./components/NoInternet";
 import InternetStatus from "./components/InternetStatus";
 import SearchPage from "./components/SearchPage";
+import FollowerPage from "./components/FollowerPage";
+import FollowingPage from "./components/FollowingPage";
 
 const router = createBrowserRouter([
 	{
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
 	{
 		path: "/profile/:username",
 		element: <Profile />,
+	},
+	{
+		path: "/profile/:username/followers",
+		element: <FollowerPage />,
+	},
+	{
+		path: "/profile/:username/following",
+		element: <FollowingPage />,
 	},
 	{
 		path: "/auth",
