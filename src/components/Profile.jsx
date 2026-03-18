@@ -27,7 +27,7 @@ function Profile() {
 	const { username: urlUsername } = useParams();
 	const navigate = useNavigate();
 	const [currentUser] = useContext(userContext);
-	const [isFollow, setFollow] = useState(false);
+	const [isFollow, setFollow] = useState(true);
 	// 2. Local State
 	const [profileData, setProfileData] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -51,6 +51,7 @@ function Profile() {
 
 	const [info] = useContext(userContext);
 	if (!info) navigate("/login");
+
 	useEffect(() => {
 		if (urlUsername) {
 			isMyProfile.current = false;
@@ -99,7 +100,12 @@ function Profile() {
 
 	// 5. Permission Check: Is this the logged-in user's own profile?
 	const isOwnProfile = currentUser?.user_id === profileData?.user_id;
-
+	useEffect(() => {
+		if (!urlUsername) {
+			navigate(`/profile/${currentUser?.username}`)
+			return null;
+		}
+	}, [isOwnProfile, navigate]);
 	//check follow
 	useEffect(() => {
 		if (!isOwnProfile && !loading) {
@@ -258,7 +264,12 @@ function Profile() {
 								control && "bg-background text-foreground"
 							}`}>
 							{" "}
-							<Ellipsis size={24}  className={`${!control && "text-amber-50 "} rotate-90 text-foreground`} />
+							<Ellipsis
+								size={24}
+								className={`${
+									!control && "text-amber-50 "
+								} rotate-90 text-foreground`}
+							/>
 							<ul
 								hidden={!control}
 								className="absolute z-50 right-12  w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
@@ -363,13 +374,17 @@ function Profile() {
 					</div>
 				)}
 				<div className=" pl-4  md:mt-4 text-xs  flex gap-8  mt-2  ">
-					<NavLink to={'followers'} className="flex flex-col justify-center items-center">
+					<NavLink
+						to={`followers?id=${profileData?.user_id}`}
+						className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="followers">
 							Followers
 						</label>
 						<p className="font-semibold">{follower}</p>
 					</NavLink>
-					<NavLink to={'following'} className="flex flex-col justify-center items-center">
+					<NavLink
+						to={`following?id=${profileData?.user_id}`}
+						className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="following">
 							Following
 						</label>
