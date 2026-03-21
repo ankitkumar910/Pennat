@@ -161,10 +161,36 @@ function App() {
 	const [userInfo, setUserInfo] = useState();
 	const [loading, setLoading] = useState(true);
 	const [likedArcticles, setLikedArcticles] = useState(new Set());
+	const [myFollowing, setMyFollowing] = useState(new Set());
 	let isOnline = InternetStatus();
 
 	const loadUser = useCallback(async () => {
+		console.log("i am being called.");
 		let res = await supabase.auth.getUser();
+
+		async function loadFollowinglist(user_id) {
+			//load my followings data
+
+			const { data: followData, error: followError } = await supabase
+				.from("FollowTable")
+				.select("following_id")
+				.eq("follower_id", user_id);
+
+			if (followError) {
+				console.log("Can not load following of the you.");
+				console.log(followError);
+			}
+
+			if (followData) {
+				console.log("Yes. Followings loaded of you.");
+				let tempSet = new Set();
+				followData.map((row) => {
+					console.log(row)
+					tempSet.add(row.following_id);
+				});
+				setMyFollowing(tempSet);
+			}
+		}
 
 		try {
 			if (res?.data?.user) {
@@ -180,6 +206,7 @@ function App() {
 					setUserInfo(null);
 				} else {
 					setUserInfo(data);
+					loadFollowinglist(id);
 				}
 			}
 		} catch (error) {
@@ -269,6 +296,8 @@ function App() {
 					setArticlesData,
 					likedArcticles,
 					setLikedArcticles,
+					myFollowing,
+					setMyFollowing,
 				]}>
 				<userContext.Provider value={[userInfo, loading, loadUser]}>
 					<themeContext.Provider value={[isDark, setIsDark, theme]}>

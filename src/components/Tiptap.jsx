@@ -34,7 +34,7 @@ const Tiptap = ({ setHtml }) => {
       </div>
 
      
-      <div className="sticky bottom-0 bg-white rounded-4xl my-2 shadow-md sm:w-fit sm:ml-1 dark:bg-[#010101] border-t p-3 flex flex-wrap gap-2">
+      <div className="sticky mx-4 bottom-0 bg-white rounded-4xl my-2 shadow-md sm:w-fit sm:ml-1 dark:bg-[#010101] border-t p-3 flex flex-wrap gap-2">
 
         <button
           type="button"

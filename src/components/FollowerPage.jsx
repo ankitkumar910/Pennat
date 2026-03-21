@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import FollowerCard from "./FollowerCard";
 import supabase from "../config/supabaseClient";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LoaderCircle } from "lucide-react";
 
 function FollowerPage() {
 	const [followerList, setFollowerList] = useState([]);
-
+	const [loading, setLoading] = useState(true);
 	const params = useParams();
 	const { username } = params;
 	const [searchParam] = useSearchParams();
@@ -14,27 +14,36 @@ function FollowerPage() {
 
 	useEffect(() => {
 		async function loadFollowers() {
+			setLoading(true);
 			console.log("Calling supabase to load followers");
 
 			const { data: followData, error: followError } = await supabase
 				.from("FollowTable")
 				.select(
-					"*, UserTable!FollowTable_follower_id_fkey(username, user_id,name,profile_img)"
+					"*, UserTable!FollowTable_follower_id_fkey(username,user_id,name,profile_img)"
 				)
 				.eq("following_id", user_id);
 
 			if (followError) {
 				console.log(followError);
+				setLoading(false);
 				return;
 			}
 
 			if (followData) {
 				console.log(followData);
 				setFollowerList(followData);
+				setLoading(false);
 			}
 		}
 		loadFollowers();
 	}, []);
+
+	// if (loading) {
+	// 	return (
+
+	// 	);
+	// }
 
 	return (
 		<div className=" min-h-screen">
@@ -58,30 +67,39 @@ function FollowerPage() {
 						/ followers
 					</h14>
 				</div>
-				<br />
+				{loading && (
+					<div className="min-h-screen  flex items-center justify-center bg-transparent">
+						<div className="flex items-center gap-2 text-gray-600">
+							<LoaderCircle size={24} className="animate-spin" />
+							<span>Loading..</span>
+						</div>
+					</div>
+				)}
 
-				<div className="md:w-1/2 md:mx-auto">
-					<ul
-						className="-mt-3 *:p-4 
+				{!loading && (
+					<div className="md:w-1/2 md:mx-auto">
+						<br />
+
+						<ul
+							className="-mt-3 *:p-4 
                border-gray-100 *:m-0.5 *:rounded-sm
               
           ">
-						{followerList.map((el) => (
-							<li key={el.id}>
-								<FollowerCard data={el.UserTable} />
-							</li>
-						))}
+							{followerList.map((el) => (
+								<li key={el.id}>
+									<FollowerCard data={el.UserTable} />
+								</li>
+							))}
 
-						{followerList.length <= 0 && (
-							<div className="text-center">
-								{username ? "@" + username : "This user"} is not followed
-								anyone.
-							</div>
-						)}
-
-						
-					</ul>
-				</div>
+							{followerList.length <= 0 && (
+								<div className="text-center">
+									{username ? "@" + username : "This user"} is not followed
+									anyone.
+								</div>
+							)}
+						</ul>
+					</div>
+				)}
 			</div>
 		</div>
 	);

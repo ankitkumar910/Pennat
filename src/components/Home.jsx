@@ -1,7 +1,6 @@
 import NavbarPage from "./NavbarPage";
 import ArticlePage from "./ArticlePage";
 import AddArticle from "./AddArticle";
-
 import FieldInput from "./ui/FieldInput";
 import ArticleWriter from "./ArticleWriter";
 import { useContext, useEffect, useState } from "react";
@@ -17,7 +16,7 @@ function Home() {
 	const [userInfo, isLoading] = useContext(userContext);
 	const navi = useNavigate();
 
-	const [articles, setArticlesData, , setLikedArcticles] =
+	const [articles, setArticlesData, , setLikedArcticles, , setMyFollowing] =
 		useContext(dataContext);
 
 	useEffect(() => {
@@ -36,8 +35,7 @@ function Home() {
 
 				if (response.error) {
 					console.error("Database error:", response.error);
-					
-					
+
 					return null;
 				}
 				if (response.data) {
@@ -51,7 +49,7 @@ function Home() {
 					} else if (data) {
 						let tempSet = new Set();
 						data.forEach((row) => {
-							if(row.user_id == userInfo.user_id) tempSet.add(row.article_id);
+							if (row.user_id == userInfo.user_id) tempSet.add(row.article_id);
 						});
 						console.log("Liked Articles By Me 🙍‍♂️🩷");
 						console.log(tempSet);
@@ -62,7 +60,14 @@ function Home() {
 
 			loadeArticles();
 		}
-	}, [userInfo, isLoading, navi, setLikedArcticles, setArticlesData]);
+	}, [
+		userInfo,
+		isLoading,
+		navi,
+		setLikedArcticles,
+		setArticlesData,
+		setMyFollowing,
+	]);
 
 	return (
 		<div className="w-full    -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">

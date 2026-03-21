@@ -48,7 +48,7 @@ function ArticleWriter({ setWriter }) {
 				title: title,
 				body: html,
 				UserTable: userInfo,
-        preview : true
+				preview: true,
 			};
 			setArticlesData((p) => [...p, article]);
 			//navigate("/home");

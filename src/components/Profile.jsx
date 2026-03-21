@@ -10,7 +10,7 @@ import {
 	PencilIcon,
 } from "lucide-react";
 import supabase from "../config/supabaseClient";
-import { userContext } from "../context/Context";
+import { dataContext, userContext } from "../context/Context";
 import userDp from "../assets/user.png";
 import { cover_placeholder } from "../../public/resource";
 
@@ -27,6 +27,7 @@ function Profile() {
 	const { username: urlUsername } = useParams();
 	const navigate = useNavigate();
 	const [currentUser] = useContext(userContext);
+	const [, , , , myFollowing] = useContext(dataContext);
 	const [isFollow, setFollow] = useState(true);
 	// 2. Local State
 	const [profileData, setProfileData] = useState(null);
@@ -51,6 +52,43 @@ function Profile() {
 
 	const [info] = useContext(userContext);
 	if (!info) navigate("/login");
+
+	//follow - unfollow function
+
+	async function handleFollow() {
+		setFollow(true);
+		setFollower((p) => p + 1);
+		const { error: followError } = await supabase.from("FollowTable").insert({
+			follower_id: currentUser?.user_id,
+			following_id: profileData?.user_id,
+		});
+
+		if (followError) {
+			setFollow(false);
+			toast("Something went wrong.");
+			console.log(followError);
+			setFollower((p) => p - 1);
+			return;
+		}
+	}
+
+	async function handleUnfollow() {
+		setFollow(false);
+		setFollower((p) => p - 1);
+		const { error: unfollowError } = await supabase
+			.from("FollowTable")
+			.delete()
+			.eq("follower_id", currentUser?.user_id)
+			.eq("following_id", profileData?.user_id);
+
+		if (unfollowError) {
+			setFollow(true);
+			toast("Something went wrong.");
+			console.log(unfollowError);
+			setFollower((p) => p + 1);
+			return;
+		}
+	}
 
 	useEffect(() => {
 		if (urlUsername) {
@@ -102,8 +140,8 @@ function Profile() {
 	const isOwnProfile = currentUser?.user_id === profileData?.user_id;
 	useEffect(() => {
 		if (!urlUsername) {
-			navigate(`/profile/${currentUser?.username}`)
-			return null;
+			navigate(`/profile/${currentUser?.username}`);
+			return;
 		}
 	}, [isOwnProfile, navigate]);
 	//check follow
@@ -176,6 +214,9 @@ function Profile() {
 		loadFollower();
 	}, [profileData]);
 
+	//follow list
+	console.log("myFollow", myFollowing);
+
 	if (loading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center dark:bg-black">
@@ -209,40 +250,6 @@ function Profile() {
 		navigate("/login");
 	}
 
-	async function handleFollow() {
-		setFollow(true);
-		setFollower((p) => p + 1);
-		const { error: followError } = await supabase.from("FollowTable").insert({
-			follower_id: currentUser?.user_id,
-			following_id: profileData?.user_id,
-		});
-
-		if (followError) {
-			setFollow(false);
-			toast("Something went wrong.");
-			console.log(followError);
-			setFollower((p) => p - 1);
-			return;
-		}
-	}
-
-	async function handleUnfollow() {
-		setFollow(false);
-		setFollower((p) => p - 1);
-		const { error: unfollowError } = await supabase
-			.from("FollowTable")
-			.delete()
-			.eq("follower_id", currentUser?.user_id)
-			.eq("following_id", profileData?.user_id);
-
-		if (unfollowError) {
-			setFollow(true);
-			toast("Something went wrong.");
-			console.log(unfollowError);
-			setFollower((p) => p + 1);
-			return;
-		}
-	}
 	return (
 		<div className="relative  dark:text-gray-400 bg-white dark:bg-black  pb-1 box-border w-full min-h-screen ">
 			{/* Navigation & Edit Controls */}

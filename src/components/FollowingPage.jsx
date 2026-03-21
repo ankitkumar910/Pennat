@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import FollowerCard from "./FollowerCard";
 import supabase from "../config/supabaseClient";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Circle, Loader, LoaderCircle } from "lucide-react";
+import { dataContext, userContext } from "../context/Context";
 
 function FollowingPage() {
 	const [followerList, setFollowerList] = useState([]);
+	const [, , , , myFollowing] = useContext(dataContext);
+	const [loading, setLoading] = useState(true);
+	const [currentUser, , loadUser] = useContext(userContext);
 
 	const params = useParams();
 	const { username } = params;
@@ -13,27 +17,36 @@ function FollowingPage() {
 	const user_id = searchParam.get("id") ?? "";
 
 	useEffect(() => {
-		if (!username) console.log("My profile");
-		console.log("username");
-		console.log(username);
+		if (loading) return;
+		function fun() {
+			setLoading(true);
+			if (!currentUser) loadUser();
+			console.log(myFollowing);
+			setLoading(false);
+		}
+		fun();
+	}, [currentUser, loadUser, myFollowing]);
+
+	useEffect(() => {
 		async function loadFollowers() {
-			console.log("Calling supabase to load followers");
+			setLoading(true);
 
 			const { data: followData, error: followError } = await supabase
 				.from("FollowTable")
 				.select(
-					"*, UserTable!FollowTable_follower_id_fkey(username, user_id,name,profile_img)"
+					"*, UserTable!FollowTable_following_id_fkey(username, user_id,name,profile_img)"
 				)
 				.eq("follower_id", user_id);
 
 			if (followError) {
 				console.log(followError);
+				setLoading(false);
 				return;
 			}
 
 			if (followData) {
-				console.log(followData);
 				setFollowerList(followData);
+				setLoading(false);
 			}
 		}
 		loadFollowers();
@@ -52,36 +65,48 @@ function FollowingPage() {
 							<ChevronLeft />
 						</button>
 					</NavLink>
-					<h14 className="ml-2">
+					<h4 className="ml-2">
 						<NavLink
 							to={`/profile/${username}`}
 							className=" text-sm font-semibold inline rounded-3xl px-2 pb-0.5 bg-gray-300 dark:bg-gray-800">
 							@{username}
 						</NavLink>{" "}
 						/ followings
-					</h14>
+					</h4>
 				</div>
 
-				<br />
-
-				<div className=" md:w-1/2 md:mx-auto">
-					<ul
-						className="-mt-4 *:p-4 
+				{loading && (
+					<div className="min-h-screen flex items-center justify-center bg-transparent">
+						<div className="flex items-center gap-2 text-gray-600">
+							<LoaderCircle size={24} className="animate-spin" />
+							<span>Loading..</span>
+						</div>
+					</div>
+				)}
+				{!loading && (
+					<div className=" md:w-1/2 md:mx-auto">
+						<br />
+						<ul
+							className="-mt-4 *:p-4 
                border-gray-100 *:m-0.5 *:rounded-sm
               
           ">
-						{followerList.length > 0 &&
-							followerList.map((el) => (
-								<li key={el.id}>
-									<FollowerCard data={el.UserTable} />
-								</li>
-							))}
+							{followerList.length > 0 &&
+								followerList.map((el) => (
+									<li key={el.id}>
+										<FollowerCard data={el.UserTable} />
+									</li>
+								))}
 
-						{followerList.length <= 0 && <div className="text-center">
-							{username ? '@' + username : "This user"} does not follow anyone.
-							</div>}
-					</ul>
-				</div>
+							{followerList.length <= 0 && (
+								<div className="text-center">
+									{username ? "@" + username : "This user"} does not follow
+									anyone.
+								</div>
+							)}
+						</ul>
+					</div>
+				)}
 			</div>
 		</div>
 	);
