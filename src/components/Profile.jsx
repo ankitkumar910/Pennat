@@ -28,15 +28,13 @@ function Profile() {
 	const navigate = useNavigate();
 	const [currentUser] = useContext(userContext);
 	const [, , , , myFollowing] = useContext(dataContext);
-	const [isFollow, setFollow] = useState(true);
 	// 2. Local State
 	const [profileData, setProfileData] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [failed, setFailed] = useState(false);
-
+	const [isFollow, setFollow] = useState(null);
 	const [ImgEditor, setImgEditor] = useState(false);
 	const [popup, SetPopup] = useState(false);
-
 	// UI States (Synced with profileData)
 	const [cover, setCover] = useState(cover_placeholder);
 	const [profileImg, setProfileImg] = useState(userDp);
@@ -44,17 +42,14 @@ function Profile() {
 	const [control, setControl] = useState(false);
 	const [follower, setFollower] = useState(0);
 	const [following, setFollowing] = useState(0);
-
+	const [showFollow, setShowFollow] = useState(false);
 	// 3. Logic: Decide which data to load
-
 	//check for viewing other profile
 	let isMyProfile = useRef(true);
-
 	const [info] = useContext(userContext);
 	if (!info) navigate("/login");
 
 	//follow - unfollow function
-
 	async function handleFollow() {
 		setFollow(true);
 		setFollower((p) => p + 1);
@@ -71,7 +66,6 @@ function Profile() {
 			return;
 		}
 	}
-
 	async function handleUnfollow() {
 		setFollow(false);
 		setFollower((p) => p - 1);
@@ -147,28 +141,15 @@ function Profile() {
 	//check follow
 	useEffect(() => {
 		if (!isOwnProfile && !loading) {
-			console.log("Calling supabase to get follow status.");
-			async function loadFollowState() {
-				const { data: stateData, error: stateError } = await supabase
-					.from("FollowTable")
-					.select()
-					.eq("follower_id", currentUser?.user_id)
-					.eq("following_id", profileData?.user_id);
+			function fun() {
+				setFollow(myFollowing.has(profileData?.user_id));
 
-				if (stateError) {
-					setFollow(false);
-					toast("Can't load profile.");
-					console.log(stateError);
-				}
-
-				if (stateData?.length < 1) {
-					setFollow(false);
-				} else if (stateData?.length > 0) {
-					setFollow(true);
-				}
+				setTimeout(() => {
+					setShowFollow(true);
+				}, 300);
 			}
 
-			loadFollowState();
+			fun();
 		}
 	}, [isOwnProfile, loading]);
 
@@ -214,9 +195,6 @@ function Profile() {
 		loadFollower();
 	}, [profileData]);
 
-	//follow list
-	console.log("myFollow", myFollowing);
-
 	if (loading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center dark:bg-black">
@@ -227,7 +205,6 @@ function Profile() {
 			</div>
 		);
 	}
-
 	if (failed || !profileData) {
 		return (
 			<div className="min-h-screen flex items-center justify-center dark:bg-black">
@@ -237,7 +214,6 @@ function Profile() {
 			</div>
 		);
 	}
-
 	async function handleLogOut() {
 		const res = await supabase.auth.signOut();
 		if (res.error) {
@@ -355,7 +331,9 @@ function Profile() {
 					{!isOwnProfile && (
 						<div
 							onClick={isFollow ? handleUnfollow : handleFollow}
-							className={`border p-2 mt-16 rounded-md mx-2 
+							className={`
+								${showFollow ? "" : "collapse"}
+								border p-2 mt-16 rounded-full mx-2 px-4
 								${!isFollow ? "bg-foreground text-background" : "bg-background text-foreground"}
 							  hover:text-foreground  hover:bg-gray-500 transition-all duration-400  shadow-2xs cursor-pointer`}>
 							{isFollow ? "Following" : "Follow"}
