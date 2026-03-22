@@ -27,6 +27,7 @@ import InternetStatus from "./components/InternetStatus";
 import SearchPage from "./components/SearchPage";
 import FollowerPage from "./components/FollowerPage";
 import FollowingPage from "./components/FollowingPage";
+import { CarouselComp } from "./components/ui/Crousel";
 
 const router = createBrowserRouter([
 	{
@@ -102,7 +103,7 @@ const router = createBrowserRouter([
 		path: "/signup",
 		element: (
 			<>
-				<Signup />
+				<Signup/>
 			</>
 		),
 	},

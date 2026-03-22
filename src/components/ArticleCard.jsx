@@ -1,4 +1,4 @@
-import React, { useContext,  useState } from "react";
+import React, { useContext, useState } from "react";
 import userDp from "../assets/user.png";
 import { dataContext, userContext } from "../context/Context";
 import {
@@ -14,10 +14,18 @@ import { NavLink, useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import { toast } from "sonner";
 import { CalculateTime } from "../utils/CalculateTime";
+import { CarouselComp } from "./ui/Crousel";
+import ImageGrid from "./ImageGrid";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
+
+
+	
+	
+
+	let images = article.images ??  [];
 
 	const [userInfo] = useContext(userContext);
 	const [, setArticles] = useContext(dataContext);
@@ -142,10 +150,10 @@ function ArticleCard({ article }) {
 		setIsLiking(false);
 	}
 
-	// 
+	//
 	return (
-		<div className="w-full bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all hover:shadow-[0_2px_15px_rgba(0,0,0,0.1)]">
-			<div className="flex justify-between items-center mb-4">
+		<div className="w-full bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all">
+			<div className="flex justify-between items-center mb-4 ">
 				<div className="flex items-center gap-3">
 					<img
 						onClick={() => navigate(`/profile/${username}`)}
@@ -168,7 +176,7 @@ function ArticleCard({ article }) {
 				<div className="flex flex-row-reverse items-center">
 					<div>
 						{user_id === author_id && (
-							<div className="relative">
+							<div className="relative hidden">
 								<button
 									onClick={() => setIsMenuOpen(!isMenuOpen)}
 									className="p-1.5 flex items-center rounded-full text-gray-400 hover:bg-gray-100 dark:hover:bg-[#252525] transition-colors cursor-pointer">
@@ -203,8 +211,8 @@ function ArticleCard({ article }) {
 				onClick={() => {
 					if (!preview) navigate(`/article?id=${article.id}`);
 				}}
-				className="hover:cursor-pointer">
-				<div className="space-y-2">
+				className="hover:cursor-pointer ">
+				<div className="space-y-2 ">
 					<h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-snug">
 						{article.title}
 					</h2>
@@ -213,7 +221,12 @@ function ArticleCard({ article }) {
 					</div>
 				</div>
 
-				<div className="w-full mt-2">
+				{images.length>0 && (
+					<div className="h-fit  min-h-21 mb-8 overflow-clip">
+						<ImageGrid images={images} />
+					</div>
+				)}
+				<div className="w-full mt-2 ">
 					<ul className="flex mt-4 justify-start items-center *:mx-2 w-fit *:flex">
 						<li
 							onClick={handleLikeCount}
