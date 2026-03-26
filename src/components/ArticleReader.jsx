@@ -384,7 +384,7 @@ function ArticleReader() {
 					</div>
 				</div>
 
-				<div className="font-[roboto] dark:text-[#E0E0E0] text-xl sm:text-2xl mb-8">
+				<div className="tiptapEditor  font-[roboto] dark:text-[#E0E0E0] text-xl sm:text-2xl mb-8">
 					{parse(article.body)}
 				</div>
 

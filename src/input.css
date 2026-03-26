@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@theme{
+@theme {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
 }
@@ -11,6 +11,7 @@
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
 }
+
 @custom-variant dark (&:is(.dark *));
 
 
@@ -19,10 +20,10 @@
 
 @layer components {
 
-  *{
+  * {
     margin: 0;
-    padding:0;
-    
+    padding: 0;
+
   }
 
 
@@ -167,7 +168,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
---fontVerdana :Verdana, Geneva, Tahoma, sans-serif ;
+  --fontVerdana: Verdana, Geneva, Tahoma, sans-serif;
 
 }
 
@@ -212,9 +213,22 @@
     @apply border-border outline-ring/50;
 
   }
+
   body {
     @apply bg-background text-foreground;
     @apply bg-background text-foreground;
+
+
+  }
+
+  .tiptapEditor img {
+  
+
+    border-radius: 12px;
+    width:fit-content;
+    max-width: 100%;
+    box-shadow: 0px 0px 8px var(--background);
+
     
 
   }

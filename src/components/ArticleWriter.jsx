@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import Tiptap from "./Tiptap";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, Camera, Image, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dataContext, userContext } from "../context/Context";
 import supabase from "../config/supabaseClient";
 import { toast } from "sonner";
+import { cover_placeholder } from "../../public/resource";
 
 function ArticleWriter({ setWriter }) {
 	const [userInfo] = useContext(userContext);
@@ -13,6 +14,8 @@ function ArticleWriter({ setWriter }) {
 
 	const [html, setHtml] = useState("");
 	const [title, setTitle] = useState("");
+	const [pop, setPop] = useState(false);
+	const [images, setImages] = useState([cover_placeholder]);
 
 	const navigate = useNavigate();
 
@@ -98,7 +101,28 @@ function ArticleWriter({ setWriter }) {
 					</div>
 
 					<div className="flex-1 overflow-y-auto">
-						<Tiptap setHtml={setHtml} />
+						<Tiptap setHtml={setHtml} child={""} />
+
+						<label className="relative w-full">
+							{!pop && (
+								<div
+									className="absolute 
+											
+										right-40	
+											   w-fit">
+									<input
+										className="dark:bg-[#070707] bg-[#fdfdfd] p-4 border-2  
+													
+													w-fit
+													rounded-2xl  "
+										type="file"
+										accept="image/*"
+										id="imgUp"
+										title="Please select image"
+									/>
+								</div>
+							)}
+						</label>
 					</div>
 
 					<div className="p-4 border-t flex justify-end">
