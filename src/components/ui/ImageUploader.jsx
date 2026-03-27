@@ -4,10 +4,12 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { Folder, Image } from "lucide-react";
+import { Camera, Folder, Image } from "lucide-react";
 import { useRef, useState } from "react";
 import { uploadToCloudinary } from "../../utils/cloudinary";
 import { toast } from "sonner";
+import { captureCamera } from "../utils/captureCamera";
+import { CameraPop } from "./CameraPop";
 
 export function ImageUploader({ addImage }) {
 	const [uploading, setUploading] = useState(true);
@@ -25,7 +27,23 @@ export function ImageUploader({ addImage }) {
 
 			console.log(file);
 
-			let url =  await uploadToCloudinary(file);
+			let url = await uploadToCloudinary(file);
+			if (url) {
+				addImage(url);
+			}
+		} catch (error) {
+			toast("Image could not upload. ❌");
+			console.log(error);
+		}
+	}
+
+	async function uploadPhoto(photo) {
+		try {
+			let file = photo;
+
+			console.log(file);
+
+			let url = await uploadToCloudinary(file);
 			if (url) {
 				addImage(url);
 			}
@@ -61,8 +79,8 @@ export function ImageUploader({ addImage }) {
 						onClick={(e) => {
 							e.stopPropagation();
 						}}>
-						<h2>Upload Image here. </h2>
-						<form>
+						<h2 className="text-sm">Upload Image here. </h2>
+						<div>
 							<div className="flex  sm:w-full items-center mt-2 ">
 								<Folder />{" "}
 								<input
@@ -72,7 +90,9 @@ export function ImageUploader({ addImage }) {
 										setActive(e.target.value.length > 0);
 									}}
 									accept="image/*"
-									className="border-2  mx-2 wrap-anywhere pr-1 h-fit w-52 pl-2 sm:w-fit rounded-md "
+									className="
+									text-foreground font-normal
+									border-2  mx-2 wrap-anywhere pr-1 h-fit w-52 pl-2 sm:w-fit rounded-md "
 								/>
 								<button
 									type="button"
@@ -85,7 +105,23 @@ export function ImageUploader({ addImage }) {
 									Upload
 								</button>
 							</div>
-						</form>
+							<div className="flex relative sm:w-full items-center mt-2 ">
+								<Camera />{" "}
+								<div className="border-2  mx-2 wrap-anywhere pr-1 h-fit w-52 pl-2 sm:w-fit rounded-md ">
+									<CameraPop uploadPhoto={uploadPhoto} />
+								</div>
+								<button
+									type="button"
+									onClick={handleImage}
+									disabled={!active}
+									className={`
+                                        cursor-pointer
+                                    disabled:collapse
+                                    bg-blue-800 justify-self-end px-2 py-1   rounded-full text-sm`}>
+									Upload
+								</button>
+							</div>
+						</div>
 					</div>
 				</PopoverContent>
 			</Popover>
