@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import userDp from "../assets/user.png";
-import { dataContext, userContext } from "../context/Context";
+import { commentUIContext, dataContext, userContext } from "../context/Context";
 import {
 	BookOpenCheck,
 	Ellipsis,
@@ -18,6 +18,7 @@ import { CalculateTime } from "../utils/CalculateTime";
 import { CarouselComp } from "./ui/Crousel";
 import ImageGrid from "./ImageGrid";
 import { TimeFormate } from "./utils/TimeFormater";
+import HomeComment from "./HomeComment";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
@@ -29,6 +30,7 @@ function ArticleCard({ article }) {
 	const [, setArticles] = useContext(dataContext);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const preview = article?.preview;
+	const [, setCommentClicked, id, setId] = useContext(commentUIContext);
 
 	console.log(article);
 
@@ -151,9 +153,20 @@ function ArticleCard({ article }) {
 		setIsLiking(false);
 	}
 
+	function handleCommentClick(e) {
+		e.stopPropagation();
+		setId(articleId);
+		setCommentClicked((p) => !p);
+	}
+
 	//
 	return (
-		<div className="w-full border-b  bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all">
+		<div
+
+		   
+			className={`${
+				id == articleId ? "bg-[#e9ebed] dark:bg-[#232323] " : " bg-white dark:bg-[#141414]"
+			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all`}>
 			<div className="flex justify-between items-center mb-4 ">
 				<div className="flex items-center gap-2 ">
 					<img
@@ -251,8 +264,10 @@ function ArticleCard({ article }) {
 							/>
 							<span>{likes}</span>
 						</li>
-						<li className="flex items-center text-sm">
-							<MessageCircle size={18} />{" "}
+						<li
+							onClick={handleCommentClick}
+							className="flex items-center text-sm ">
+							<MessageCircle size={18} className="active:bg-red-500" />{" "}
 							<span className="px-1">
 								{comment_count ? comment_count : "Comment"}
 							</span>

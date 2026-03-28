@@ -6,16 +6,19 @@ import ArticleWriter from "./ArticleWriter";
 import { useContext, useEffect, useState } from "react";
 
 import { FilePenLine, LogIn, PenLine } from "lucide-react";
-import { dataContext, userContext } from "../context/Context";
+import { commentUIContext, dataContext, userContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 import NoArticles from "./utils/NoArticles";
+import HomeComment from "./HomeComment";
 
 function Home() {
 	const [write, setWriter] = useState(false);
 	const [crousel, setCrousel] = useState(true);
 	const [userInfo, isLoading] = useContext(userContext);
 	const navi = useNavigate();
+	const [commentClicked, setCommentClicked] = useState();
+	const [id, setId] = useState(-1); //used for Home Comment Ui
 
 	const [articles, setArticlesData, , setLikedArcticles, , setMyFollowing] =
 		useContext(dataContext);
@@ -97,10 +100,19 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="box-border">
-				{articles && <ArticlePage />}
-				{!articles && <NoArticles />}
-			</div>
+			<commentUIContext.Provider
+				value={[commentClicked, setCommentClicked, id, setId]}>
+				<div className="box-border">
+					{articles && <ArticlePage />}
+					{!articles && <NoArticles />}
+				</div>
+
+				{commentClicked && (
+					<div>
+						<HomeComment setCommentUI={setCommentClicked} id={id} />
+					</div>
+				)}
+			</commentUIContext.Provider>
 		</div>
 	);
 }
