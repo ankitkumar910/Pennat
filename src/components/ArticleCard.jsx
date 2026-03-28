@@ -5,6 +5,7 @@ import {
 	BookOpenCheck,
 	Ellipsis,
 	Heart,
+	History,
 	MessageCircle,
 	Send,
 	Trash2,
@@ -16,21 +17,20 @@ import { toast } from "sonner";
 import { CalculateTime } from "../utils/CalculateTime";
 import { CarouselComp } from "./ui/Crousel";
 import ImageGrid from "./ImageGrid";
+import { TimeFormate } from "./utils/TimeFormater";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
 
-
-	
-	
-
-	let images = article.images ??  [];
+	let images = article.images ?? [];
 
 	const [userInfo] = useContext(userContext);
 	const [, setArticles] = useContext(dataContext);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const preview = article?.preview;
+
+	console.log(article);
 
 	let author_id = article?.author_id;
 	let articleId = article?.article_id;
@@ -75,6 +75,7 @@ function ArticleCard({ article }) {
 		}
 	}
 	const [time] = useState(CalculateTime(article?.body ?? ""));
+	const [timestamp] = useState(article?.created_at ?? "");
 	const [likes, setLikes] = useState(article?.likes ?? 0);
 	const [isLiking, setIsLiking] = useState(false);
 	const isLiked = likedArcticles.has(article.article_id);
@@ -152,16 +153,16 @@ function ArticleCard({ article }) {
 
 	//
 	return (
-		<div className="w-full bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-gray-100 dark:border-[#1F1B24] sm:rounded-xl transition-all">
+		<div className="w-full border-b  bg-white dark:bg-[#141414] sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all">
 			<div className="flex justify-between items-center mb-4 ">
-				<div className="flex items-center gap-3">
+				<div className="flex items-center gap-2 ">
 					<img
 						onClick={() => navigate(`/profile/${username}`)}
 						src={profile_img || userDp}
 						alt={name}
 						className="size-10 rounded-full object-cover ring-1 ring-gray-100 dark:ring-gray-800"
 					/>
-					<div className="flex flex-col">
+					<div className="flex flex-col ">
 						<span className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-none">
 							{name}
 						</span>
@@ -170,6 +171,11 @@ function ArticleCard({ article }) {
 							className="text-xs text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors mt-1">
 							@{username}
 						</NavLink>
+					</div>
+					<div className="items-start  h-full text-xs text-gray-500  mt-4 ">
+						{" "}
+						<span className="font-bold -ml-1">&#183;</span>{" "}
+						{TimeFormate(timestamp)}
 					</div>
 				</div>
 
@@ -197,7 +203,7 @@ function ArticleCard({ article }) {
 						)}
 					</div>
 
-					<span className="flex flex-row items-center">
+					<span className="flex -mt-10 flex-row items-center">
 						<BookOpenCheck className="ml-2" color="gray" size={14} />
 						<span className="px-1 text-xs flex items-center text-gray-500">
 							{" "}
@@ -221,7 +227,7 @@ function ArticleCard({ article }) {
 					</div>
 				</div>
 
-				{images.length>0 && (
+				{images.length > 0 && (
 					<div className="h-fit  min-h-21 mb-8 overflow-clip">
 						<ImageGrid images={images} />
 					</div>

@@ -13,7 +13,7 @@ import NoArticles from "./utils/NoArticles";
 
 function Home() {
 	const [write, setWriter] = useState(false);
-	const [crousel,setCrousel]  = useState(true);
+	const [crousel, setCrousel] = useState(true);
 	const [userInfo, isLoading] = useContext(userContext);
 	const navi = useNavigate();
 
@@ -31,7 +31,7 @@ function Home() {
 				const response = await supabase
 					.from("ArticleTable")
 					.select(
-						"likes,comment_count,article_id,id,title,author_id,body,UserTable(name,username,profile_img,user_id),images"
+						"created_at,likes,comment_count,article_id,id,title,author_id,body,UserTable(name,username,profile_img,user_id),images"
 					);
 
 				if (response.error) {
