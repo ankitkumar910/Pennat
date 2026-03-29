@@ -156,16 +156,16 @@ function ArticleCard({ article }) {
 	function handleCommentClick(e) {
 		e.stopPropagation();
 		setId(articleId);
-		setCommentClicked((p) => !p);
+		setCommentClicked(true);
 	}
 
 	//
 	return (
 		<div
-
-		   
 			className={`${
-				id == articleId ? "bg-[#e9ebed] dark:bg-[#232323] " : " bg-white dark:bg-[#141414]"
+				id == articleId
+					? "bg-[#e9ebed] dark:bg-[#232323] "
+					: " bg-white dark:bg-[#141414]"
 			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all`}>
 			<div className="flex justify-between items-center mb-4 ">
 				<div className="flex items-center gap-2 ">
@@ -267,7 +267,11 @@ function ArticleCard({ article }) {
 						<li
 							onClick={handleCommentClick}
 							className="flex items-center text-sm ">
-							<MessageCircle size={18} className="active:bg-red-500" />{" "}
+							<MessageCircle
+								size={18}
+								
+								
+							/>{" "}
 							<span className="px-1">
 								{comment_count ? comment_count : "Comment"}
 							</span>

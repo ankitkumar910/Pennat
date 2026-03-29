@@ -16,7 +16,7 @@ function CommentCard({ comment, deleteComment, user_id }) {
 	}
 
 	return (
-		<div className="pb-4 my-4 border-b">
+		<div className="pb-4 my-4 border-b last:pb-12 last:border-b-0  ">
 			<div className="flex justify-between ">
 				<div className="flex items-center mt-1 ">
 					<img
