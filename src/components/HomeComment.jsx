@@ -54,7 +54,7 @@ function HomeComment({ setCommentUI, id }) {
 	}, [id]);
 
 	return (
-		<div className="h-2/3 border-t border-[#d8d0d0] dark:border-[#212020] w-full z-50 fixed bottom-0 bg-[#f5f8f7] dark:bg-[#101010]  shadow-2xl   md:w-1/3 md:justify-self-end   rounded-t-4xl flex flex-col  items-center">
+		<div className="h-2/3 border-t border-[#d8d0d0] dark:border-[#212020] w-full z-50 fixed bottom-0 bg-[#f5f8f7] dark:bg-[#101010]  shadow-2xl   md:w-1/3 md:border md:bottom-3 md:rounded-2xl md:right-1 md:justify-self-end   rounded-t-4xl flex flex-col  items-center">
 			<div className="border-b h-12 w-full flex justify-between items-center p-4">
 				<div className=" text-lg font-bold ">Comments</div>
 				<X
@@ -68,7 +68,7 @@ function HomeComment({ setCommentUI, id }) {
 				/>
 			</div>
 			{!loading && (
-				<div className="w-full">
+				<div className="w-full h-full px-4">
 					{commentList.length == 0 && (
 						<span className="flex h-full  flex-col justify-center w-full items-center">
 							<span className="font-bold">No Comments yet.</span>
@@ -77,7 +77,7 @@ function HomeComment({ setCommentUI, id }) {
 					)}
 
 					{commentList.length > 0 && (
-						<div className="w-full rounded-md p-1">
+						<div className="w-full h-full  rounded-md p-1  last:pb-12   overflow-y-scroll no-scrollbar">
 							{commentList.map((comment) => (
 								<CommentCard
 									user_id={userId}

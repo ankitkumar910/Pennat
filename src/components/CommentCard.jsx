@@ -1,13 +1,14 @@
 import { Eclipse, EclipseIcon, Ellipsis } from "lucide-react";
 import React, { useState } from "react";
 import { userDp } from "../../public/avtar";
-import { dateFormmater } from "./DateFormatter";
+import { TimeFormate } from "./utils/TimeFormater";
+import { NavLink } from "react-router-dom";
 
 function CommentCard({ comment, deleteComment, user_id }) {
 	const { UserTable: commenter } = comment;
-	const {created_at} = comment;
+	const { created_at } = comment;
 	let date = Date.parse(created_at);
-	
+
 	const [menuOpen, setMenuOpen] = useState();
 	function handleDelete(e) {
 		e.stopPropagation();
@@ -15,18 +16,30 @@ function CommentCard({ comment, deleteComment, user_id }) {
 	}
 
 	return (
-		<div className="pb-4 my-4">
+		<div className="pb-4 my-4 border-b">
 			<div className="flex justify-between ">
 				<div className="flex items-center mt-1 ">
-					<img src={commenter?.profile_img ?? userDp} className="h-10  mx-2 rounded-full" />
+					<img
+						src={commenter?.profile_img ?? userDp}
+						className="h-10  mx-2 rounded-full"
+					/>
 
 					<div className="ml-2">
 						<span className="text-sm items-center  flex   text-gray-500">
-							<span className="text-center font-semibold  text-foreground">{'@'+ commenter?.username}</span>
-							<span className="text-xs pl-3 text-center">{dateFormmater(created_at)}</span>
+							<NavLink
+								to={`/profile/${commenter?.username}`}
+								className="text-center font-semibold  text-foreground">
+								{"@" + commenter?.username}
+							</NavLink>
+							<span className="text-xs pl-1 text-center">
+								{" "}
+								&#183; {TimeFormate(created_at)}
+							</span>
 						</span>
-						
-						<div className=" border-b-gray-300 text-foreground mt-1 ml-1">{comment.comment}</div>
+
+						<div className=" border-b-gray-300 text-foreground mt-1 ml-1">
+							{comment.comment}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -35,7 +48,7 @@ function CommentCard({ comment, deleteComment, user_id }) {
 							className="relative
                 ">
 							<Ellipsis
-								className={`cursor-pointer rounded-4xl rotate-90 mt-2 active:bg-gray-300`}
+								className={`collapse cursor-pointer rounded-4xl rotate-90 mt-2 active:bg-gray-300`}
 								size={20}
 								onClick={() => {
 									setMenuOpen((p) => !p);
