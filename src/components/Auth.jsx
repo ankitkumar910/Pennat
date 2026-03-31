@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/Context";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
 
 function Auth() {
 	const navi = useNavigate();
@@ -17,13 +18,9 @@ function Auth() {
 	useEffect(() => {
 		async function loadUser() {
 			if (isLoading) return;
-
-			if (!userInfo) {
-				navi("/login");
-				return null;
-			} else {
-				navi("/home", { replace: true });
-			}
+               
+		
+			navi("/home", { replace: true });
 		}
 		loadUser();
 	}, [navi, userInfo, isLoading]);

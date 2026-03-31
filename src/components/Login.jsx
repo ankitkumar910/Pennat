@@ -152,7 +152,11 @@ function Login() {
 									{" "}
 									<button
 										type="submit"
-										className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer">
+										className="
+										bg-blue-800
+										border-blue-800
+										
+										 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer">
 										Continue
 									</button>
 									<p className="text-sm text-slate-200">

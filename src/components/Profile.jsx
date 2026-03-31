@@ -47,7 +47,7 @@ function Profile() {
 	//check for viewing other profile
 	let isMyProfile = useRef(true);
 	const [info] = useContext(userContext);
-	if (!info) navigate("/login");
+	
 
 	//follow - unfollow function
 	async function handleFollow() {

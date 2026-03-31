@@ -166,7 +166,9 @@ function App() {
 	let isOnline = InternetStatus();
 
 	const loadUser = useCallback(async () => {
+
 		console.log("i am being called.");
+
 		let res = await supabase.auth.getUser();
 
 		async function loadFollowinglist(user_id) {
@@ -194,6 +196,7 @@ function App() {
 		}
 
 		try {
+			
 			if (res?.data?.user) {
 				let { id } = res.data.user;
 

@@ -26,44 +26,39 @@ function Home() {
 	useEffect(() => {
 		if (isLoading) return;
 
-		if (!userInfo) {
-			navi("/auth", { replace: true });
-			return null;
-		} else {
-			async function loadeArticles() {
-				const response = await supabase
-					.from("ArticleTable")
-					.select(
-						"created_at,likes,comment_count,article_id,id,title,author_id,body,UserTable(name,username,profile_img,user_id),images"
-					);
+		async function loadeArticles() {
+			const response = await supabase
+				.from("ArticleTable")
+				.select(
+					"created_at,likes,comment_count,article_id,id,title,author_id,body,UserTable(name,username,profile_img,user_id),images"
+				);
 
-				if (response.error) {
-					console.error("Database error:", response.error);
+			if (response.error) {
+				console.error("Database error:", response.error);
 
-					return null;
-				}
-				if (response.data) {
-					setArticlesData(response.data);
-					console.log(response.data);
+				return null;
+			}
+			if (response.data) {
+				setArticlesData(response.data);
+				console.log(response.data);
 
-					const { data, error } = await supabase.from("LikesTable").select();
+				const { data, error } = await supabase.from("LikesTable").select();
 
-					if (error) {
-						console.log(error);
-					} else if (data) {
-						let tempSet = new Set();
-						data.forEach((row) => {
-							if (row.user_id == userInfo.user_id) tempSet.add(row.article_id);
-						});
-						console.log("Liked Articles By Me 🙍‍♂️🩷");
-						console.log(tempSet);
-						setLikedArcticles(tempSet);
-					}
+				if (error) {
+					console.log(error);
+				} else if (data) {
+					let tempSet = new Set();
+					data.forEach((row) => {
+						if (row.user_id == userInfo.user_id) tempSet.add(row.article_id);
+					});
+					console.log("Liked Articles By Me 🙍‍♂️🩷");
+					console.log(tempSet);
+					setLikedArcticles(tempSet);
 				}
 			}
-
-			loadeArticles();
 		}
+
+		loadeArticles();
 	}, [
 		userInfo,
 		isLoading,
@@ -81,9 +76,9 @@ function Home() {
 				className="
 			    mt-15 overflow-auto"
 				id="writer">
-				{write && <ArticleWriter setWriter={setWriter} />}
-				<div
-					hidden={write}
+				{  write  && <ArticleWriter setWriter={setWriter} />}
+				<div 
+					hidden={write || !userInfo}
 					onClick={() => {
 						setWriter(true);
 					}}

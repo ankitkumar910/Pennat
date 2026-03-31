@@ -1,13 +1,24 @@
-import { Moon, Pen, Pencil, Sun, User } from "lucide-react";
+import {
+	LogInIcon,
+	Moon,
+	Pen,
+	Pencil,
+	Sun,
+	User,
+	User2Icon,
+} from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { themeContext } from "../context/Context";
+import { themeContext, userContext } from "../context/Context";
 import { SearchButton } from "./SearchButton";
+import { LogIn } from "lucide-react";
+import { cn } from "./utils/cn";
 
-function NavbarPage({SetSearchQuery}) {
+function NavbarPage({ SetSearchQuery }) {
 	const naviagtors = useNavigate();
 	const [isDark, setIsDark] = useContext(themeContext);
 	const [showMenu, setShowMenu] = useState(false);
+	const [userInfo] = useContext(userContext);
 
 	useEffect(() => {
 		console.log("Calling Theme Change");
@@ -29,25 +40,50 @@ function NavbarPage({SetSearchQuery}) {
 			
 		dark:bg-black
 		top-0  z-2  ">
-			<NavLink to={'/home'} >
+			<NavLink to={"/home"}>
 				<h1 className="font-bold text-3xl mb-2 pl-2">Pennat</h1>
 			</NavLink>
-			<div className="relative right-0">
+			<div className="relative right-0 ">
 				<div className="flex flex-row items-center ">
-					<SearchButton SetSearchQuery={SetSearchQuery}/>
+					<SearchButton SetSearchQuery={SetSearchQuery} />
 
-					<span
-						onClick={() => {
-							//e.stopPropagation();
-							setShowMenu((prev) => !prev);
-						}}
-						className={`flex flex-row hover:cursor-pointer items-center px-0.5 py-0.5 rounded-lg border mb-1 ${
-							showMenu ? "border-foreground" : "border-transparent"
-						}`}>
-						{" "}
-						<User size={28} fill="#303033" strokeWidth={1} strokeOpacity={0} />
-						<span className="hidden md:block pr-2 ">You</span>
-					</span>
+					{userInfo && (
+						<span
+							onClick={() => {
+								//e.stopPropagation();
+								setShowMenu((prev) => !prev);
+							}}
+							className={`flex flex-row hover:cursor-pointer items-center px-0.5 py-0.5 rounded-lg border mb-1 ${
+								showMenu ? "border-foreground" : "border-transparent"
+							}`}>
+							{" "}
+							<User
+								size={28}
+								fill="#303033"
+								strokeWidth={1}
+								strokeOpacity={0}
+							/>
+							<span className="hidden md:block pr-2 ">You</span>
+						</span>
+					)}
+
+					{!userInfo && (
+						<NavLink
+							to={"/login"}
+							end
+							className={({ isActive }) =>
+								cn(
+									"flex items-center mb-2 px-4 py-1 rounded-2xl cursor-pointer transition-colors duration-300",
+
+									isActive
+										? "bg-gray-300 text-black"
+										: "bg-foreground text-background hover:bg-gray-800"
+								)
+							}>
+							{" "}
+							<span className="block pb-0.5 ">Login</span>
+						</NavLink>
+					)}
 				</div>
 
 				<ul
@@ -90,7 +126,6 @@ function NavbarPage({SetSearchQuery}) {
 					{/* <li>For You</li> */}
 					{/* <li>Following</li> */}
 
-				
 					<li
 						onClick={() => {
 							naviagtors("/profile");
@@ -101,7 +136,7 @@ function NavbarPage({SetSearchQuery}) {
 							<span className="">Profile</span>
 						</span>
 					</li>
-						<li>
+					<li>
 						<span
 							className="flex w-40 items-center"
 							onClick={() => {
