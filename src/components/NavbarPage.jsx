@@ -16,6 +16,7 @@ import { cn } from "./utils/cn";
 
 function NavbarPage({ SetSearchQuery }) {
 	const naviagtors = useNavigate();
+	//jjjdjjd 
 	const [isDark, setIsDark] = useContext(themeContext);
 	const [showMenu, setShowMenu] = useState(false);
 	const [userInfo] = useContext(userContext);
