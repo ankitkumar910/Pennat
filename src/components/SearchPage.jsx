@@ -6,6 +6,7 @@ import ArticlePage from "./ArticlePage";
 import { LoaderCircle } from "lucide-react";
 import path from "../assets/Empty.json";
 import { Player } from "@lottiefiles/react-lottie-player";
+import SearchArticleResult from "./SearchArticleResult";
 
 function SearchPage() {
 	const [searchParams] = useSearchParams();
@@ -59,7 +60,7 @@ function SearchPage() {
 		);
 
 	return (
-		<div className="w-full ">
+		<div className="w-full min-h-screen pt-2">
 			<NavbarPage SetSearchQuery={SetSearchQuery} />
 			{!loading && !articles.length && (
 				<div className="h-full w-full">
@@ -85,7 +86,7 @@ function SearchPage() {
 			<div className="h-full  w-full flex mt-12 justify-center">
 				{articles.length>0 && (
 					<div className="w-full h-full">
-						<ArticlePage articles={articles} />
+						<SearchArticleResult articles={articles} />
 					</div>
 				)}
 			</div>

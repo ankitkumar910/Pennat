@@ -144,7 +144,7 @@ const router = createBrowserRouter([
 	{
 		path: "/search",
 		element: <SearchPage />,
-		errorElement: <>Something Went Wrong.</>,
+		errorElement: <>Something Went Wrong.In search Page</>,
 	},
 	{
 		path: "/*",
