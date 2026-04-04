@@ -13,6 +13,7 @@ import NoArticles from "./utils/NoArticles";
 import HomeComment from "./HomeComment";
 
 function Home() {
+	let [scrolling, setScrolling] = useState(false);
 	const [write, setWriter] = useState(false);
 	const [crousel, setCrousel] = useState(true);
 	const [userInfo, isLoading] = useContext(userContext);
@@ -73,13 +74,23 @@ function Home() {
 		setMyFollowing,
 	]);
 
+	useEffect(() => {
+		document.addEventListener("scroll", () => {
+			setScrolling(true);
+		});
+
+		document.addEventListener("scrollend", () => {
+			setScrolling(false);
+		});
+	}, []);
+
 	return (
 		<div className="w-full    -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">
 			<NavbarPage />
 
 			<div
 				className="
-			    mt-15 overflow-auto"
+			    mt-15 overflow-auto "
 				id="writer">
 				{write && <ArticleWriter setWriter={setWriter} />}
 				<div
@@ -87,15 +98,19 @@ function Home() {
 					onClick={() => {
 						setWriter(true);
 					}}
-					className="border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
+					className={`border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed z-20 justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
 					
-					mb-4  ">
+					${scrolling ? "opacity-0" : "opacity-100"}
+					transition-all ease-in-out duration-100
+					mb-4  `}>
 					<div
 						id="article_Button"
-						className="h-full w-full cursor-pointer px-4 flex justify-between items-center py-3 outline-0 [&:hover>.pencil]:-rotate-5 select-none"
+						className="h-full w-full cursor-pointer px-4 flex justify-between items-center py-3 outline-0 [&:hover>.pencil]:-rotate-5 select-none "
 						placeholder="">
 						<PenLine size={18} color="white" className="pencil" />
-						<span className="p-1 text-white">Write Article</span>
+						<span className={` p-1 text-white transition-all duration-350`}>
+							Write Article
+						</span>
 					</div>
 				</div>
 			</div>

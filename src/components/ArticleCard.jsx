@@ -168,13 +168,8 @@ function ArticleCard({ article }) {
 					? "bg-[#e9ebed] dark:bg-[#232323] "
 					: " bg-white dark:bg-[#141414]"
 			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all
-			
 			relative
-		
-
-			
-
-			`}>
+		`}>
 			<div className="flex  justify-between items-center mb-4  ">
 				<div
 					className="flex items-center gap-2  
@@ -213,7 +208,7 @@ function ArticleCard({ article }) {
 								</button>
 
 								{isMenuOpen && (
-									<div className="absolute right-0 mt-2 w-36 bg-white dark:bg-[#1F1B24] border border-gray-200 dark:border-gray-800 rounded-lg shadow-xl z-10 py-1">
+									<div className="absolute right-0 mt-2 w-36 bg-white dark:bg-[#1F1B24] border border-gray-200 dark:border-gray-800 rounded-lg shadow-xl  py-1">
 										<button
 											className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
 											onClick={handleDelete}>
