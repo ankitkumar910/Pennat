@@ -8,7 +8,7 @@ function ArticlePage({ articles }) {
 	let [articlesData] = useContext(dataContext);
 
 	if (articles) articlesData = articles;
-	console.log(articles)
+	console.log(articles);
 
 	return (
 		<div className="mt-3 h-full min-h-screen w-full">
