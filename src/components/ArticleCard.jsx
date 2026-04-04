@@ -170,8 +170,7 @@ function ArticleCard({ article }) {
 			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all
 			
 			relative
-			[&>span]:collapse
-			[&:hover>span]:visible
+		
 
 			
 
@@ -282,7 +281,7 @@ function ArticleCard({ article }) {
 				</div>
 			</div>
 
-			<span className="flex absolute timer top-0 right-0 flex-row items-center bg-[#282a2b] rounded-bl-md pl-2 pb-0.5 rounded-tr-3xl  px-1 transition-all duration-100">
+			<span className="flex absolute timer top-2 right-2 flex-row items-center dark:bg-[#1d1e1f] bg-[#ebeff2]  rounded-sm pl-2  py-1   px-1 transition-all duration-100">
 				<span className="px-1 text-xs flex items-center text-gray-500">
 					{" "}
 					{time?.text}

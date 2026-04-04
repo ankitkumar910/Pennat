@@ -4,7 +4,7 @@ import NavbarPage from "./NavbarPage";
 import supabase from "../config/supabaseClient";
 import ArticlePage from "./ArticlePage";
 import { LoaderCircle } from "lucide-react";
-import path from "../assets/Empty.json";
+
 import { Player } from "@lottiefiles/react-lottie-player";
 import SearchArticleResult from "./SearchArticleResult";
 
@@ -12,6 +12,8 @@ function SearchPage() {
 	const [searchParams] = useSearchParams();
 	const [searchQuery, SetSearchQuery] = useState(searchParams.get("q"));
 	const [articles, setArticles] = useState([]);
+
+	const [authors, setAuthors] = useState([]);
 	const [loading, setLoading] = useState();
 	const navigate = useNavigate();
 
@@ -25,6 +27,8 @@ function SearchPage() {
 				console.log("📞 Calling api...");
 				let orQuery = `title.ilike.%${text}%,body.ilike.%${text}%`;
 
+				let authorQuery = `username.ilike.%${text}%,name.ilike.%${text}%,about.ilike.%${text}%`;
+
 				const { data: searchData, error: searchError } = await supabase
 					.from("ArticleTable")
 					.select("*,UserTable(*)")
@@ -35,12 +39,25 @@ function SearchPage() {
 					console.log("Got Error");
 					setLoading(false);
 				} else if (searchData) {
-					console.log("Got Data");
-					console.log(searchData);
 					setArticles(searchData);
-					setLoading(false);
+					
 				}
 
+				const { data: authorData, error: authorSearchError } = await supabase
+					.from("UserTable")
+					.select("*")
+					.or(authorQuery);
+
+				if (authorSearchError) {
+					console.log(authorSearchError);
+					console.log("Got Error");
+					setLoading(false);
+				} else if (authorData) {
+					console.log("Got Data 🔥");
+					console.log(authorData);
+					setAuthors(authorData);
+					setLoading(false);
+				}
 				console.log("Call Finised.");
 			}
 			Search(searchQuery);
@@ -62,36 +79,14 @@ function SearchPage() {
 	return (
 		<div className="w-full min-h-screen pt-2">
 			<NavbarPage SetSearchQuery={SetSearchQuery} />
-			{!loading && !articles.length && (
-				<div className="h-full w-full">
-					<div className="min-h-screen flex items-center justify-center">
-						<div className="flex items-center gap-2 text-gray-600">
-							<div className="select-none h-full w-full flex flex-col items-center justify-center  ">
-								<Player
-									autoplay
-									className="h-50 m-0  sm:h-54   md:h-60"
-									src={path}></Player>
 
-								<h2 className="text-center text-gray-300 bg-gray-800 mt-2 sm:-mt-1 rounded px-4 font-mono  my-0  py-0 text-sm font-extralight">
-									No result found for{" "}
-									<span className="text-blue-500 font-bold text-lg">
-										{searchQuery}
-									</span>
-								</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			)}
 			<div className="h-full  w-full flex mt-12 justify-center">
-				{articles.length>0 && (
+				{!loading && (
 					<div className="w-full h-full">
-						<SearchArticleResult articles={articles} />
+						<SearchArticleResult articles={articles} authors={authors} />
 					</div>
 				)}
 			</div>
-
-		
 		</div>
 	);
 }
