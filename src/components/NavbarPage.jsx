@@ -30,7 +30,7 @@ function NavbarPage({SetSearchQuery}) {
 		dark:bg-black
 		top-0  z-2  ">
 			<NavLink to={'/home'} >
-				<h1 className="font-bold text-3xl mb-2 pl-2">Pennat</h1>
+				<h1 className="font-bold text-xl text-black dark:text-gray-500  sm:text-2xl mb-2 sm:pl-2">Pennat</h1>
 			</NavLink>
 			<div className="relative right-0">
 				<div className="flex flex-row items-center ">
@@ -98,7 +98,7 @@ function NavbarPage({SetSearchQuery}) {
 						<span className="flex items-center text-sm">
 							{" "}
 							<User size={16} className="p-0 mx-1" />
-							<span className="">Profile</span>
+							<span >Profile</span>
 						</span>
 					</li>
 						<li>
