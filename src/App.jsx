@@ -13,8 +13,7 @@ import Profile from "./components/Profile";
 import ArticleWriter from "./components/ArticleWriter";
 import { Toaster } from "sonner";
 import Loader from "./components/Loader";
-import NavbarPage from "./components/NavbarPage";
-import InstallPWA from "./components/InstallPWA";
+
 import UserControl from "./components/UserControl";
 import { LoaderCircle } from "lucide-react";
 import NotAllowed from "./components/NotAllowed";
@@ -103,7 +102,7 @@ const router = createBrowserRouter([
 		path: "/signup",
 		element: (
 			<>
-				<Signup/>
+				<Signup />
 			</>
 		),
 	},
@@ -186,7 +185,7 @@ function App() {
 				console.log("Yes. Followings loaded of you.");
 				let tempSet = new Set();
 				followData.map((row) => {
-					console.log(row)
+					console.log(row);
 					tempSet.add(row.following_id);
 				});
 				setMyFollowing(tempSet);
@@ -289,7 +288,6 @@ function App() {
 		
 		`}>
 			<Toaster position="top-center" />
-			<InstallPWA />
 
 			<dataContext.Provider
 				value={[
