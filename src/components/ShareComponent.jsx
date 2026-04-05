@@ -20,13 +20,13 @@ export function ShareComponent({ title, body, username, id }) {
 	const url = window.location.origin;
 	const shareUrl = `${url}/article?id=${id}`;
 	const [copied, setCopied] = useState(false);
+	console.log("Body");
 
 	async function handleShare() {
 		if (navigator.share) {
 			try {
 				await navigator.share({
 					title: title,
-					text: parse(body),
 					url: shareUrl,
 				});
 				console.log("Shared successfully");
