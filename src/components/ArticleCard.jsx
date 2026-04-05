@@ -20,6 +20,7 @@ import { CarouselComp } from "./ui/Crousel";
 import ImageGrid from "./ImageGrid";
 import { TimeFormate } from "./utils/TimeFormater";
 import HomeComment from "./HomeComment";
+import { ShareComponent } from "./ShareComponent";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
@@ -34,6 +35,10 @@ function ArticleCard({ article }) {
 	const [, setCommentClicked, id, setId] = useContext(commentUIContext);
 
 	console.log(article);
+
+	function handleShare(e) {
+		e.stopPropagation();
+	}
 
 	let author_id = article?.author_id;
 	let articleId = article?.article_id;
@@ -269,8 +274,14 @@ function ArticleCard({ article }) {
 								{comment_count ? comment_count : "Comment"}
 							</span>
 						</li>
-						<li className="flex items-center text-sm" hidden>
-							<Send size={20} /> <span className="px-1">Share</span>
+						<li className="flex items-center text-sm" onClick={handleShare}>
+							<ShareComponent
+								title={article.title}
+								body={article.body}
+								author={name}
+								username={username}
+								id={article.id}
+							/>
 						</li>
 					</ul>
 				</div>
