@@ -16,7 +16,7 @@ import { Check, Copy, Send } from "lucide-react";
 import parse from "html-react-parser";
 import { NavLink, useNavigate, useNavigation } from "react-router-dom";
 import { useState } from "react";
-export function ShareComponent({ title, body, author, username, id }) {
+export function ShareComponent({ title, body, username, id }) {
 	const url = window.location.origin;
 	const shareUrl = `${url}/article?id=${id}`;
 	const [copied, setCopied] = useState(false);
@@ -26,7 +26,7 @@ export function ShareComponent({ title, body, author, username, id }) {
 			try {
 				await navigator.share({
 					title: title,
-					text: title,
+					text: parse(body),
 					url: shareUrl,
 				});
 				console.log("Shared successfully");
@@ -71,19 +71,24 @@ export function ShareComponent({ title, body, author, username, id }) {
 
 								<div className="mt-2 border px-2 py-1 rounded-sm ">
 									<div className="flex gap-2">
-										<span className="font-semibold text-gray-700 dark:text-gray-600">Auhtor :</span>{" "}
-									
-										<NavLink to={`/profile/${username}`} className="text-foreground font-semibold  rounded-sm  ">
+										<span className="font-semibold text-gray-700 dark:text-gray-600">
+											Auhtor :
+										</span>{" "}
+										<NavLink
+											to={`/profile/${username}`}
+											className="text-foreground font-semibold  rounded-sm  ">
 											{" "}
 											@{username}
 										</NavLink>
 									</div>
 
 									<div className="flex gap-2 my-1">
-										<span className="font-semibold  text-gray-700 dark:text-gray-600">Link : </span>
+										<span className="font-semibold  text-gray-700 dark:text-gray-600 hidden  sm:block">
+											Link :{" "}
+										</span>
 										<span className="flex items-center gap-2 ">
 											{" "}
-											<span className="text-cyan-800 bg-gray-300 dark:bg-gray-900 px-2 rounded-sm ">
+											<span className="text-cyan-800 bg-gray-300 dark:bg-gray-900 px-2 rounded-sm overflow-hidden   max-h-10    flex-nowrap ">
 												{shareUrl}
 											</span>
 											<span onClick={handleCopy} className="cursor-pointer">
