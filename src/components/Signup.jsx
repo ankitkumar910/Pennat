@@ -5,6 +5,7 @@ import { AlertBasic } from "./ui/AlertBasic";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import GoogleComp from "./GoogleComp";
 
 function Signup() {
 	const [errorMsg, setErrorMsg] = useState(null);
@@ -159,6 +160,10 @@ function Signup() {
 							</p>
 						</div>
 
+<br />
+
+<GoogleComp />
+<br />
 						<button
 							type="submit"
 							className="bg-slate-900 px-4 py-2 mx-4 my-4 ml-12 border rounded-md active:bg-gray-600  text-white cursor-pointer ">

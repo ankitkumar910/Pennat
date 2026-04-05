@@ -6,8 +6,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AlertColors } from "./ui/AlertColors";
 import { userContext } from "../context/Context";
 import { toast } from "sonner";
+import GoogleComp from "./GoogleComp";
+
+
 
 function Login() {
+	
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [, setSuccess] = useState();
 	const emailRef = useRef();
@@ -24,8 +28,6 @@ function Login() {
 			return;
 		}
 	}, []);
-
-	
 
 	async function handleSubmit() {
 		event.preventDefault();
@@ -163,6 +165,9 @@ function Login() {
 								{errorMsg && <AlertColors errorMsg={errorMsg} />}
 							</form>
 
+							<br />
+
+						  <GoogleComp />
 							<br />
 							<p className="text-sm text-slate-200 ml-12">
 								Don't have an account?{" "}
