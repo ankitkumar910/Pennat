@@ -83,9 +83,7 @@ export function ShareComponent({ title, body, username, id }) {
 									</div>
 
 									<div className="flex gap-2 my-1">
-										<span className="font-semibold  text-gray-700 dark:text-gray-600 hidden  sm:block">
-											Link :{" "}
-										</span>
+										
 										<span className="flex items-center gap-2 ">
 											{" "}
 											<span className="text-cyan-800 bg-gray-300 dark:bg-gray-900 px-2 rounded-sm overflow-hidden   max-h-10    flex-nowrap ">
