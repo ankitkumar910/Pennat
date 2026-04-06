@@ -8,6 +8,7 @@ import {
 	History,
 	MessageCircle,
 	Send,
+	Timer,
 	Trash2,
 } from "lucide-react";
 import supabase from "../config/supabaseClient";
@@ -19,6 +20,7 @@ import { CarouselComp } from "./ui/Crousel";
 import ImageGrid from "./ImageGrid";
 import { TimeFormate } from "./utils/TimeFormater";
 import HomeComment from "./HomeComment";
+import { ShareComponent } from "./ShareComponent";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
@@ -33,6 +35,10 @@ function ArticleCard({ article }) {
 	const [, setCommentClicked, id, setId] = useContext(commentUIContext);
 
 	console.log(article);
+
+	function handleShare(e) {
+		e.stopPropagation();
+	}
 
 	let author_id = article?.author_id;
 	let articleId = article?.article_id;
@@ -166,16 +172,20 @@ function ArticleCard({ article }) {
 				id == articleId
 					? "bg-[#e9ebed] dark:bg-[#232323] "
 					: " bg-white dark:bg-[#141414]"
-			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all`}>
-			<div className="flex justify-between items-center mb-4 ">
-				<div className="flex items-center gap-2 ">
+			}  disabled:bg-green-400 w-full border-b   sm:w-[60vw] max-w-2xl mx-auto py-6 px-4  sm:border sm:mt-2 border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all
+			relative
+		`}>
+			<div className="flex  justify-between items-center mb-4  ">
+				<div
+					className="flex items-center gap-2  
+			">
 					<img
 						onClick={() => navigate(`/profile/${username}`)}
 						src={profile_img || userDp}
 						alt={name}
 						className="size-10 rounded-full object-cover ring-1 ring-gray-100 dark:ring-gray-800"
 					/>
-					<div className="flex flex-col ">
+					<div className="flex flex-col   ">
 						<span className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-none">
 							{name}
 						</span>
@@ -185,14 +195,14 @@ function ArticleCard({ article }) {
 							@{username}
 						</NavLink>
 					</div>
-					<div className="items-start  h-full text-xs text-gray-500  mt-4 ">
+					<span className="items-start  h-full text-xs text-gray-500  mt-4 ">
 						{" "}
 						<span className="font-bold -ml-1">&#183;</span>{" "}
 						{TimeFormate(timestamp)}
-					</div>
+					</span>
 				</div>
 
-				<div className="flex flex-row-reverse items-center">
+				<div className="flex  bg-blue-800   flex-row-reverse items-center">
 					<div>
 						{user_id === author_id && (
 							<div className="relative hidden">
@@ -203,7 +213,7 @@ function ArticleCard({ article }) {
 								</button>
 
 								{isMenuOpen && (
-									<div className="absolute right-0 mt-2 w-36 bg-white dark:bg-[#1F1B24] border border-gray-200 dark:border-gray-800 rounded-lg shadow-xl z-10 py-1">
+									<div className="absolute right-0 mt-2 w-36 bg-white dark:bg-[#1F1B24] border border-gray-200 dark:border-gray-800 rounded-lg shadow-xl  py-1">
 										<button
 											className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
 											onClick={handleDelete}>
@@ -215,14 +225,6 @@ function ArticleCard({ article }) {
 							</div>
 						)}
 					</div>
-
-					<span className="flex -mt-10 flex-row items-center">
-						<BookOpenCheck className="ml-2" color="gray" size={14} />
-						<span className="px-1 text-xs flex items-center text-gray-500">
-							{" "}
-							{time?.text}
-						</span>
-					</span>
 				</div>
 			</div>
 
@@ -267,21 +269,30 @@ function ArticleCard({ article }) {
 						<li
 							onClick={handleCommentClick}
 							className="flex items-center text-sm ">
-							<MessageCircle
-								size={18}
-								
-								
-							/>{" "}
+							<MessageCircle size={18} />{" "}
 							<span className="px-1">
 								{comment_count ? comment_count : "Comment"}
 							</span>
 						</li>
-						<li className="flex items-center text-sm" hidden>
-							<Send size={20} /> <span className="px-1">Share</span>
+						<li className="flex items-center text-sm" onClick={handleShare}>
+							<ShareComponent
+								title={article.title}
+								body={article.body}
+								author={name}
+								username={username}
+								id={article.id}
+							/>
 						</li>
 					</ul>
 				</div>
 			</div>
+
+			<span className="flex absolute timer top-2 right-2 flex-row items-center dark:bg-[#1d1e1f] bg-[#ebeff2]  rounded-sm pl-2  py-1   px-1 transition-all duration-100">
+				<span className="px-1 text-xs flex items-center text-gray-500">
+					{" "}
+					{time?.text}
+				</span>
+			</span>
 		</div>
 	);
 }

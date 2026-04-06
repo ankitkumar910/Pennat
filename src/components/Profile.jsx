@@ -108,6 +108,8 @@ function Profile() {
 			}
 			// Scenario B: Viewing own profile page (no username in URL)
 			else if (currentUser) {
+				console.log("my profile", currentUser?.profile_img);
+
 				setProfileData(currentUser);
 				setFailed(false);
 			}
@@ -164,10 +166,10 @@ function Profile() {
 
 			if (followerError) {
 				toast("Error while loading follower count");
-				console.log(followerError);
+
 				return;
 			}
-			console.log("COunt", count);
+
 			setFollower(count ?? 0);
 		}
 
@@ -185,10 +187,10 @@ function Profile() {
 
 			if (followingError) {
 				toast("Error while loading following count");
-				console.log(followingError);
+
 				return;
 			}
-			console.log("COunt", count);
+
 			setFollowing(count ?? 0);
 		}
 
@@ -390,7 +392,7 @@ function Profile() {
 
 			{ImgEditor && isOwnProfile && (
 				<ProfileImageUpdater
-					profileImg={profileImg}
+					profileImg={profileData?.profile_img}
 					setProfileImg={setProfileImg}
 					setImgEditor={setImgEditor}
 					user_id={profileData?.user_id}
@@ -404,6 +406,7 @@ function Profile() {
 				)}
 			</div>
 
+		
 			<ProfileFooter />
 
 			<Outlet />

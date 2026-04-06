@@ -6,8 +6,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AlertColors } from "./ui/AlertColors";
 import { userContext } from "../context/Context";
 import { toast } from "sonner";
+import GoogleComp from "./GoogleComp";
+import LoginDivider from "./LoginDivider";
+
+
+
 
 function Login() {
+	
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [, setSuccess] = useState();
 	const emailRef = useRef();
@@ -24,8 +30,6 @@ function Login() {
 			return;
 		}
 	}, []);
-
-	
 
 	async function handleSubmit() {
 		event.preventDefault();
@@ -74,7 +78,7 @@ function Login() {
 		<>
 			{!userInfo && (
 				<div>
-					<div className="bg-linear-to-r from-slate-900 to-slate-800    min-h-screen max-w-screen bg-center bg-cover ">
+					<div className="bg-linear-to-r from-slate-900 to-slate-800  pb-12  min-h-screen max-w-screen bg-center bg-cover ">
 						<h1 className="text-2xl  font-bold px-2 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
 							Pennat
 						</h1>
@@ -167,6 +171,11 @@ function Login() {
 								{errorMsg && <AlertColors errorMsg={errorMsg} />}
 							</form>
 
+			  <LoginDivider />
+
+							<br />
+
+						  <GoogleComp />
 							<br />
 							<p className="text-sm text-slate-200 ml-12">
 								Don't have an account?{" "}

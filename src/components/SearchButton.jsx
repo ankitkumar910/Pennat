@@ -39,7 +39,7 @@ export function SearchButton({ SetSearchQuery }) {
 				onClick={() => setOpen(true)}
 				variant="ghost"
 				className="w-fit mb-1 cursor-pointer">
-				<Search size={30} strokeWidth={3} />
+				<Search size={30} color="#303033" strokeWidth={4} />
 			</Button>
 			<CommandDialog
 				open={open}
@@ -47,16 +47,13 @@ export function SearchButton({ SetSearchQuery }) {
 				className="top-10    sm:left-1/2  ">
 				<Command className="border  border-b-0">
 					<CommandInput
-					
 						onKeyDown={(e) => {
 							if (e.key == "Enter") {
 								goSearch(e.target.value);
 							}
 						}}
 						placeholder={placeholder}
-						
 					/>
-				
 				</Command>
 			</CommandDialog>
 		</div>

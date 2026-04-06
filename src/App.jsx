@@ -13,8 +13,7 @@ import Profile from "./components/Profile";
 import ArticleWriter from "./components/ArticleWriter";
 import { Toaster } from "sonner";
 import Loader from "./components/Loader";
-import NavbarPage from "./components/NavbarPage";
-import InstallPWA from "./components/InstallPWA";
+
 import UserControl from "./components/UserControl";
 import { LoaderCircle } from "lucide-react";
 import NotAllowed from "./components/NotAllowed";
@@ -28,6 +27,7 @@ import SearchPage from "./components/SearchPage";
 import FollowerPage from "./components/FollowerPage";
 import FollowingPage from "./components/FollowingPage";
 import { CarouselComp } from "./components/ui/Crousel";
+import { userDp } from "../public/avtar";
 
 const router = createBrowserRouter([
 	{
@@ -103,7 +103,7 @@ const router = createBrowserRouter([
 		path: "/signup",
 		element: (
 			<>
-				<Signup/>
+				<Signup />
 			</>
 		),
 	},
@@ -144,7 +144,7 @@ const router = createBrowserRouter([
 	{
 		path: "/search",
 		element: <SearchPage />,
-		errorElement: <>Something Went Wrong.</>,
+		errorElement: <>Something Went Wrong.In search Page</>,
 	},
 	{
 		path: "/*",
@@ -172,23 +172,19 @@ function App() {
 		let res = await supabase.auth.getUser();
 
 		async function loadFollowinglist(user_id) {
-			//load my followings data
-
 			const { data: followData, error: followError } = await supabase
 				.from("FollowTable")
 				.select("following_id")
 				.eq("follower_id", user_id);
-
 			if (followError) {
 				console.log("Can not load following of the you.");
 				console.log(followError);
 			}
-
 			if (followData) {
 				console.log("Yes. Followings loaded of you.");
 				let tempSet = new Set();
 				followData.map((row) => {
-					console.log(row)
+					console.log(row);
 					tempSet.add(row.following_id);
 				});
 				setMyFollowing(tempSet);
@@ -198,16 +194,50 @@ function App() {
 		try {
 			
 			if (res?.data?.user) {
+				console.log("Google user metadata:", res.data.user?.user_metadata);
 				let { id } = res.data.user;
-
 				let { data, error } = await supabase
 					.from("UserTable")
 					.select("*,ArticleTable(*)")
 					.eq("user_id", id)
 					.single();
+
 				if (error) {
-					console.log(error);
-					setUserInfo(null);
+					// PGRST116 = no rows found — Google se pehli baar login
+					if (error.code === "PGRST116") {
+						const googleUser = res.data.user;
+						console.log("Google user metadata:", res.data.user?.user_metadata);
+						const newUser = {
+							user_id: googleUser.id,
+							email: googleUser.email,
+							name:
+								googleUser.user_metadata?.full_name ||
+								googleUser.email.split("@")[0],
+							username:
+								googleUser.email.split("@")[0] +
+								"_" +
+								googleUser.id.slice(0, 4),
+							profile_img: googleUser.user_metadata?.avatar_url || userDp,
+						};
+
+						const { data: insertedUser, error: insertError } = await supabase
+							.from("UserTable")
+							.insert(newUser)
+							.select("*,ArticleTable(*)")
+							.single();
+
+						if (insertError) {
+							console.log("Could not create new Google user:", insertError);
+							setUserInfo(null);
+						} else {
+							console.log("New Google user created successfully.");
+							setUserInfo(insertedUser);
+							loadFollowinglist(googleUser.id);
+						}
+					} else {
+						console.log(error);
+						setUserInfo(null);
+					}
 				} else {
 					setUserInfo(data);
 					loadFollowinglist(id);
@@ -292,7 +322,6 @@ function App() {
 		
 		`}>
 			<Toaster position="top-center" />
-			<InstallPWA />
 
 			<dataContext.Provider
 				value={[
