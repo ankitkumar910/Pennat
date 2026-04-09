@@ -78,8 +78,8 @@ function SearchPost({ article }) {
 	return (
 		<div
 			className="group relative bg-white dark:bg-[#1a1a1b] border border-gray-200 dark:border-[#2d2d2e] 
-                       rounded-xl p-4 sm:p-6 transition-all hover:border-gray-300 dark:hover:border-gray-600 ">
-			<div className="flex justify-between items-start mb-3">
+                       rounded-xl p-0 sm:p-6 transition-all hover:border-gray-300 dark:hover:border-gray-600 ">
+			<div className="flex justify-between items-start mb-1">
 				<div className="flex items-center gap-3">
 					<img
 						onClick={(e) => {

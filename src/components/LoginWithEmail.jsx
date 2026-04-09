@@ -13,11 +13,9 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import EmailComp from "./EmailComp";
-import { useContext } from "react";
-import { themeContext } from "../context/Context";
 
-export function SignWithEmail({ child }) {
-	const [isDark] = useContext(themeContext);
+
+export function LoginWithEmail({ child }) {
 	return (
 		<Dialog>
 			<form>
@@ -26,17 +24,18 @@ export function SignWithEmail({ child }) {
 						<EmailComp />
 					</div>
 				</DialogTrigger>
-
-				<DialogContent
-					className="sm:max-w-3xl bg-gradient-to-r from-teal-400 to-yellow-200 py-4 pb-12 px-4">
+				<DialogContent className="sm:max-w-3xl bg-gradient-to-r from-teal-400 to-yellow-200 py-4 pb-12 px-4">
 					<DialogHeader>
-						<DialogTitle>Create Account</DialogTitle>
-						<DialogDescription>
-							Please ensure your email address is accurate and choose a secure
-							password. All provided details must be authentic.
+						<DialogTitle>Login to your account!</DialogTitle>
+						<DialogDescription className="text-sm ">
+							Please enter your registered email address and password to access
+							your account. Ensure your login details are kept confidential.
+							
 						</DialogDescription>
 					</DialogHeader>
-					{child}
+
+                    {child}
+					
 				</DialogContent>
 			</form>
 		</Dialog>

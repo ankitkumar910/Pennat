@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import supabase from "../config/supabaseClient";
 import { AlertColors } from "./ui/AlertColors";
 import { AlertBasic } from "./ui/AlertBasic";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import GoogleComp from "./GoogleComp";
@@ -21,10 +21,9 @@ function Signup() {
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [userData, setUserData] = useState(null);
 	const [showForm, setShowForm] = useState(false);
-	const [success, setSuccess] = useState(false); 
+	const [success, setSuccess] = useState(false);
 	const navi = useNavigate();
 
-	
 	const clearStatus = () => {
 		setErrorMsg(null);
 		setSuccess(false);
@@ -42,7 +41,7 @@ function Signup() {
 		});
 
 		if (error) {
-			setErrorMsg(error.message || error); 
+			setErrorMsg(error.message || error);
 			setUserData(null);
 			return;
 		}
@@ -55,13 +54,13 @@ function Signup() {
 			setTimeout(() => {
 				setShowForm(true);
 				setSuccess(false);
-			}, 1500); 
+			}, 1500);
 		}
 	}
 
 	async function handleUserData(event) {
 		event.preventDefault();
-		clearStatus(); 
+		clearStatus();
 
 		const { data, error } = await supabase
 			.from("UserTable")
@@ -119,105 +118,129 @@ function Signup() {
 					</header>
 
 					<div className="space-y-6 w-full">
+						<GoogleComp />
 						<SignWithEmail
 							child={
-								<div className="p-6 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800">
+								<div className="w-full">
 									{!showForm ? (
-										<form onSubmit={handleSubmit} className="space-y-4">
-											<div>
-												<label className="block mb-2 text-sm font-medium dark:text-gray-200">
-													Email
-												</label>
-												<input
-													ref={emailRef}
-													type="email"
-													required
-													placeholder="name@example.com"
-													className="w-full p-3 rounded-lg border bg-white dark:bg-gray-800 text-foreground"
-												/>
-											</div>
-											<div>
-												<label className="block mb-2 text-sm font-medium dark:text-gray-200">
-													Password
-												</label>
-												<input
-													ref={passwordRef}
-													type="password"
-													required
-													className="w-full p-3 rounded-lg border bg-white dark:bg-gray-800 text-foreground"
-												/>
-												<p className="text-[10px] mt-2 text-gray-500 italic">
-													Min. 6 chars with symbols.
-												</p>
-											</div>
-											<button
-												type="submit"
-												className="w-full md:w-auto px-8 py-3 bg-slate-900 dark:bg-blue-600 text-white rounded-lg font-bold hover:opacity-90 transition-all">
-												Continue
-											</button>
-										</form>
+										/* LOGIN / INITIAL SIGNUP FORM STYLE */
+										<div>
+											<form onSubmit={handleSubmit}>
+												<div className="mx-12 flex flex-col gap-0">
+													<label
+														htmlFor="email"
+														className="text-sm font-normal text-foreground">
+														Enter your email
+													</label>
+													<input
+														onChange={() => setErrorMsg(null)}
+														ref={emailRef}
+														type="email"
+														id="email"
+														required
+														placeholder="pennat@exmple.com"
+														className="p-2 lowercase border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+													/>
+													<br />
+													<label
+														htmlFor="password"
+														className="text-sm font-normal text-foreground">
+														Enter your password
+													</label>
+													<input
+														onChange={() => setErrorMsg(null)}
+														ref={passwordRef}
+														type="password" /* Changed to password type for security */
+														id="password"
+														required
+														placeholder="••••••"
+														minLength={6}
+														maxLength={20}
+														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+													/>
+													<p className="text-xs wrap-anywhere text-slate-800 mt-2">
+														Possibly your password had min. length 6, included
+														<br className="hidden sm:block" />
+														uppercase, lowercase, numbers and special symbols.
+													</p>
+												</div>
+
+												<div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center">
+													<button
+														type="submit"
+														className="bg-blue-800 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
+														Continue
+													</button>
+													<p className="text-sm sm:ml-8 text-slate-900">
+														<NavLink to={"/flow"}>Forgot password?</NavLink>
+													</p>
+												</div>
+												{errorMsg && (
+													<div className="mx-12 mt-4">
+														<AlertColors errorMsg={errorMsg} />
+													</div>
+												)}
+											</form>
+										</div>
 									) : (
-										<form onSubmit={handleUserData} className="space-y-4">
-											<div>
-												<label className="block mb-2 text-sm font-medium dark:text-gray-200">
-													Full Name
-												</label>
-												<input
-													ref={nameRef}
-													type="text"
-													required
-													className="w-full p-3 rounded-lg border bg-white dark:bg-gray-800 text-foreground"
-												/>
-											</div>
-											<div>
-												<label className="block mb-2 text-sm font-medium dark:text-gray-200">
-													Username
-												</label>
-												<input
-													ref={usernameRef}
-													type="text"
-													required
-													className="w-full p-3 rounded-lg border bg-white dark:bg-gray-800 text-foreground"
-												/>
-											</div>
-											<div>
-												<label className="block mb-2 text-sm font-medium dark:text-gray-200">
-													Date of Birth
-												</label>
-												<input
-													ref={dobRef}
-													type="date"
-													required
-													className="w-full p-3 rounded-lg border bg-white dark:bg-gray-800 text-foreground"
-												/>
-											</div>
-											<button
-												type="submit"
-												className="w-full md:w-auto px-8 py-3 bg-slate-900 dark:bg-blue-600 text-white rounded-lg font-bold">
-												Save Details
-											</button>
-										</form>
+										/* USER DATA DETAILS FORM STYLE */
+										<div>
+											<form onSubmit={handleUserData}>
+												<div className="mx-12 flex flex-col gap-0">
+													<label className="text-sm font-normal text-foreground">
+														Full Name
+													</label>
+													<input
+														ref={nameRef}
+														type="text"
+														required
+														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+													/>
+													<br />
+													<label className="text-sm font-normal text-foreground">
+														Username
+													</label>
+													<input
+														ref={usernameRef}
+														type="text"
+														required
+														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+													/>
+													<br />
+													<label className="text-sm font-normal text-foreground">
+														Date of Birth
+													</label>
+													<input
+														ref={dobRef}
+														type="date"
+														required
+														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+													/>
+												</div>
+
+												<div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center">
+													<button
+														type="submit"
+														className="bg-blue-800 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
+														Save Details
+													</button>
+												</div>
+
+												<div className="mx-12 mt-4">
+													{errorMsg && <AlertColors errorMsg={errorMsg} />}
+													{success && (
+														<AlertBasic
+															title="Success!"
+															desc="Moving to next step..."
+														/>
+													)}
+												</div>
+											</form>
+										</div>
 									)}
-									<div>
-										{errorMsg && (
-											<div className="mt-4">
-												<AlertColors errorMsg={errorMsg} />
-											</div>
-										)}
-										{success && (
-											<div className="mt-4">
-												<AlertBasic
-													title="Success!"
-													desc="Moving to next step..."
-												/>
-											</div>
-										)}
-									</div>
 								</div>
 							}
 						/>
-
-						<GoogleComp />
 
 						<p className="text-sm text-gray-600 dark:text-gray-400">
 							Already have an account?{" "}
