@@ -21,6 +21,7 @@ import UserProfilePosts from "./UserProfilePosts";
 import ProfileFooter from "./ProfileFooter";
 import { AlertDialogBasic } from "./ui/AlertDialogBasic";
 import { toast } from "sonner";
+import ShareProfile from "./ShareProfile";
 
 function Profile() {
 	// 1. Context and Params
@@ -47,7 +48,6 @@ function Profile() {
 	//check for viewing other profile
 	let isMyProfile = useRef(true);
 	const [info] = useContext(userContext);
-	
 
 	//follow - unfollow function
 	async function handleFollow() {
@@ -238,67 +238,73 @@ function Profile() {
 						className="p-2 rounded-full dark:bg-[#1F1B24] bg-white shadow-lg hover:scale-105 transition cursor-pointer  ">
 						<ChevronLeft />
 					</button>
-
 					{/* Only show Edit Pencil if it's the user's own profile */}
-					{isOwnProfile && (
-						<div
-							onClick={() => {
-								setControl((p) => !p);
-							}}
-							className={`p-2  relative text-foreground dark:bg-[#000000] bg-white flex justify-end rounded-full ${
-								control && "bg-background text-foreground"
-							}`}>
-							{" "}
-							<Ellipsis
-								size={24}
-								className={`${
-									!control && "text-amber-50 "
-								} rotate-90 text-foreground`}
-							/>
-							<ul
-								hidden={!control}
-								className="absolute z-50 right-12  w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
+					<div
+						onClick={() => {
+							setControl((p) => !p);
+						}}
+						className={`p-2  relative text-foreground dark:bg-[#000000] bg-white flex justify-end rounded-full ${
+							control && "bg-background text-foreground"
+						}`}>
+						{" "}
+						<Ellipsis
+							size={24}
+							className={`${
+								!control && "text-amber-50 "
+							} rotate-90 text-foreground`}
+						/>
+						<ul
+							hidden={!control}
+							className="absolute z-50 right-12  w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
                             *:hover:border
                             *:rounded-md
                             *:hover:bg-gray-600
                             ">
-								<li>
-									<button
-										className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
-										onClick={() => SetPopup(true)}>
-										<PencilIcon
-											size={14}
-											className="hover:-rotate-12 mx-1 mr-5"
-										/>{" "}
-										Edit
-									</button>
-								</li>
+							<li className={`${!isOwnProfile && "bg-gray-700 py-1"}`}>
+								<ShareProfile
+									name={profileData.name}
+									username={profileData.username}
+								/>
+							</li>
+							{isOwnProfile && (
+								<>
+									<li>
+										<button
+											className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
+											onClick={() => SetPopup(true)}>
+											<PencilIcon
+												size={14}
+												className="hover:-rotate-12 mx-1 mr-5"
+											/>{" "}
+											Edit
+										</button>
+									</li>
 
-								<li>
-									<div className="p-1 w-full px-4 whitespace-nowrap flex items-center   transition cursor-pointer hover:bg-red-800 rounded-md">
-										<LogOut size={14} className="mx-1" />
-										<AlertDialogBasic
-											className={`px-0`}
-											titleText={`Log Out  `}
-											handleLogOut={handleLogOut}
-										/>
-									</div>
-								</li>
+									<li>
+										<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
+											<AlertDialogBasic
+												
+												titleText={`Log Out`}
+												handleLogOut={handleLogOut}
+											/>
+										</div>
+									</li>
 
-								<li>
-									<button
-										className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
-										onClick={() => navigate("/control")}>
-										<ChevronRight
-											size={14}
-											className="hover:-rotate-12 mx-1 mr-5"
-										/>{" "}
-										More
-									</button>
-								</li>
-							</ul>
-						</div>
-					)}
+									<li>
+										<button
+											className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
+											onClick={() => navigate("/control")}>
+											<ChevronRight
+												size={14}
+												className="hover:-rotate-12 mx-1 mr-5"
+											/>{" "}
+											More
+										</button>
+									</li>
+								</>
+							)}
+						</ul>
+					</div>
 				</div>
 			</div>
 
@@ -330,7 +336,7 @@ function Profile() {
 						)}
 					</div>
 
-					{!isOwnProfile && (
+					{ !isOwnProfile && (
 						<div
 							onClick={isFollow ? handleUnfollow : handleFollow}
 							className={`
@@ -406,7 +412,6 @@ function Profile() {
 				)}
 			</div>
 
-		
 			<ProfileFooter />
 
 			<Outlet />
