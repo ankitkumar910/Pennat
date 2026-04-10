@@ -41,12 +41,18 @@ function Signup() {
 		});
 
 		if (error) {
-			setErrorMsg(error.message || error);
+			console.log("Error is here.");
+			setErrorMsg(error);
+
+			console.log(error)
+
 			setUserData(null);
+
 			return;
 		}
 
 		if (data?.user) {
+			setErrorMsg(null);
 			setUserData(data.user);
 			setSuccess(true);
 			toast.success("💡 Account created! Note your password.");
@@ -75,12 +81,13 @@ function Signup() {
 			.select();
 
 		if (error) {
-			setErrorMsg(error.message || error);
+			setErrorMsg(error);
 			toast.error(error.message || "An error occurred");
 			return;
 		}
 
 		if (data) {
+			setErrorMsg(null);
 			setSuccess(true);
 			toast.success("Profile updated successfully!");
 
@@ -121,12 +128,12 @@ function Signup() {
 						<GoogleComp />
 						<SignWithEmail
 							child={
-								<div className="w-full">
+								<div className="w-full flex ">
 									{!showForm ? (
 										/* LOGIN / INITIAL SIGNUP FORM STYLE */
 										<div>
 											<form onSubmit={handleSubmit}>
-												<div className="mx-12 flex flex-col gap-0">
+												<div className="sm:mx-12 mx-2 flex flex-col gap-0">
 													<label
 														htmlFor="email"
 														className="text-sm font-normal text-foreground">
@@ -139,7 +146,13 @@ function Signup() {
 														id="email"
 														required
 														placeholder="pennat@exmple.com"
-														className="p-2 lowercase border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-2/2 
+														dark:bg-gray-800
+														
+														"
 													/>
 													<br />
 													<label
@@ -156,9 +169,15 @@ function Signup() {
 														placeholder="••••••"
 														minLength={6}
 														maxLength={20}
-														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-2/2 
+														dark:bg-gray-800
+														
+														"
 													/>
-													<p className="text-xs wrap-anywhere text-slate-800 mt-2">
+													<p className="text-xs wrap-anywhere text-slate-800  text-sm   dark:text-slate-500/60 mt-2">
 														Possibly your password had min. length 6, included
 														<br className="hidden sm:block" />
 														uppercase, lowercase, numbers and special symbols.
@@ -168,12 +187,9 @@ function Signup() {
 												<div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center">
 													<button
 														type="submit"
-														className="bg-blue-800 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
+														className="bg-blue-800 mt-4 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
 														Continue
 													</button>
-													<p className="text-sm sm:ml-8 text-slate-900">
-														<NavLink to={"/flow"}>Forgot password?</NavLink>
-													</p>
 												</div>
 												{errorMsg && (
 													<div className="mx-12 mt-4">
@@ -184,9 +200,9 @@ function Signup() {
 										</div>
 									) : (
 										/* USER DATA DETAILS FORM STYLE */
-										<div>
+										<div className="w-full sm:min-w-1/2">
 											<form onSubmit={handleUserData}>
-												<div className="mx-12 flex flex-col gap-0">
+												<div className="sm:mx-12 justify-center  mx-2 flex flex-col gap-0 overflow-y-scroll no-scrollbar">
 													<label className="text-sm font-normal text-foreground">
 														Full Name
 													</label>
@@ -194,7 +210,13 @@ function Signup() {
 														ref={nameRef}
 														type="text"
 														required
-														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-2/2 
+														dark:bg-gray-800
+														
+														"
 													/>
 													<br />
 													<label className="text-sm font-normal text-foreground">
@@ -204,7 +226,13 @@ function Signup() {
 														ref={usernameRef}
 														type="text"
 														required
-														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-2/2 
+														dark:bg-gray-800
+														
+														"
 													/>
 													<br />
 													<label className="text-sm font-normal text-foreground">
@@ -214,15 +242,21 @@ function Signup() {
 														ref={dobRef}
 														type="date"
 														required
-														className="p-2 border rounded-sm bg-slate-300 min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-2/2 
+														dark:bg-gray-800
+														
+														"
 													/>
 												</div>
 
 												<div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center">
 													<button
 														type="submit"
-														className="bg-blue-800 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
-														Save Details
+														className="bg-blue-800 mt-4 border-blue-800 px-[30%] rounded-full sm:px-4 py-2 mx-4 my-4 sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600 text-white cursor-pointer">
+														Save
 													</button>
 												</div>
 

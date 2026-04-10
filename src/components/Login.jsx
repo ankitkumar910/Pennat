@@ -100,14 +100,12 @@ function Login() {
 
 								<GoogleComp />
 
-								
-
 								<br />
 								<LoginWithEmail
 									child={
 										<div>
 											<form onSubmit={handleSubmit}>
-												<div className="mx-12 flex flex-col gap-0 ">
+												<div className="sm:mx-12 mx-2 flex justify-center flex-col gap-0 ">
 													<label
 														htmlFor="email"
 														className="text-sm font-normal  text-foreground">
@@ -123,7 +121,13 @@ function Login() {
 														required
 														title="Enter your email"
 														placeholder="pennat@exmple.com"
-														className="p-2 lowercase border rounded-sm  bg-slate-300  min-w-1 sm:w-1/2 text-black"
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-1/2 
+														dark:bg-gray-800
+														
+														"
 													/>
 													<br />
 													<label
@@ -143,13 +147,15 @@ function Login() {
 														minLength={6}
 														maxLength={20}
 														title="enter your password"
-														className="p-2  border rounded-sm 
-                 
-               bg-slate-300 
-              
-               min-w-1 sm:w-1/2   text-black"
+															className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														
+														text-foreground
+														min-w-1 sm:w-1/2 
+														dark:bg-gray-800
+														
+														"
 													/>{" "}
-													<p className="text-xs  wrap-anywhere text-slate-800">
+													<p className="text-xs  wrap-anywhere text-slate-800 dark:text-slate-600">
 														Possibly your password had min. length 6, included{" "}
 														<br className="hidden sm:block" />
 														uppercase,lowercase,numbers and special symbols.
@@ -168,9 +174,9 @@ function Login() {
 										 sm:px-4 py-2 mx-4 my-4  sm:mr-0 sm:ml-12 border sm:rounded-md active:bg-gray-600  text-white cursor-pointer">
 														Continue
 													</button>
-													<p className="text-sm sm:ml-8 text-slate-900">
+													<div className="text-sm sm:ml-8 underline text-slate-900 dark:text-slate-600">
 														<NavLink to={"/flow"}>Forgot password?</NavLink>
-													</p>
+													</div>
 												</div>
 
 												{errorMsg && <AlertColors errorMsg={errorMsg} />}
@@ -180,7 +186,7 @@ function Login() {
 								/>
 
 								<br />
-								<p className="text-sm text-foreground ml-12">
+								<div className="text-sm text-foreground  ml-12">
 									Don't have an account?{" "}
 									<span
 										onClick={() => {
@@ -190,7 +196,7 @@ function Login() {
 										Create one
 										<ExternalLink className="inline ml-1 mb-1" size={"12px"} />
 									</span>
-								</p>
+								</div>
 							</div>
 						</div>
 					</div>

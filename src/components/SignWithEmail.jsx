@@ -28,12 +28,12 @@ export function SignWithEmail({ child }) {
 				</DialogTrigger>
 
 				<DialogContent
-					className="sm:max-w-3xl bg-gradient-to-r from-teal-400 to-yellow-200 py-4 pb-12 px-4">
+					className="sm:max-w-3xl bg-background backdrop-blur-3xl py-4 pb-12 px-4">
 					<DialogHeader>
-						<DialogTitle>Create Account</DialogTitle>
-						<DialogDescription>
+						<DialogTitle  className="font-bold text-xl">Create Account</DialogTitle>
+						<DialogDescription  className="text-sm  text-foreground dark:text-slate-500/60">
 							Please ensure your email address is accurate and choose a secure
-							password. All provided details must be authentic.
+							password. <span className="hidden sm:block">All provided details must be authentic.</span>
 						</DialogDescription>
 					</DialogHeader>
 					{child}

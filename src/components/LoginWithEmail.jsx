@@ -14,8 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import EmailComp from "./EmailComp";
 
-
 export function LoginWithEmail({ child }) {
+	const isDark = localStorage.getItem("theme");
+	console.log(isDark)
 	return (
 		<Dialog>
 			<form>
@@ -24,18 +25,19 @@ export function LoginWithEmail({ child }) {
 						<EmailComp />
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-3xl bg-gradient-to-r from-teal-400 to-yellow-200 py-4 pb-12 px-4">
+				<DialogContent
+					className={`sm:max-w-3xl bg-background  backdrop-blur-3xl py-4 pb-12 px-4 `}>
 					<DialogHeader>
-						<DialogTitle>Login to your account!</DialogTitle>
-						<DialogDescription className="text-sm ">
+						<DialogTitle className="font-bold text-xl">
+							Login to your account!
+						</DialogTitle>
+						<DialogDescription className="text-sm  text-foreground dark:text-gray-600">
 							Please enter your registered email address and password to access
-							your account. Ensure your login details are kept confidential.
-							
+							your account. <span className="hidden sm:block">Ensure your login details are kept confidential.</span>
 						</DialogDescription>
 					</DialogHeader>
 
-                    {child}
-					
+					{child}
 				</DialogContent>
 			</form>
 		</Dialog>
