@@ -13,6 +13,7 @@ import { themeContext, userContext } from "../context/Context";
 import { SearchButton } from "./SearchButton";
 import { LogIn } from "lucide-react";
 import { cn } from "./utils/cn";
+import { SignPop } from "./SignPop";
 
 function NavbarPage({ SetSearchQuery }) {
 	const naviagtors = useNavigate();
@@ -48,7 +49,9 @@ function NavbarPage({ SetSearchQuery }) {
 			</NavLink>
 			<div className="relative right-0 ">
 				<div className="flex flex-row items-center ">
-					<SearchButton SetSearchQuery={SetSearchQuery} />
+					<SignPop
+						child={<SearchButton on SetSearchQuery={SetSearchQuery} />}
+					/>
 
 					{userInfo && (
 						<span
@@ -131,7 +134,7 @@ function NavbarPage({ SetSearchQuery }) {
 
 					<li
 						onClick={() => {
-							naviagtors("/profile");
+							naviagtors(`/profile/${userInfo?.username}`);
 						}}>
 						<span className="flex items-center text-sm">
 							{" "}

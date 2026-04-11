@@ -22,6 +22,7 @@ import ProfileFooter from "./ProfileFooter";
 import { AlertDialogBasic } from "./ui/AlertDialogBasic";
 import { toast } from "sonner";
 import ShareProfile from "./ShareProfile";
+import { SignDialogue } from "./SignDialogue";
 
 function Profile() {
 	// 1. Context and Params
@@ -50,7 +51,8 @@ function Profile() {
 	const [info] = useContext(userContext);
 
 	//follow - unfollow function
-	async function handleFollow() {
+	async function handleFollow(e) {
+		e.stopPropagation();
 		setFollow(true);
 		setFollower((p) => p + 1);
 		const { error: followError } = await supabase.from("FollowTable").insert({
@@ -66,7 +68,8 @@ function Profile() {
 			return;
 		}
 	}
-	async function handleUnfollow() {
+	async function handleUnfollow(e) {
+		e.stopPropagation();
 		setFollow(false);
 		setFollower((p) => p - 1);
 		const { error: unfollowError } = await supabase
@@ -85,8 +88,17 @@ function Profile() {
 	}
 
 	useEffect(() => {
+
+		if(!currentUser && !urlUsername) {
+			console.log("Not logged in. This runned. 🔥")
+			navigate('/login')
+			
+		}
 		if (urlUsername) {
 			isMyProfile.current = false;
+		}else{
+			toast("You are not logged In.")
+			return
 		}
 		async function fetchProfile() {
 			setLoading(true);
@@ -260,7 +272,10 @@ function Profile() {
                             *:rounded-md
                             *:hover:bg-gray-600
                             ">
-							<li className={`${!isOwnProfile && "bg-gray-700 py-1"}`}>
+							<li
+								className={`${
+									!isOwnProfile && "bg-background dark:bg-gray-700 py-1"
+								}`}>
 								<ShareProfile
 									name={profileData.name}
 									username={profileData.username}
@@ -283,7 +298,6 @@ function Profile() {
 									<li>
 										<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
 											<AlertDialogBasic
-												
 												titleText={`Log Out`}
 												handleLogOut={handleLogOut}
 											/>
@@ -336,17 +350,26 @@ function Profile() {
 						)}
 					</div>
 
-					{ !isOwnProfile && (
-						<div
-							onClick={isFollow ? handleUnfollow : handleFollow}
-							className={`
+					<SignDialogue
+						child={
+							<div>
+								{!isOwnProfile && (
+									<div
+										onClick={
+											info ? (isFollow ? handleUnfollow : handleFollow) : null
+										}
+										className={`
 								${showFollow ? "" : "collapse"}
 								border p-2 mt-16 rounded-full mx-2 px-4
 								${!isFollow ? "bg-foreground text-background" : "bg-background text-foreground"}
 							  hover:text-foreground  hover:bg-gray-500 transition-all duration-400  shadow-2xs cursor-pointer`}>
-							{isFollow ? "Following" : "Follow"}
-						</div>
-					)}
+										{isFollow ? "Following" : "Follow"}
+									</div>
+								)}
+							</div>
+						}
+						title={`Want to follow this author?`}
+					/>
 				</div>
 
 				<div className="flex pl-4 items-center mt-1 sm:mt-2">
@@ -368,7 +391,7 @@ function Profile() {
 				)}
 				<div className=" pl-4  md:mt-4 text-xs  flex gap-8  mt-2  ">
 					<NavLink
-						to={`followers?id=${profileData?.user_id}`}
+						to={info && `followers?id=${profileData?.user_id}`}
 						className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="followers">
 							Followers
@@ -376,7 +399,7 @@ function Profile() {
 						<p className="font-semibold">{follower}</p>
 					</NavLink>
 					<NavLink
-						to={`following?id=${profileData?.user_id}`}
+						to={info && `following?id=${profileData?.user_id}`}
 						className="flex flex-col justify-center items-center">
 						<label className="text-sm" htmlFor="following">
 							Following

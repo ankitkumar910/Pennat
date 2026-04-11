@@ -21,6 +21,7 @@ import ImageGrid from "./ImageGrid";
 import { TimeFormate } from "./utils/TimeFormater";
 import HomeComment from "./HomeComment";
 import { ShareComponent } from "./ShareComponent";
+import { SignDialogue } from "./SignDialogue";
 
 function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
@@ -250,21 +251,33 @@ function ArticleCard({ article }) {
 				<div className="w-full mt-2 ">
 					<ul className="flex mt-4 justify-start items-center *:mx-2 w-fit *:flex">
 						<li
-							onClick={handleLikeCount}
-							className={`flex items-center gap-2 text-sm cursor-pointer select-none transition-colors ${
-								isLiked
-									? "text-red-500"
-									: "text-gray-600 dark:text-gray-400 hover:text-red-500"
-							}`}>
-							<Heart
-								size={20}
-								fill={isLiked ? "#ff0000" : "none"}
-								strokeWidth={2}
-								className={`${
-									isLiking ? "scale-130" : ""
-								} transition-transform hover:scale-120`}
+							onClick={(e) => {
+								e.stopPropagation();
+							}}>
+							<SignDialogue
+								child={
+									<div
+										onClick={userInfo && handleLikeCount}
+										className={`flex items-center gap-2 text-sm cursor-pointer select-none transition-colors ${
+											isLiked
+												? "text-red-500"
+												: "text-gray-600 dark:text-gray-400 hover:text-red-500"
+										}`}>
+										<Heart
+											size={20}
+											fill={isLiked ? "#ff0000" : "none"}
+											strokeWidth={2}
+											className={`${
+												isLiking ? "scale-130" : ""
+											} transition-transform hover:scale-120`}
+										/>
+										<span>{likes}</span>
+									</div>
+								}
+
+								title={`Liked this article?`}
+								
 							/>
-							<span>{likes}</span>
 						</li>
 						<li
 							onClick={handleCommentClick}

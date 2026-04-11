@@ -4,6 +4,7 @@ import { Ellipsis, Trash2, BookOpen } from "lucide-react";
 import supabase from "../config/supabaseClient";
 import Loader from "./Loader";
 import { userContext } from "../context/Context";
+import { NavLink } from "react-router-dom";
 
 function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 	const [loader, setLoader] = useState(false);
@@ -26,13 +27,14 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 	}
 
 	return (
-		<div
+		<NavLink
+			to={`/article?id=${article.id}`}
 			onContextMenu={(e) => {
 				e.preventDefault();
 				setOpenMenuId(isOpen ? null : article.id);
 			}}
-			className="group relative flex flex-col w-full my-1 min-h-20 bg-white dark:bg-[#1A1A1A] border border-gray-100 dark:border-[#2A2A2A] 
-			rounded overflow-hidden transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+			className="group  relative flex flex-col w-full my-1   bg-white dark:bg-[#141414] border  
+			rounded-xl overflow-hidden  duration-300 mx-auto px-4  sm:border sm:mt-2 border-[#d8d1d1] dark:border-[#232225]   sm:rounded-xl transition-all">
 			{/* Loading Overlay */}
 			{loader && (
 				<div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-[2px]">
@@ -40,8 +42,7 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 				</div>
 			)}
 
-			{/* Top Action Bar */}
-			<div className="flex justify-between items-start p-4 pb-2">
+			<div className="flex collapse justify-between items-start p-4 pb-2">
 				<div className="p-2 rounded-lg collapse bg-gray-50 dark:bg-[#252525] text-gray-400">
 					<BookOpen size={16} />
 				</div>
@@ -63,7 +64,7 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 									className="fixed inset-0 z-10"
 									onClick={() => setOpenMenuId(null)}
 								/>
-								<div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#252525] border border-gray-200 dark:border-[#333] rounded-lg shadow-xl z-20 py-1 animate-in fade-in zoom-in duration-150">
+								<div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#252525] border border-gray-200 dark:border-[#333] rounded-lg  z-20 py-1 animate-in fade-in zoom-in duration-150">
 									<button
 										onClick={handleDelete}
 										className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
@@ -77,19 +78,15 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 				)}
 			</div>
 
-			{/* Content Body */}
-			<div className="px-5 pb-5">
-				<h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 line-clamp-1 mb-2 tracking-tight">
+			<div className="px-5 mt-6 pb-5">
+				<h3 className=" font-semibold text-gray-800 dark:text-gray-100 text-xl line-clamp-1 mb-2 tracking-tight">
 					{article.title}
 				</h3>
-				<div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed opacity-80 prose-p:m-0">
+				<div className="text-sm text-gray-800 dark:text-gray-400 line-clamp-3 leading-relaxed opacity-80 prose-p:m-0">
 					{parse(article.body)}
 				</div>
 			</div>
-
-			{/* Decorative Footer */}
-			<div className="mt-auto h-1 w-full bg-linear-to-r from-transparent via-gray-100 dark:via-[#2A2A2A] to-transparent opacity-50" />
-		</div>
+		</NavLink>
 	);
 }
 
