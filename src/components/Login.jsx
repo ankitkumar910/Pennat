@@ -98,7 +98,7 @@ function Login() {
 										</span>
 									</span>
 								</p>
-								<p className="px-2 flex justify-self-center text-xl sm:border-s-4 border-blue-600 mt-12    font-norml font-sans my-4  w-fit   text-gray-600  ">
+								<p className="px-2 collapse sm:visible justify-self-center  text-xl sm:border-s-4 border-blue-600 mt-12  sm:ml-1 md:ml-12   font-norml font-sans my-4  w-fit   text-gray-600  ">
 									Log in to your digital desk.
 								</p>
 
