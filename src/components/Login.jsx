@@ -78,9 +78,13 @@ function Login() {
 				{!userInfo && (
 					<div>
 						<div className="dark:bg-[#121212] bg-background pb-12  min-h-screen max-w-screen bg-center bg-cover ">
-							<h1 className="text-2xl  font-bold px-2 text-clip b inline text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-pink-600  w-full ">
-								Pennat
-							</h1>
+							<div className="bg-transparent backdrop-blur-3xl">
+								<h1
+									onClick={() => navi("/")}
+									className="relative top-6 left-6 md:left-12 z-50 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-pink-800/90 to-indigo-800    cursor-pointer">
+									Pennat
+								</h1>
+							</div>
 
 							<div className="mt-16">
 								<p className="text-5xl    mt-4 ml-4    font-extrabold font-fontVerdana md:text-7xl sm:text-5xl px-2 text-foreground ">
@@ -94,7 +98,7 @@ function Login() {
 										</span>
 									</span>
 								</p>
-								<p className="px-2 text-xl border-s-4 border-blue-600 mt-12  ml-12 font-norml font-sans my-4  w-fit   text-gray-600  ">
+								<p className="px-2 flex justify-self-center text-xl sm:border-s-4 border-blue-600 mt-12    font-norml font-sans my-4  w-fit   text-gray-600  ">
 									Log in to your digital desk.
 								</p>
 
@@ -147,7 +151,7 @@ function Login() {
 														minLength={6}
 														maxLength={20}
 														title="enter your password"
-															className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
 														
 														text-foreground
 														min-w-1 sm:w-1/2 
