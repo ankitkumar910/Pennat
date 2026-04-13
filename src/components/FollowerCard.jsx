@@ -104,48 +104,41 @@ function FollowerCard({ data }) {
 	}
 
 	return (
-		<div className="flex w-full justify-between pr-4 items-center">
-			<div className="flex   mr-4">
-				{" "}
-				<div className="self-center">
-					<img
-						src={data?.profile_img ?? userDp}
-						width={40}
-						className="rounded-full mr-2"
-						alt=""
-					/>
-				</div>
-				<div>
-					<div className="flex flex-col">
-						<NavLink
-							to={`/profile/${data?.username ?? ""}`}
-							className="text-sm  text-gray-500  hover:underline">
-							@{data?.name}
-						</NavLink>
+		<div className="flex w-full justify-between items-center pr-4">
+			{/* LEFT SECTION */}
+			<div className="flex items-center gap-2 mr-4 min-w-0">
+				{/* PROFILE IMAGE (fixed size, no shrink) */}
+				<img
+					src={data?.profile_img ?? userDp}
+					alt=""
+					className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full object-cover flex-shrink-0"
+				/>
 
-						<p className="text-md text-sm pr-4">{data?.name}</p>
-					</div>
+			
+				<div className="flex flex-col min-w-0">
+					<NavLink
+						to={`/profile/${data?.username ?? ""}`}
+						className="text-sm text-gray-500 hover:underline truncate">
+						@{data?.username}
+					</NavLink>
 
-					<p>{data?.about ?? ""}</p>
+					<p className="text-sm truncate">{data?.name}</p>
+
+					<p className="text-sm truncate">{data?.about ?? ""}</p>
 				</div>
 			</div>
 
-			<div>
+			
+			<div className="flex-shrink-0">
 				<button
 					onClick={handleClick}
 					className={`${
 						!myFollowing?.has(data?.user_id)
 							? "bg-foreground text-background"
 							: "text-foreground bg-background"
-					}  px-4 py-1 rounded-full font-semibold cursor-pointer 
-					${currentUser?.user_id == data?.user_id ? "collapse" : ""}
-				transition-all
-				duration-200
-				ease-linear
-				hover:scale-101
-				hover:shadow-xs
-				shadow-background
-				`}>
+					} px-4 py-1 rounded-full font-semibold cursor-pointer
+        ${currentUser?.user_id == data?.user_id ? "collapse" : ""}
+        transition-all duration-200 ease-linear hover:scale-101 hover:shadow-xs`}>
 					{!myFollowing?.has(data?.user_id) ? "Follow" : "Following"}
 				</button>
 			</div>
