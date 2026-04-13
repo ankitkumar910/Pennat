@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 import NoArticles from "./utils/NoArticles";
 import HomeComment from "./HomeComment";
+import FollowRecc from "./FollowRecc";
 
 function Home() {
 	let [scrolling, setScrolling] = useState(false);
@@ -80,49 +81,57 @@ function Home() {
 	}, []);
 
 	return (
-		<div className="w-full    -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">
+		<div className="w-full  -mt-2 box-border h-fit  min-h-screen dark:bg-[#1F1B24]">
 			<NavbarPage />
 
-			<div
-				className="
+			<div className="flex-col justify-center  items-start md:gap-10">
+				<div className="  ">
+					<div
+						className="
 			    mt-15 overflow-auto "
-				id="writer">
-				{  write  && <ArticleWriter setWriter={setWriter} />}
-				<div 
-					hidden={write || !userInfo}
-					onClick={() => {
-						setWriter(true);
-					}}
-					className={`border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed z-20 justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
+						id="writer">
+						{write && <ArticleWriter setWriter={setWriter} />}
+						<div
+							hidden={write || !userInfo}
+							onClick={() => {
+								setWriter(true);
+							}}
+							className={`border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed z-20 justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
 					
 					${scrolling ? "opacity-0" : "opacity-100"}
 					transition-all ease-in-out duration-100
 					mb-4  `}>
-					<div
-						id="article_Button"
-						className="h-full w-full cursor-pointer px-4 flex justify-between items-center py-3 outline-0 [&:hover>.pencil]:-rotate-5 select-none "
-						placeholder="">
-						<PenLine size={18} color="white" className="pencil" />
-						<span className={` p-1 text-white transition-all duration-350`}>
-							Write Article
-						</span>
+							<div
+								id="article_Button"
+								className="h-full w-full cursor-pointer px-4 flex justify-between items-center py-3 outline-0 [&:hover>.pencil]:-rotate-5 select-none "
+								placeholder="">
+								<PenLine size={18} color="white" className="pencil" />
+								<span className={` p-1 text-white transition-all duration-350`}>
+									Write Article
+								</span>
+							</div>
+						</div>
 					</div>
+
+					<commentUIContext.Provider
+						value={[commentClicked, setCommentClicked, id, setId]}>
+						<div className="box-border">
+							{articles && <ArticlePage />}
+							{!articles && <NoArticles />}
+						</div>
+
+						{commentClicked && (
+							<div>
+								<HomeComment setCommentUI={setCommentClicked} id={id} />
+							</div>
+						)}
+					</commentUIContext.Provider>
+				</div>
+
+				<div className="">
+					<FollowRecc />
 				</div>
 			</div>
-
-			<commentUIContext.Provider
-				value={[commentClicked, setCommentClicked, id, setId]}>
-				<div className="box-border">
-					{articles && <ArticlePage />}
-					{!articles && <NoArticles />}
-				</div>
-
-				{commentClicked && (
-					<div>
-						<HomeComment setCommentUI={setCommentClicked} id={id} />
-					</div>
-				)}
-			</commentUIContext.Provider>
 		</div>
 	);
 }

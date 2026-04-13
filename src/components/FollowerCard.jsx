@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 
 import { userDp } from "../../public/avtar";
 import { NavLink } from "react-router-dom";
@@ -103,10 +103,9 @@ function FollowerCard({ data }) {
 		}
 	}
 
-
 	return (
-		<div className="flex  w-full justify-between pr-4 items-center">
-			<div className="flex">
+		<div className="flex w-full justify-between pr-4 items-center">
+			<div className="flex   mr-4">
 				{" "}
 				<div className="self-center">
 					<img
@@ -121,10 +120,10 @@ function FollowerCard({ data }) {
 						<NavLink
 							to={`/profile/${data?.username ?? ""}`}
 							className="text-sm  text-gray-500  hover:underline">
-							@{data?.username}
+							@{data?.name}
 						</NavLink>
 
-						<p className="text-md font-bold">{data?.name}</p>
+						<p className="text-md text-sm pr-4">{data?.name}</p>
 					</div>
 
 					<p>{data?.about ?? ""}</p>
