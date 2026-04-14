@@ -98,7 +98,7 @@ function Home() {
 							}}
 							className={`border-2 hover:border-gray-900 shadow-2xl  bg-black bottom-2 right-2 fixed z-20 justify-center sm:mx-auto mx-2 w-fit  text-sm rounded-2xl dark:bg-[#313839]  my-2 py-1 
 					
-					${scrolling ? "opacity-0" : "opacity-100"}
+					${scrolling ? "hidden" : "block"}
 					transition-all ease-in-out duration-100
 					mb-4  `}>
 							<div
@@ -128,7 +128,7 @@ function Home() {
 					</commentUIContext.Provider>
 				</div>
 
-				<div className="">
+				<div className="pb-8">
 					<FollowRecc />
 				</div>
 			</div>

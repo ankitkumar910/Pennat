@@ -103,7 +103,7 @@ function NavbarPage({ SetSearchQuery }) {
 					duration-400
 					ease-in-out
 
-					${showMenu ? "opacity-100" : "opacity-0"}
+					${showMenu ? "block" : "hidden"}
 
 					*:px-2
 					*:py-2

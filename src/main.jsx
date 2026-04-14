@@ -5,9 +5,12 @@ import App from "./App.jsx";
 import "./input.css";
 import Tiptap from "./components/Tiptap.jsx";
 import Email from "./components/Email.jsx";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<App />
+		<TooltipProvider>
+			<App />
+		</TooltipProvider>
 	</StrictMode>
 );

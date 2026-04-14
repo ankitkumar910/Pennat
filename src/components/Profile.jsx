@@ -23,6 +23,7 @@ import { AlertDialogBasic } from "./ui/AlertDialogBasic";
 import { toast } from "sonner";
 import ShareProfile from "./ShareProfile";
 import { SignDialogue } from "./SignDialogue";
+import { UserNamePop } from "./UserNamePop";
 
 function Profile() {
 	// 1. Context and Params
@@ -88,17 +89,15 @@ function Profile() {
 	}
 
 	useEffect(() => {
-
-		if(!currentUser && !urlUsername) {
-			console.log("Not logged in. This runned. 🔥")
-			navigate('/login')
-			
+		if (!currentUser && !urlUsername) {
+			console.log("Not logged in. This runned. 🔥");
+			navigate("/login");
 		}
 		if (urlUsername) {
 			isMyProfile.current = false;
-		}else{
-			toast("You are not logged In.")
-			return
+		} else {
+			toast("You are not logged In.");
+			return;
 		}
 		async function fetchProfile() {
 			setLoading(true);
@@ -372,13 +371,17 @@ function Profile() {
 					/>
 				</div>
 
-				<div className="flex pl-4 items-center mt-1 sm:mt-2">
-					<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-						{profileData.name}
-					</h2>
-					<p className="text-sm ml-0.5 items-center mt-2 text-gray-500">
-						@{profileData.username}
-					</p>
+				<div className="w-full ">
+					
+							<div className="flex pl-4 items-center mt-1 sm:mt-2 min-w-0">
+								<h2 className="text-2xl max-w-[50%] truncate font-semibold text-gray-900 dark:text-gray-100">
+									{profileData.name}
+								</h2>
+								<p className="text-sm ml-2 mt-2 text-gray-500 shrink-0">
+									@{profileData.username}
+								</p>
+							</div>
+						
 				</div>
 				{!about && (
 					<div className="mt-1 pl-4 text-sm">
@@ -429,13 +432,15 @@ function Profile() {
 			)}
 
 			{/* Posts Section */}
-			<div className="mt-8  px-6  sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
+			<div className="mt-8  mb-40 px-6  sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
 				{profileData.ArticleTable && (
 					<UserProfilePosts ArticleTable={profileData.ArticleTable} />
 				)}
 			</div>
 
-			<ProfileFooter />
+			<div className="absolute bottom-0 right-0 w-full  ">
+				<ProfileFooter />
+			</div>
 
 			<Outlet />
 		</div>

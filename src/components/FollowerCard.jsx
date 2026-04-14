@@ -6,7 +6,7 @@ import { dataContext, userContext } from "../context/Context";
 import supabase from "../config/supabaseClient";
 import { toast } from "sonner";
 
-function FollowerCard({ data }) {
+function FollowerCard({ data,setLength }) {
 	//start
 	// 1. Context and Params
 	const [currentUser] = useContext(userContext);
@@ -34,6 +34,8 @@ function FollowerCard({ data }) {
 						temp.add(el);
 					});
 
+
+               
 					temp.delete(data?.user_id);
 					return temp;
 				});
@@ -63,6 +65,8 @@ function FollowerCard({ data }) {
 			} else {
 				//setMyFollowing(temp);
 
+				setLength(p=>p-1)
+
 				setMyFollowing((prev) => {
 					let temp = new Set();
 
@@ -72,6 +76,8 @@ function FollowerCard({ data }) {
 					temp.add(data?.user_id);
 					return temp;
 				});
+
+				
 
 				const { error: followError } = await supabase
 					.from("FollowTable")
