@@ -40,13 +40,13 @@ function FollowRecc() {
 					className={`
 
                 justify-self-center
-				  
+				  -mt-8 sm:mt-auto
 					 bg-white dark:bg-[#141414]
 			 disabled:bg-green-400 w-full    sm:w-[60vw] max-w-2xl   border-[#ebdede] dark:border-[#232225]   
 			
 		`}>
 					{
-						<div className="  w-full border-b border     max-w-2xl mx-auto pt-4  px-4   border-[#ebdede] dark:border-[#232225]   rounded-xl transition-all  bg-white dark:bg-[#141414]">
+						<div className="  w-full border-b sm:border     max-w-2xl mx-auto pt-4  px-4   border-[#ebdede] dark:border-[#232225]   sm:rounded-xl transition-all  bg-white dark:bg-[#141414]">
 							<div className="dark:text-gray-300 text-gray-900  pb-2 text-sm">
 								You may know 	{
 										Number(followRecc.length - myFollowing.size - 1) > 1 ? "them" : "him"
