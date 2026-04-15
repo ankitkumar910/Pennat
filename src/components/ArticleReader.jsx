@@ -3,16 +3,20 @@ import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 import parse from "html-react-parser";
 import {
+	AArrowDown,
+	ALargeSmall,
 	Bluetooth,
 	Bookmark,
 	BookMarked,
 	BookOpenCheck,
+	BookOpenText,
 	CalendarDays,
 	ChevronLeft,
 	Ellipsis,
 	Heart,
 	Hourglass,
 	Share,
+	Share2,
 	User,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -24,7 +28,8 @@ import CommentCard from "./CommentCard";
 import { CalculateTime } from "../utils/CalculateTime";
 import { ReaderMenu } from "./ReaderMenu";
 import { SignDialogue } from "./SignDialogue";
-import NavbarPage from './NavbarPage'
+import NavbarPage from "./NavbarPage";
+import { ShareComponent } from "./ShareComponent";
 function ArticleReader() {
 	const navigate = useNavigate();
 	const [userInfo] = useContext(userContext);
@@ -47,6 +52,13 @@ function ArticleReader() {
 	const [time, setTime] = useState();
 
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
+	const url = window.location;
+	const shareUrl = `${url}`;
+
+
+	
+
+	console.log("Body");
 
 	useEffect(() => {
 		if (!articleId) {
@@ -305,10 +317,26 @@ function ArticleReader() {
 		setIsLiking(false);
 	}
 
-	
+	async function handleShare() {
+		if (navigator.share) {
+			try {
+				await navigator.share({
+					title: article?.title,
+					url: shareUrl,
+				});
+				console.log("Shared successfully");
+			} catch (err) {
+				console.error("Error sharing:", err.message);
+			}
+		} else {
+			// 2. Fallback for unsupported browsers
+			alert("Web Share API not supported. You can copy the link manually!");
+		}
+	}
+
 	return (
 		<div className="min-h-screen   no-scrollbar  bg-white dark:bg-gray-950">
-		  <NavbarPage />
+			<NavbarPage />
 
 			<article className="max-w-3xl mx-auto px-4 mt-14 py-8">
 				<h1 className="text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -371,7 +399,31 @@ function ArticleReader() {
 					</div>
 
 					<div>
-						<ReaderMenu />
+						<ReaderMenu
+							child={
+								<ul className="*:px-2  *:py-1 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 *:hover:bg-background">
+									<li className="flex items-center gap-1">
+										<span>
+											<BookOpenText size={16} />
+										</span>
+										<span className="text-sm">Reading Mode</span>
+									</li>
+
+									<li className="flex  gap-1" onClick={handleShare}>
+										<span>
+											<Share2 size={20} />
+										</span>
+										<span className="text-sm">Share</span>
+									</li>
+									<li className="flex  gap-1">
+										<span>
+											<ALargeSmall size={20} />
+										</span>
+										<span className="text-sm">Increase Font Size</span>
+									</li>
+								</ul>
+							}
+						/>
 					</div>
 				</div>
 

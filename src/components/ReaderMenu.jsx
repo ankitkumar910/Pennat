@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Ellipsis } from "lucide-react";
 
-export function ReaderMenu() {
+export function ReaderMenu({child}) {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -18,11 +18,8 @@ export function ReaderMenu() {
 					className={`${"text-amber-50 "} rotate-90 text-foreground`}
 				/>
 			</PopoverTrigger>
-			<PopoverContent justify="left" align="end">
-				<PopoverHeader>
-					<PopoverTitle>Still in development.</PopoverTitle>
-					<PopoverDescription>Menu will be soon available.</PopoverDescription>
-				</PopoverHeader>
+			<PopoverContent justify="left" align="end" className="p-0 z-30">
+				{child}
 			</PopoverContent>
 		</Popover>
 	);
