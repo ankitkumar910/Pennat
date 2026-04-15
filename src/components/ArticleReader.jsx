@@ -13,11 +13,14 @@ import {
 	CalendarDays,
 	ChevronLeft,
 	Ellipsis,
+	Eye,
+	EyeClosed,
 	Heart,
 	Hourglass,
 	Share,
 	Share2,
 	User,
+	X,
 } from "lucide-react";
 import { toast } from "sonner";
 import Loader from "./Loader";
@@ -55,8 +58,8 @@ function ArticleReader() {
 	const url = window.location;
 	const shareUrl = `${url}`;
 
-
-	
+	const [reading, setReading] = useState();
+	const [size, setSize] = useState("2xl");
 
 	console.log("Body");
 
@@ -334,214 +337,259 @@ function ArticleReader() {
 		}
 	}
 
-	return (
-		<div className="min-h-screen   no-scrollbar  bg-white dark:bg-gray-950">
-			<NavbarPage />
+	function handleReader() {
+		setReading((p) => !p);
+	}
 
-			<article className="max-w-3xl mx-auto px-4 mt-14 py-8">
-				<h1 className="text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+	return (
+		<div className="min-h-screen    no-scrollbar  ">
+			{!reading && <NavbarPage />}
+
+			{reading && (
+				<div
+					className="border w-fit px-2 p-2 absolute top-1 right-2 items-center  flex gap-1 rounded-2xl shadow-xs bg-gray-50 dark:bg-gray-800 cursor-pointer"
+					onClick={handleReader}>
+					<span>
+						<Eye size={18} />{" "}
+					</span>
+					<span className="text-xs "> Turn off reading mode</span>{" "}
+				</div>
+			)}
+
+			<article
+				className={`max-w-4xl  ${reading && "py-12"} mx-auto px-4 ${
+					!reading ? "mt-14" : "pt-12"
+				} py-8"`}>
+				<h1
+					className={`text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white ${
+						reading && "font-stretch-200% font-serif"
+					}`}>
 					{article?.title}
 				</h1>
 
-				<div className="flex  flex-row  justify-between  items-start gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
-					<div>
-						<div className="flex  ">
-							<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-								<span
-									title="Published Date"
-									className="flex flex-row items-center">
-									<CalendarDays className="ml-2" size={16} />
-									<span className="px-1 flex">
-										{" "}
-										{formatDate(article.created_at)}
-									</span>
-								</span>
-								<>
-									{time && (
-										<span
-											title="Expected reading duration"
-											className="flex flex-row items-center">
-											<span>•</span>
-											<BookOpenCheck className="ml-2" size={16} />
-											<span className="px-1 flex"> {time.text}</span>
+				{!reading && (
+					<div className="flex    flex-row  justify-between  items-start gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+						<div>
+							<div className="flex  ">
+								<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+									<span
+										title="Published Date"
+										className="flex flex-row items-center">
+										<CalendarDays className="ml-2" size={16} />
+										<span className="px-1 flex">
+											{" "}
+											{formatDate(article.created_at)}
 										</span>
-									)}
-								</>
-								{article.view_count && (
+									</span>
 									<>
-										<span>•</span>
-										<span>{article.view_count} views</span>
+										{time && (
+											<span
+												title="Expected reading duration"
+												className="flex flex-row items-center">
+												<span>•</span>
+												<BookOpenCheck className="ml-2" size={16} />
+												<span className="px-1 flex"> {time.text}</span>
+											</span>
+										)}
 									</>
-								)}
+									{article.view_count && (
+										<>
+											<span>•</span>
+											<span>{article.view_count} views</span>
+										</>
+									)}
+								</div>
 							</div>
-						</div>
 
-						<div className="rounded-xl mt-2">
-							<div className="flex items-center gap-1">
-								<img
-									src={author?.profile_img || userDp}
-									alt={author?.username}
-									className="h-10 mr-4 rounded-full object-cover cursor-pointer"
-									onClick={() => navigate(`/profile/${author?.username}`)}
-								/>
-								<div className="flex-1">
-									<h3
-										className="font-bold -mb-1 cursor-pointer hover:underline"
-										onClick={() => navigate(`/profile/${author?.username}`)}>
-										{author?.name || author?.username}
-									</h3>
-									<p className="text-gray-600 text-xs dark:text-gray-400">
-										{author?.about || "Hey, I write on Pennat."}
-									</p>
+							<div className="rounded-xl mt-2">
+								<div className="flex items-center gap-1">
+									<img
+										src={author?.profile_img || userDp}
+										alt={author?.username}
+										className="h-10 mr-4 rounded-full object-cover cursor-pointer"
+										onClick={() => navigate(`/profile/${author?.username}`)}
+									/>
+									<div className="flex-1">
+										<h3
+											className="font-bold -mb-1 cursor-pointer hover:underline"
+											onClick={() => navigate(`/profile/${author?.username}`)}>
+											{author?.name || author?.username}
+										</h3>
+										<p className="text-gray-600 text-xs dark:text-gray-400">
+											{author?.about || "Hey, I write on Pennat."}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
+
+						<div>
+							<ReaderMenu
+								child={
+									<ul className="*:px-2  *:py-1 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 dark:*:hover:bg-[#2a2a2a] *:cursor-pointer *:hover:bg-[#e9e9e9]">
+										<li
+											className="flex items-center gap-1"
+											onClick={handleReader}>
+											<span>
+												<BookOpenText size={16} />
+											</span>
+											<span className="text-sm">Reading Mode</span>
+										</li>
+
+										<li className="flex  gap-1" onClick={handleShare}>
+											<span>
+												<Share2 size={20} />
+											</span>
+											<span className="text-sm">Share</span>
+										</li>
+										<li className="flex  gap-1 hidden">
+											<span>
+												<ALargeSmall size={20} />
+											</span>
+											<select >
+												<option>
+													<span className="text-sm">Increase Font Size</span>
+												</option>
+												<option>
+													<span className="text-sm">xl</span>
+												</option>
+												<option>
+													<span className="text-sm">2xl</span>
+												</option>
+												<option>
+													<span className="text-sm">3xl</span>
+												</option>
+											</select>
+										</li>
+									</ul>
+								}
+							/>
+						</div>
 					</div>
+				)}
 
-					<div>
-						<ReaderMenu
-							child={
-								<ul className="*:px-2  *:py-1 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 *:hover:bg-background">
-									<li className="flex items-center gap-1">
-										<span>
-											<BookOpenText size={16} />
-										</span>
-										<span className="text-sm">Reading Mode</span>
-									</li>
-
-									<li className="flex  gap-1" onClick={handleShare}>
-										<span>
-											<Share2 size={20} />
-										</span>
-										<span className="text-sm">Share</span>
-									</li>
-									<li className="flex  gap-1">
-										<span>
-											<ALargeSmall size={20} />
-										</span>
-										<span className="text-sm">Increase Font Size</span>
-									</li>
-								</ul>
-							}
-						/>
-					</div>
-				</div>
-
-				<div className="tiptapEditor  font-[roboto] dark:text-[#E0E0E0] text-xl sm:text-2xl mb-8">
+				<div
+					className={`tiptapEditor pb-12  ${
+						reading && "font-serif"
+					}  dark:text-[#E0E0E0] text-${size}   mb-8`}>
 					{parse(article.body)}
 				</div>
 
-				<div className="flex items-center gap-3 py-8 border-gray-200 dark:border-gray-700">
-					<SignDialogue
-						title={`Liked this article?`}
-						child={
-							<div
-								onClick={(e) => {
-									e.stopPropagation();
+				{!reading && (
+					<>
+						<div className="flex  items-center gap-3 py-8 border-gray-200 dark:border-gray-700">
+							<SignDialogue
+								title={`Liked this article?`}
+								child={
+									<div
+										onClick={(e) => {
+											e.stopPropagation();
 
-									if (userInfo) {
-										e.preventDefault();
-										handleLike();
-									}
-								}}
-								className="flex  items-center gap-2 px-4 py-2 rounded-full border  border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
-								<Heart
-									size={20}
-									fill={isLiked ? "#ff0000" : "none"}
-									strokeWidth={2}
-									className={`${
-										isLiked ? "stroke-red-600" : ""
-									} transition-transform hover:scale-120`}
-								/>
+											if (userInfo) {
+												e.preventDefault();
+												handleLike();
+											}
+										}}
+										className="flex  items-center gap-2 px-4 py-2 rounded-full border  border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+										<Heart
+											size={20}
+											fill={isLiked ? "#ff0000" : "none"}
+											strokeWidth={2}
+											className={`${
+												isLiked ? "stroke-red-600" : ""
+											} transition-transform hover:scale-120`}
+										/>
 
-								<span className="text-sm">{like ?? "Like"}</span>
-							</div>
-						}
-					/>
-
-					<button className=" items-center gap-2 px-4 py-2 rounded-lg hidden border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
-						<Bookmark size={18} />
-						<span className="text-sm">Save</span>
-					</button>
-
-					<button className=" items-center gap-2 px-4 py-2 rounded-lg hidden  border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
-						<Share size={18} />
-						<span className="text-sm">Share</span>
-					</button>
-				</div>
-
-				<div className="mt-12">
-					<h2 className="text-lg font-bold mb-2 ml-2">
-						{commentCount ?? ""} {commentCount > 1 ? "Comments" : "Comment"}
-					</h2>
-
-					{userInfo && (
-						<div>
-							<textarea
-								onChange={(e) => {
-									if (e.target.value) setShowBtn(true);
-									else setShowBtn(false);
-								}}
-								ref={commentRef}
-								placeholder="Write a comment..."
-								className="block field-sizing-content  h-fit w-full px-2 py-0 focus:py-1 border-b border-gray-300 dark:border-gray-700 rounded-xs focus:outline-none"
+										<span className="text-sm">{like ?? "Like"}</span>
+									</div>
+								}
 							/>
 
-							<div className="w-full mt-1 flex justify-end">
-								<button
-									disabled={!canComment}
-									className={`transition duration-700 ${
-										showBtn ? "opacity-100 block" : "opacity-0 collapse"
-									}
-								outline-0 px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700 dark:border-0 disabled:bg-gray-400`}
-									onClick={(e) => {
-										if (userInfo) {
-											e.preventDefault();
-											handleComment();
-										}
-									}}>
-									{canComment ? "Post Comment" : "Please Wait.."}
-								</button>
-							</div>
-						</div>
-					)}
+							<button className=" items-center gap-2 px-4 py-2 rounded-lg hidden border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+								<Bookmark size={18} />
+								<span className="text-sm">Save</span>
+							</button>
 
-					{!userInfo && (
-						<div className="px-4 bg-gray-200 dark:bg-[#1b1b1c] py-2 rounded-md">
-							<div className=" w-full mt-1 justify-start      border text-gray-600 dark:text-gray-400  text-sm inline ">
-								In order to comment and put your opinion you need to{" "}
-								<NavLink
-									to={"/login"}
-									className={" text-blue-700 font-semibold underline"}>
-									{" "}
-									login.
-								</NavLink>
-							</div>
+							<button className=" items-center gap-2 px-4 py-2 rounded-lg hidden  border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+								<Share size={18} />
+								<span className="text-sm">Share</span>
+							</button>
 						</div>
-					)}
 
-					<div className="text-gray-500 w-full dark:text-gray-400">
-						{commentList.length > 0 && (
-							<div className="w-full rounded-md p-1">
-								{commentList.map((comment) => (
-									<CommentCard
-										user_id={userId}
-										deleteComment={deleteComment}
-										setCommentList={setCommentList}
-										key={comment.id}
-										comment={comment}
+						<div className="pt-12 ">
+							<h2 className="text-lg font-bold mb-2 ml-2">
+								{commentCount ?? ""} {commentCount > 1 ? "Comments" : "Comment"}
+							</h2>
+
+							{userInfo && (
+								<div>
+									<textarea
+										onChange={(e) => {
+											if (e.target.value) setShowBtn(true);
+											else setShowBtn(false);
+										}}
+										ref={commentRef}
+										placeholder="Write a comment..."
+										className="block field-sizing-content  h-fit w-full px-2 py-0 focus:py-1 border-b border-gray-300 dark:border-gray-700 rounded-xs focus:outline-none"
 									/>
-								))}
-							</div>
-						)}
 
-						{!commentList.length && (
-							<div className="p-2 text-center text-xs pt-8">
-								No Comments. Be the first to comment.
+									<div className="w-full mt-1 flex justify-end">
+										<button
+											disabled={!canComment}
+											className={`transition duration-700 ${
+												showBtn ? "opacity-100 block" : "opacity-0 collapse"
+											}
+								outline-0 px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700 dark:border-0 disabled:bg-gray-400`}
+											onClick={(e) => {
+												if (userInfo) {
+													e.preventDefault();
+													handleComment();
+												}
+											}}>
+											{canComment ? "Post Comment" : "Please Wait.."}
+										</button>
+									</div>
+								</div>
+							)}
+
+							{!userInfo && (
+								<div className="px-4 bg-gray-200 dark:bg-[#1b1b1c] py-2 rounded-md">
+									<div className=" w-full mt-1 justify-start      border text-gray-600 dark:text-gray-400  text-sm inline ">
+										In order to comment and put your opinion you need to{" "}
+										<NavLink
+											to={"/login"}
+											className={" text-blue-700 font-semibold underline"}>
+											{" "}
+											login.
+										</NavLink>
+									</div>
+								</div>
+							)}
+
+							<div className="text-gray-500 w-full dark:text-gray-400">
+								{commentList.length > 0 && (
+									<div className="w-full rounded-md p-1">
+										{commentList.map((comment) => (
+											<CommentCard
+												user_id={userId}
+												deleteComment={deleteComment}
+												setCommentList={setCommentList}
+												key={comment.id}
+												comment={comment}
+											/>
+										))}
+									</div>
+								)}
+
+								{!commentList.length && (
+									<div className="p-2 text-center text-xs pt-8">
+										No Comments. Be the first to comment.
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-				</div>
+						</div>
+					</>
+				)}
 			</article>
 		</div>
 	);
