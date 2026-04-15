@@ -128,9 +128,11 @@ function Home() {
 					</commentUIContext.Provider>
 				</div>
 
-				<div className="pb-8">
-					<FollowRecc />
-				</div>
+				{userInfo && (
+					<div className="pb-8">
+						<FollowRecc />
+					</div>
+				)}
 			</div>
 		</div>
 	);
