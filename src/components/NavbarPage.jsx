@@ -36,14 +36,14 @@ function NavbarPage({ SetSearchQuery }) {
 			
 			items-center  w-full justify-between 
 			backdrop-blur-sm
-			border-b
+			shadow-xs
 			 px-4
 			 py-2
-			
-		dark:bg-black
+	
+		dark:bg-[#0f0f10]
 		top-0  z-2  ">
 			<NavLink to={"/home"}>
-				<h1 className="font-bold text-xl text-black dark:text-gray-500  sm:text-2xl mb-2 sm:pl-2">
+				<h1 className="font-bold text-xl text-black dark:text-gray-300  sm:text-2xl mb-2 sm:pl-2">
 					Pennat
 				</h1>
 			</NavLink>

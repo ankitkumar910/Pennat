@@ -13,6 +13,7 @@ import {
 	Heart,
 	Hourglass,
 	Share,
+	User,
 } from "lucide-react";
 import { toast } from "sonner";
 import Loader from "./Loader";
@@ -23,7 +24,7 @@ import CommentCard from "./CommentCard";
 import { CalculateTime } from "../utils/CalculateTime";
 import { ReaderMenu } from "./ReaderMenu";
 import { SignDialogue } from "./SignDialogue";
-
+import NavbarPage from './NavbarPage'
 function ArticleReader() {
 	const navigate = useNavigate();
 	const [userInfo] = useContext(userContext);
@@ -303,18 +304,13 @@ function ArticleReader() {
 
 		setIsLiking(false);
 	}
-	return (
-		<div className="min-h-screen  overflow-x-clip no-scrollbar  bg-white dark:bg-gray-900">
-			<div className="max-w-4xl mx-auto px-4 pt-8">
-				<button
-					onClick={() => navigate(-1)}
-					className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
-					<ChevronLeft width={20} />
-					Back
-				</button>
-			</div>
 
-			<article className="max-w-3xl mx-auto px-4 py-8">
+	
+	return (
+		<div className="min-h-screen   no-scrollbar  bg-white dark:bg-gray-950">
+		  <NavbarPage />
+
+			<article className="max-w-3xl mx-auto px-4 mt-14 py-8">
 				<h1 className="text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
 					{article?.title}
 				</h1>
@@ -447,8 +443,6 @@ function ArticleReader() {
 									}
 								outline-0 px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700 dark:border-0 disabled:bg-gray-400`}
 									onClick={(e) => {
-										
-
 										if (userInfo) {
 											e.preventDefault();
 											handleComment();
@@ -461,10 +455,15 @@ function ArticleReader() {
 					)}
 
 					{!userInfo && (
-						<div>
-							<div className=" w-full mt-1 flex justify-start pl-3 bg-gray-200 dark:bg-[#1b1b1c]  rounded-sm border py-2 text-gray-600 dark:text-gray-400  text-sm ">
+						<div className="px-4 bg-gray-200 dark:bg-[#1b1b1c] py-2 rounded-md">
+							<div className=" w-full mt-1 justify-start      border text-gray-600 dark:text-gray-400  text-sm inline ">
 								In order to comment and put your opinion you need to{" "}
-								<NavLink to={'/login'} className={"px-1 text-blue-700 font-semibold underline"}> login.</NavLink>
+								<NavLink
+									to={"/login"}
+									className={" text-blue-700 font-semibold underline"}>
+									{" "}
+									login.
+								</NavLink>
 							</div>
 						</div>
 					)}
