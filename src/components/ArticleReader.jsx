@@ -32,7 +32,7 @@ import { CalculateTime } from "../utils/CalculateTime";
 import { ReaderMenu } from "./ReaderMenu";
 import { SignDialogue } from "./SignDialogue";
 import NavbarPage from "./NavbarPage";
-import { ShareComponent } from "./ShareComponent";
+
 function ArticleReader() {
 	const navigate = useNavigate();
 	const [userInfo] = useContext(userContext);
@@ -44,22 +44,19 @@ function ArticleReader() {
 	const [author, setAuthor] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [commentCount, setCommentCount] = useState(null);
-	let temporaryCount = useRef(0);
 	const [commentList, setCommentList] = useState([]);
 	const [canComment, setCanComment] = useState(true);
 	const [showBtn, setShowBtn] = useState();
 	const [isLiking, setIsLiking] = useState(false);
-
 	const [like, setLike] = useState(null); // null = loading state
 	const [isLiked, setIsLiked] = useState(false); // default false, fetch ke baad set hoga
 	const [time, setTime] = useState();
-
-	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
 	const url = window.location;
 	const shareUrl = `${url}`;
-
 	const [reading, setReading] = useState();
-	const [size, setSize] = useState("2xl");
+
+	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
+	let temporaryCount = useRef(0);
 
 	console.log("Body");
 
@@ -343,7 +340,7 @@ function ArticleReader() {
 
 	return (
 		<div className="min-h-screen    no-scrollbar  ">
-			{!reading && <NavbarPage />}
+			{!reading && <div ><NavbarPage /></div>}
 
 			{reading && (
 				<div
@@ -357,13 +354,13 @@ function ArticleReader() {
 			)}
 
 			<article
-				className={`max-w-4xl  ${reading && "py-12"} mx-auto px-4 ${
+				className={`max-w-4xl pt-12  ${reading && "py-12"} mx-auto px-4 ${
 					!reading ? "mt-14" : "pt-12"
 				} py-8"`}>
 				<h1
-					className={`text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white ${
-						reading && "font-stretch-200% font-serif"
-					}`}>
+					className={`text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-foreground  ${
+						reading && "font-stretch-200% font-serif dark:text-orange-300 "
+					}   `}>
 					{article?.title}
 				</h1>
 
@@ -424,9 +421,13 @@ function ArticleReader() {
 						</div>
 
 						<div>
+
 							<ReaderMenu
 								child={
-									<ul className="*:px-2  *:py-1 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 dark:*:hover:bg-[#2a2a2a] *:cursor-pointer *:hover:bg-[#e9e9e9]">
+									<ul className="*:pl-2 *:pr-12  *:py-2 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 dark:*:hover:bg-[#2a2a2a] *:cursor-pointer *:hover:bg-[#e9e9e9]
+									
+									
+									">
 										<li
 											className="flex items-center gap-1"
 											onClick={handleReader}>
@@ -436,31 +437,13 @@ function ArticleReader() {
 											<span className="text-sm">Reading Mode</span>
 										</li>
 
-										<li className="flex  gap-1" onClick={handleShare}>
+										<li className="flex items-center  gap-1" onClick={handleShare}>
 											<span>
-												<Share2 size={20} />
+												<Share2 size={18} />
 											</span>
 											<span className="text-sm">Share</span>
 										</li>
-										<li className="flex  gap-1 hidden">
-											<span>
-												<ALargeSmall size={20} />
-											</span>
-											<select >
-												<option>
-													<span className="text-sm">Increase Font Size</span>
-												</option>
-												<option>
-													<span className="text-sm">xl</span>
-												</option>
-												<option>
-													<span className="text-sm">2xl</span>
-												</option>
-												<option>
-													<span className="text-sm">3xl</span>
-												</option>
-											</select>
-										</li>
+									
 									</ul>
 								}
 							/>
@@ -470,14 +453,14 @@ function ArticleReader() {
 
 				<div
 					className={`tiptapEditor pb-12  ${
-						reading && "font-serif"
-					}  dark:text-[#E0E0E0] text-${size}   mb-8`}>
+						reading && "font-serif dark:text-orange-300"
+					}  dark:text-[#E0E0E0] text-xl mb-2`}>
 					{parse(article.body)}
 				</div>
 
 				{!reading && (
 					<>
-						<div className="flex  items-center gap-3 py-8 border-gray-200 dark:border-gray-700">
+						<div className="flex  items-center gap-3 pb-8 border-gray-200 dark:border-gray-700">
 							<SignDialogue
 								title={`Liked this article?`}
 								child={
@@ -490,8 +473,9 @@ function ArticleReader() {
 												handleLike();
 											}
 										}}
-										className="flex  items-center gap-2 px-4 py-2 rounded-full border  border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+										className={`flex  items-center gap-2 px-4 py-2 rounded-lg border  border-gray-300 ${isLiked && "border-red-600 bg-red-100 dark:border-red-950 dark:bg-red-900/25 hover:bg-red-800 dark:hover:bg-red-900/25 "} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 [&:hover>#heart]:animate-pulse cursor-pointer`}>
 										<Heart
+										id="heart"
 											size={20}
 											fill={isLiked ? "#ff0000" : "none"}
 											strokeWidth={2}

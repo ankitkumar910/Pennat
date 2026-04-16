@@ -18,7 +18,7 @@ export function ReaderMenu({child}) {
 					className={`${"text-amber-50 "} rotate-90 text-foreground`}
 				/>
 			</PopoverTrigger>
-			<PopoverContent justify="left" align="end" className="p-0 z-30">
+			<PopoverContent justify="left" align="end" className="p-0 z-30 w-fit ">
 				{child}
 			</PopoverContent>
 		</Popover>

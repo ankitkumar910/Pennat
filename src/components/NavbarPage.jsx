@@ -21,12 +21,24 @@ function NavbarPage({ SetSearchQuery }) {
 	const [isDark, setIsDark] = useContext(themeContext);
 	const [showMenu, setShowMenu] = useState(false);
 	const [userInfo] = useContext(userContext);
+	const [landing, setLanding] = useState(true);
+	console.log("Profile: ", userInfo);
 
 	useEffect(() => {
 		console.log("Calling Theme Change");
 
 		console.log(isDark);
 	}, [isDark]);
+
+	useEffect(() => {
+		function helper() {
+			setTimeout(() => {
+				setLanding(false);
+			}, 3000);
+		}
+
+		helper();
+	}, []);
 
 	return (
 		<nav
@@ -59,17 +71,32 @@ function NavbarPage({ SetSearchQuery }) {
 								//e.stopPropagation();
 								setShowMenu((prev) => !prev);
 							}}
-							className={`flex flex-row hover:cursor-pointer items-center px-0.5 py-0.5 rounded-lg border mb-1 ${
-								showMenu ? "border-foreground" : "border-transparent"
-							}`}>
+							className={`
+							transition-all duration-500
+							flex ${
+								landing && "border"
+							} rounded-full relative flex-row hover:cursor-pointer items-center px-0.5   mb-1 `}>
 							{" "}
-							<User
-								size={28}
-								fill="#303033"
-								strokeWidth={1}
-								strokeOpacity={0}
-							/>
-							<span className="hidden md:block pr-2 ">You</span>
+							{landing && (
+								<div className="w-full  md:block  text-foreground  text-xs  top-4 min-w-12  pl-2 right-4 py-2 hidden pr-2">
+									Hi, {userInfo?.name} 👋
+								</div>
+							)}
+							{!userInfo?.profile_img && (
+								<User
+									size={28}
+									fill="#303033"
+									strokeWidth={1}
+									strokeOpacity={0}
+									className={`${landing && "ml-1"}`}
+								/>
+							)}
+							{userInfo?.profile_img && (
+								<img
+									src={`${userInfo?.profile_img}`}
+									className="h-8 rounded-full"
+								/>
+							)}
 						</span>
 					)}
 
