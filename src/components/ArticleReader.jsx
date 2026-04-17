@@ -170,6 +170,9 @@ function ArticleReader() {
 	async function handleComment() {
 		setCanComment(false);
 
+		let date = new Date();
+		
+
 		let commentText = commentRef.current.value + "";
 		let newString = commentText.trim();
 
@@ -181,6 +184,7 @@ function ArticleReader() {
 					username: userInfo?.username,
 					profile_img: userInfo?.profile_img,
 				},
+				created_at : Date.now()
 			};
 			setCommentCount((prev) => prev + 1);
 			setCommentList((prev) => [dummyComment, ...prev]);
@@ -500,8 +504,8 @@ function ArticleReader() {
 							</button>
 						</div>
 
-						<div className="pt-12 ">
-							<h2 className="text-lg font-bold mb-2 ml-2">
+						<div className="pt-8 border-t">
+							<h2 className="text-lg font-bold mb-2 ">
 								{commentCount ?? ""} {commentCount > 1 ? "Comments" : "Comment"}
 							</h2>
 
@@ -514,16 +518,16 @@ function ArticleReader() {
 										}}
 										ref={commentRef}
 										placeholder="Write a comment..."
-										className="block field-sizing-content  h-fit w-full px-2 py-0 focus:py-1 border-b border-gray-300 dark:border-gray-700 rounded-xs focus:outline-none"
+										className="block  field-sizing-content  h-fit min-h-12  w-full px-2 py-0 focus:py-1 border-2 border-gray-500 rounded-lg   dark:border-gray-700 focus:outline-2 outline-gray-800"
 									/>
 
 									<div className="w-full mt-1 flex justify-end">
 										<button
 											disabled={!canComment}
 											className={`transition duration-700 ${
-												showBtn ? "opacity-100 block" : "opacity-0 collapse"
+												showBtn ? "opacity-100 block" : "opacity-0 hidden"
 											}
-								outline-0 px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700 dark:border-0 disabled:bg-gray-400`}
+								outline-0 px-3 py-2 mt-1 text-sm bg-gray-900 text-white dark:bg-gray-100 dark:text-black border rounded-full hover:bg-gray-700  disabled:bg-gray-400`}
 											onClick={(e) => {
 												if (userInfo) {
 													e.preventDefault();
@@ -550,9 +554,9 @@ function ArticleReader() {
 								</div>
 							)}
 
-							<div className="text-gray-500 w-full dark:text-gray-400">
+							<div className="text-gray-500 w-full dark:text-gray-400 pt-4 ">
 								{commentList.length > 0 && (
-									<div className="w-full rounded-md p-1">
+									<div className="w-full rounded-md ">
 										{commentList.map((comment) => (
 											<CommentCard
 												user_id={userId}

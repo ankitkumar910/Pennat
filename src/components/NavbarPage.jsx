@@ -78,7 +78,7 @@ function NavbarPage({ SetSearchQuery }) {
 							} rounded-full relative flex-row hover:cursor-pointer items-center px-0.5   mb-1 `}>
 							{" "}
 							{landing && (
-								<div className="w-full  md:block  text-foreground  text-xs  top-4 min-w-12  pl-2 right-4 py-2 hidden pr-2">
+								<div className="w-full  md:block  text-foreground  text-xs  top-4 min-w-12  pl-2 right-4 py-2  pr-2">
 									Hi, {userInfo?.name} 👋
 								</div>
 							)}

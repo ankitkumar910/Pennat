@@ -16,19 +16,19 @@ function CommentCard({ comment, deleteComment, user_id }) {
 	}
 
 	return (
-		<div className="pb-4 my-4 border-b last:pb-12 last:border-b-0  ">
+		<div className="py-1  rounded-xl   last:pb-12 last:border-b-0  ">
 			<div className="flex justify-between ">
-				<div className="flex items-center mt-1 ">
+				<div className="flex items-center mt-1  w-full">
 					<img
 						src={commenter?.profile_img ?? userDp}
-						className="h-10  mx-2 rounded-full"
+						className="h-9 -mt-7 ring ring-gray-300 dark:ring-gray-800 rounded-full"
 					/>
 
-					<div className="ml-2">
+					<div className="ml-1 w-full sm:w-3/4 ">
 						<span className="text-sm items-center  flex   text-gray-500">
 							<NavLink
 								to={`/profile/${commenter?.username}`}
-								className="text-center font-semibold  text-foreground">
+								className="text-center  text-sm font-semibold text-gray-600   dark:text-gray-400">
 								{"@" + commenter?.username}
 							</NavLink>
 							<span className="text-xs pl-1 text-center">
@@ -37,7 +37,7 @@ function CommentCard({ comment, deleteComment, user_id }) {
 							</span>
 						</span>
 
-						<div className=" border-b-gray-300 text-foreground mt-1 ml-1">
+						<div className=" dark:border-gray-900 border-gray-200 border text-foreground mt-1 ml-1 pb-6  rounded-tl-0 rounded-r-md rounded-bl-md pl-2 pt-1 text-sm dark:bg-[#0d0d0e] bg-[#dbdbdb] w-full ">
 							{comment.comment}
 						</div>
 					</div>
