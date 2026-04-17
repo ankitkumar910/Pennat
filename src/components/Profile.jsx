@@ -7,7 +7,9 @@ import {
 	LoaderCircle,
 	LogOut,
 	MoveRight,
+	Paintbrush,
 	PencilIcon,
+	Wallpaper,
 } from "lucide-react";
 import supabase from "../config/supabaseClient";
 import { dataContext, userContext } from "../context/Context";
@@ -25,6 +27,7 @@ import ShareProfile from "./ShareProfile";
 import { SignDialogue } from "./SignDialogue";
 import { UserNamePop } from "./UserNamePop";
 
+import { ReaderMenu } from "./ReaderMenu";
 function Profile() {
 	// 1. Context and Params
 	const { username: urlUsername } = useParams();
@@ -258,65 +261,65 @@ function Profile() {
 							control && "bg-background text-foreground"
 						}`}>
 						{" "}
-						<Ellipsis
-							size={24}
-							className={`${
-								!control && "text-amber-50 "
-							} rotate-90 text-foreground`}
-						/>
-						<ul
-							hidden={!control}
-							className="absolute z-50 right-12  w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
+						<ReaderMenu
+							child={
+								<>
+									<ul
+										className=" z-50   w-fit min-w-[20vw] bg-inherit  sm:min-w-[10vw]  rounded-md   shadow-lg transition cursor-pointer p-1
                             *:hover:border
                             *:rounded-md
                             *:hover:bg-gray-600
+							*:text-sm
                             ">
-							<li
-								className={`${
-									!isOwnProfile && "bg-background dark:bg-gray-700 py-1"
-								}`}>
-								<ShareProfile
-									name={profileData.name}
-									username={profileData.username}
-								/>
-							</li>
-							{isOwnProfile && (
-								<>
-									<li>
-										<button
-											className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
-											onClick={() => SetPopup(true)}>
-											<PencilIcon
-												size={14}
-												className="hover:-rotate-12 mx-1 mr-5"
-											/>{" "}
-											Edit
-										</button>
-									</li>
-
-									<li>
-										<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
-											<AlertDialogBasic
-												titleText={`Log Out`}
-												handleLogOut={handleLogOut}
+										<li
+											className={`${
+												!isOwnProfile && "bg-background dark:bg-gray-700 py-1"
+											}`}>
+											<ShareProfile
+												name={profileData.name}
+												username={profileData.username}
 											/>
-										</div>
-									</li>
+										</li>
+										{isOwnProfile && (
+											<>
+												<li>
+													<button
+														className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
+														onClick={() => SetPopup(true)}>
+														<Paintbrush
+															size={14}
+															className="hover:-rotate-12 mx-1 mr-2"
+														/>{" "}
+														Change Banner
+													</button>
+												</li>
 
-									<li>
-										<button
-											className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
-											onClick={() => navigate("/control")}>
-											<ChevronRight
-												size={14}
-												className="hover:-rotate-12 mx-1 mr-5"
-											/>{" "}
-											More
-										</button>
-									</li>
+												<li>
+													<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
+														<AlertDialogBasic
+															titleText={`Log Out`}
+															handleLogOut={handleLogOut}
+														/>
+													</div>
+												</li>
+
+												<li>
+													<button
+														className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
+														onClick={() => navigate("/control")}>
+														<ChevronRight
+															size={14}
+															className="hover:-rotate-12 mx-1 mr-2"
+														/>{" "}
+														More
+													</button>
+												</li>
+											</>
+										)}
+									</ul>
 								</>
-							)}
-						</ul>
+							}
+						/>
 					</div>
 				</div>
 			</div>
@@ -372,16 +375,14 @@ function Profile() {
 				</div>
 
 				<div className="w-full ">
-					
-							<div className="flex pl-4 items-center mt-1 sm:mt-2 min-w-0">
-								<h2 className="text-2xl max-w-[50%] truncate font-semibold text-gray-900 dark:text-gray-100">
-									{profileData.name}
-								</h2>
-								<p className="text-sm ml-2 mt-2 text-gray-500 shrink-0">
-									@{profileData.username}
-								</p>
-							</div>
-						
+					<div className="flex pl-4 items-center mt-1 sm:mt-2 min-w-0">
+						<h2 className="text-2xl max-w-[50%] truncate font-semibold text-gray-900 dark:text-gray-100">
+							{profileData.name}
+						</h2>
+						<p className="text-sm ml-2 mt-2 text-gray-500 shrink-0">
+							@{profileData.username}
+						</p>
+					</div>
 				</div>
 				{!about && (
 					<div className="mt-1 pl-4 text-sm">

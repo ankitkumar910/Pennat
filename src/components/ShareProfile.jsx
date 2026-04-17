@@ -73,7 +73,7 @@ export default function ShareProfile({ name, username }) {
 				<form>
 					<DialogTrigger asChild>
 						<div className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full ">
-							<Send size={14} className="hover:-rotate-12 mx-1 mr-5" /> Share
+							<Send size={14} className="hover:-rotate-12 mx-1 mr-2.5" /> Share
 						</div>
 					</DialogTrigger>
 					<DialogContent className="sm:max-w-sm">

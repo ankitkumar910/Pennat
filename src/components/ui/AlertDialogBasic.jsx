@@ -22,7 +22,7 @@ export function AlertDialogBasic({ titleText, handleLogOut }) {
 			<AlertDialogTrigger asChild>
 				<div className="p-1 justify-start  px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full ">
 					<LogOut size={14} className="hover:-rotate-12 mx-1 " />{" "}
-					<span className="ml-3 text-sm font-normal">{titleText ? titleText : "Show Dialog"}</span>
+					<span className="ml-0.5 text-sm font-normal">{titleText ? titleText : "Show Dialog"}</span>
 				</div>
 			</AlertDialogTrigger>
 			<AlertDialogContent className={`${theme} bg-background text-foreground `}>
