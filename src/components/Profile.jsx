@@ -386,9 +386,9 @@ function Profile() {
 																	</label>
 																	<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
 																		About
-																		<input
+																		<textarea
 																			type="text"
-																			className="text-gray-400"
+																			className="text-gray-400 outline-1 focus:outline-blue-500"
 																			placeholder="your bio"
 																			defaultValue={about}
 																			ref={aboutRef}

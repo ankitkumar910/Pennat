@@ -151,7 +151,7 @@ function Login() {
 														minLength={6}
 														maxLength={20}
 														title="enter your password"
-														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														className="p-2 mt-1  border-0 outline-0 rounded-sm  bg-slate-300 
 														
 														text-foreground
 														min-w-1 sm:w-1/2 

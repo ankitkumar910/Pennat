@@ -163,13 +163,13 @@ function Signup() {
 													<input
 														onChange={() => setErrorMsg(null)}
 														ref={passwordRef}
-														type="password" /* Changed to password type for security */
+														type="text" /* Changed to password type for security */
 														id="password"
 														required
 														placeholder="••••••"
 														minLength={6}
 														maxLength={20}
-														className="p-2 mt-1 lowercase border-0 outline-0 rounded-sm  bg-slate-300 
+														className="p-2 mt-1 e border-0 outline-0 rounded-sm  bg-slate-300 
 														
 														text-foreground
 														min-w-1 sm:w-2/2 

@@ -39,7 +39,7 @@ export function SearchButton({ SetSearchQuery }) {
 				onClick={() => setOpen(true)}
 				variant="ghost"
 				className="w-fit mb-1 cursor-pointer">
-				<Search size={30} color="#303033" strokeWidth={4} />
+				<Search size={30}  className="text-foreground" strokeWidth={4} />
 			</Button>
 			<CommandDialog
 				open={open}
