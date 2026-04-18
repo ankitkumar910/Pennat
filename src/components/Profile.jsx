@@ -4,11 +4,14 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	Ellipsis,
+	GeorgianLari,
 	LoaderCircle,
 	LogOut,
 	MoveRight,
 	Paintbrush,
 	PencilIcon,
+	Settings,
+	User,
 	Wallpaper,
 } from "lucide-react";
 import supabase from "../config/supabaseClient";
@@ -28,6 +31,8 @@ import { SignDialogue } from "./SignDialogue";
 import { UserNamePop } from "./UserNamePop";
 
 import { ReaderMenu } from "./ReaderMenu";
+import { EditProfileDetails } from "./EditProfileDetails";
+
 function Profile() {
 	// 1. Context and Params
 	const { username: urlUsername } = useParams();
@@ -44,7 +49,7 @@ function Profile() {
 	// UI States (Synced with profileData)
 	const [cover, setCover] = useState(cover_placeholder);
 	const [profileImg, setProfileImg] = useState(userDp);
-	const [about, setAbout] = useState("");
+
 	const [control, setControl] = useState(false);
 	const [follower, setFollower] = useState(0);
 	const [following, setFollowing] = useState(0);
@@ -53,6 +58,14 @@ function Profile() {
 	//check for viewing other profile
 	let isMyProfile = useRef(true);
 	const [info] = useContext(userContext);
+
+	const usernameRef = useRef();
+	const nameRef = useRef();
+	const aboutRef = useRef();
+
+	const [username, setUsername] = useState();
+	const [name, setName] = useState();
+	const [about, setAbout] = useState();
 
 	//follow - unfollow function
 	async function handleFollow(e) {
@@ -102,6 +115,7 @@ function Profile() {
 			toast("You are not logged In.");
 			return;
 		}
+
 		async function fetchProfile() {
 			setLoading(true);
 
@@ -117,6 +131,10 @@ function Profile() {
 					setFailed(true);
 				} else {
 					setProfileData(res.data);
+
+					usernameRef.current = res.data?.username;
+					nameRef.current = res.data?.name;
+					aboutRef.current = res.data?.about ?? "I am a pennat user.";
 					setFailed(false);
 				}
 			}
@@ -126,8 +144,15 @@ function Profile() {
 
 				setProfileData(currentUser);
 				setFailed(false);
+
+				usernameRef.current = currentUser?.username;
+				nameRef.current = currentUser?.name;
+				aboutRef.current = currentUser?.about ?? "I am a pennat user.";
 			}
 
+			setUsername(usernameRef.current);
+			setName(nameRef.current);
+			setAbout(aboutRef.current);
 			setLoading(false);
 		}
 
@@ -140,7 +165,6 @@ function Profile() {
 			if (profileData) {
 				setCover(profileData.cover_img || cover_placeholder);
 				setProfileImg(profileData.profile_img || userDp);
-				setAbout(profileData.about || "");
 			}
 		}
 		myFunction();
@@ -242,6 +266,48 @@ function Profile() {
 		navigate("/login");
 	}
 
+	async function handleEditChanges() {
+		event.preventDefault();
+
+		setUsername(usernameRef.current.value);
+		setName(nameRef.current.value);
+		setAbout(aboutRef.current.value);
+        let changes = {};
+		
+		
+
+		if (profileData?.username  != usernameRef.current.value) {
+			changes["username"] = usernameRef.current.value;
+		}
+
+		if (profileData?.name != nameRef.current.value) {
+			changes["name"] = nameRef.current.value;
+		}
+
+		if (profileData?.about != aboutRef.current.value) {
+			changes["about"] = aboutRef.current.value;
+		}
+
+		if (Object.keys(changes).length === 0) return;
+		if (Object.keys(changes).length > 0) {
+			const { error } = await supabase
+				.from("UserTable")
+				.update(changes)
+				.eq("user_id", profileData?.user_id)
+				.select();
+
+			if (error) {
+				toast(error.message);
+				console.log(error);
+			} else {
+				toast("Success. Changes made will reflect soon.");
+				
+			}
+		}
+
+		supabase.from("UserTable").update();
+	}
+
 	return (
 		<div className="relative  dark:text-gray-400 bg-white dark:bg-black  pb-1 box-border w-full min-h-screen ">
 			{/* Navigation & Edit Controls */}
@@ -271,17 +337,69 @@ function Profile() {
                             *:hover:bg-gray-600
 							*:text-sm
                             ">
-										<li
-											className={`${
-												!isOwnProfile && "bg-background dark:bg-gray-700 py-1"
-											}`}>
-											<ShareProfile
-												name={profileData.name}
-												username={profileData.username}
-											/>
-										</li>
 										{isOwnProfile && (
 											<>
+												<li>
+													<EditProfileDetails
+														trigger={
+															<>
+																<button
+																	type="button"
+																	className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full ">
+																	<User
+																		size={14}
+																		className="hover:-rotate-12 mx-1 mr-2"
+																	/>{" "}
+																	Edit Details
+																</button>
+															</>
+														}
+														child={
+															<>
+																<div
+																	className="
+															
+															
+															 *:w-full w-full *:my-2 
+															
+															">
+																	<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
+																		Username
+																		<input
+																			type="text"
+																			className=" lowercase text-gray-400"
+																			placeholder="username"
+																			defaultValue={username}
+																			ref={usernameRef}
+																		/>
+																	</label>
+
+																	<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
+																		Name
+																		<input
+																			className="text-gray-400"
+																			type="text"
+																			placeholder="username"
+																			defaultValue={name}
+																			ref={nameRef}
+																		/>
+																	</label>
+																	<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
+																		About
+																		<input
+																			type="text"
+																			className="text-gray-400"
+																			placeholder="your bio"
+																			defaultValue={about}
+																			ref={aboutRef}
+																		/>
+																	</label>
+																</div>
+															</>
+														}
+														handleEditChanges={handleEditChanges}
+													/>
+												</li>
 												<li>
 													<button
 														className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer  w-full "
@@ -297,7 +415,7 @@ function Profile() {
 												<li>
 													<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
 														<AlertDialogBasic
-															titleText={`Log Out`}
+															titleText={`Sign out`}
 															handleLogOut={handleLogOut}
 														/>
 													</div>
@@ -307,15 +425,25 @@ function Profile() {
 													<button
 														className="p-1 px-4 whitespace-nowrap flex items-center   transition cursor-pointer "
 														onClick={() => navigate("/control")}>
-														<ChevronRight
+														<Settings
 															size={14}
 															className="hover:-rotate-12 mx-1 mr-2"
 														/>{" "}
-														More
+														Controls
 													</button>
 												</li>
 											</>
 										)}
+
+										<li
+											className={`${
+												!isOwnProfile && "bg-background dark:bg-gray-700 py-1"
+											}`}>
+											<ShareProfile
+												name={profileData.name}
+												username={profileData.username}
+											/>
+										</li>
 									</ul>
 								</>
 							}
@@ -377,22 +505,20 @@ function Profile() {
 				<div className="w-full ">
 					<div className="flex pl-4 items-center mt-1 sm:mt-2 min-w-0">
 						<h2 className="text-2xl max-w-[50%] truncate font-semibold text-gray-900 dark:text-gray-100">
-							{profileData.name}
+							{name}
 						</h2>
 						<p className="text-sm ml-2 mt-2 text-gray-500 shrink-0">
-							@{profileData.username}
+							@{username}
 						</p>
 					</div>
 				</div>
-				{!about && (
+				{
 					<div className="mt-1 pl-4 text-sm">
 						<p className="text-gray-700 dark:text-gray-400 leading-relaxed max-w-sm">
-							{about
-								? about
-								: `Hey, I am am ${profileData?.name}. I write articles on Pennet.`}
+							{about}
 						</p>
 					</div>
-				)}
+				}
 				<div className=" pl-4  md:mt-4 text-xs  flex gap-8  mt-2  ">
 					<NavLink
 						to={info && `followers?id=${profileData?.user_id}`}
