@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 
-export function EditProfileDetails({trigger,child,handleEditChanges}) {
+export function EditProfileDetails({trigger,child,handleEditChanges,title}) {
 
   
    const [open, setOpen] = useState(false);
@@ -33,9 +33,9 @@ export function EditProfileDetails({trigger,child,handleEditChanges}) {
  {trigger}
          </div>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-sm md:min-w-2xl ">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.

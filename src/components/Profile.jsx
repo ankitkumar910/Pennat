@@ -341,6 +341,7 @@ function Profile() {
 											<>
 												<li>
 													<EditProfileDetails
+													title={"Edit profile"}
 														trigger={
 															<>
 																<button

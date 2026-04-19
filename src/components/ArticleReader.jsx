@@ -17,6 +17,7 @@ import {
 	EyeClosed,
 	Heart,
 	Hourglass,
+	Pencil,
 	Share,
 	Share2,
 	User,
@@ -32,6 +33,7 @@ import { CalculateTime } from "../utils/CalculateTime";
 import { ReaderMenu } from "./ReaderMenu";
 import { SignDialogue } from "./SignDialogue";
 import NavbarPage from "./NavbarPage";
+import { EditProfileDetails } from "./EditProfileDetails";
 
 function ArticleReader() {
 	const navigate = useNavigate();
@@ -54,6 +56,39 @@ function ArticleReader() {
 	const url = window.location;
 	const shareUrl = `${url}`;
 	const [reading, setReading] = useState();
+	const titleRef = useRef();
+	const bodyRef = useRef();
+	const [title, setTitle] = useState();
+	const [body, setBody] = useState();
+
+	async function handleEditChanges() {
+		console.log("Article changed.");
+		setTitle(titleRef.current.value);
+		setBody(bodyRef.current.value);
+
+		let changes = {};
+
+		if (article?.title != titleRef.current.value)
+			changes["title"] = titleRef.current.value;
+
+		if (article?.body != bodyRef.current.value)
+			changes["body"] = bodyRef.current.value;
+
+		if (Object.keys(changes).length > 0) {
+			const { error } = await supabase
+				.from("ArticleTable")
+				.update(changes)
+				.eq("id", articleId)
+				.select();
+
+			if (error) {
+				toast(error.message);
+				console.log(error);
+			} else {
+				toast("Success. Changes made will reflect soon.");
+			}
+		}
+	}
 
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
 	let temporaryCount = useRef(0);
@@ -80,6 +115,10 @@ function ArticleReader() {
 				setArticle(data);
 				setTime(CalculateTime(data.body ?? ""));
 				setCommentCount(data?.comment_count);
+
+				setTitle(data?.title);
+				setBody(data?.body);
+
 				temporaryCount.current = data?.comment_count;
 				setAuthor(data.UserTable);
 
@@ -171,7 +210,6 @@ function ArticleReader() {
 		setCanComment(false);
 
 		let date = new Date();
-		
 
 		let commentText = commentRef.current.value + "";
 		let newString = commentText.trim();
@@ -184,7 +222,7 @@ function ArticleReader() {
 					username: userInfo?.username,
 					profile_img: userInfo?.profile_img,
 				},
-				created_at : Date.now()
+				created_at: Date.now(),
 			};
 			setCommentCount((prev) => prev + 1);
 			setCommentList((prev) => [dummyComment, ...prev]);
@@ -344,7 +382,11 @@ function ArticleReader() {
 
 	return (
 		<div className="min-h-screen    no-scrollbar  ">
-			{!reading && <div ><NavbarPage /></div>}
+			{!reading && (
+				<div>
+					<NavbarPage />
+				</div>
+			)}
 
 			{reading && (
 				<div
@@ -365,7 +407,7 @@ function ArticleReader() {
 					className={`text-4xl md:text-6xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-foreground  ${
 						reading && "font-stretch-200% font-serif dark:text-orange-300 "
 					}   `}>
-					{article?.title}
+					{title}
 				</h1>
 
 				{!reading && (
@@ -425,13 +467,60 @@ function ArticleReader() {
 						</div>
 
 						<div>
-
 							<ReaderMenu
 								child={
-									<ul className="*:pl-2 *:pr-12  *:py-2 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 dark:*:hover:bg-[#2a2a2a] *:cursor-pointer *:hover:bg-[#e9e9e9]
+									<ul
+										className="*:pl-2 *:pr-12  *:py-2 *:mx-0.5 *:rounded-sm  *:my-0.5  py-0.5 dark:*:hover:bg-[#2a2a2a] *:cursor-pointer *:hover:bg-[#e9e9e9]
 									
 									
 									">
+										{userId == author?.user_id && (
+											<EditProfileDetails
+												title={"Edit article"}
+												trigger={
+													<li className="flex items-center gap-1">
+														<span>
+															<Pencil size={16} />
+														</span>
+														<span className="text-sm">Edit Article</span>
+													</li>
+												}
+												child={
+													<>
+														<div
+															className="
+															
+															
+															 *:w-full w-full *:my-2 
+															
+															">
+															<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
+																Title
+																<input
+																	type="text"
+																	className="  text-gray-800"
+																	placeholder="title"
+																	defaultValue={title}
+																	ref={titleRef}
+																/>
+															</label>
+
+															<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
+																Article Body
+																<textarea
+																	type="text"
+																	className="text-gray-800 sm:min-h-80  no-scrollbar outline-1 focus:outline-blue-500"
+																	placeholder="Article body start here.."
+																	defaultValue={body}
+																	ref={bodyRef}
+																/>
+															</label>
+														</div>
+													</>
+												}
+												handleEditChanges={handleEditChanges}
+											/>
+										)}
 										<li
 											className="flex items-center gap-1"
 											onClick={handleReader}>
@@ -441,13 +530,14 @@ function ArticleReader() {
 											<span className="text-sm">Reading Mode</span>
 										</li>
 
-										<li className="flex items-center  gap-1" onClick={handleShare}>
+										<li
+											className="flex items-center  gap-1"
+											onClick={handleShare}>
 											<span>
 												<Share2 size={18} />
 											</span>
 											<span className="text-sm">Share</span>
 										</li>
-									
 									</ul>
 								}
 							/>
@@ -459,7 +549,7 @@ function ArticleReader() {
 					className={`tiptapEditor pb-12  ${
 						reading && "font-serif dark:text-orange-300"
 					}  dark:text-[#E0E0E0] text-xl mb-2`}>
-					{parse(article.body)}
+					{parse(body)}
 				</div>
 
 				{!reading && (
@@ -477,9 +567,12 @@ function ArticleReader() {
 												handleLike();
 											}
 										}}
-										className={`flex  items-center gap-2 px-4 py-2 rounded-lg border  border-gray-300 ${isLiked && "border-red-600 bg-red-100 dark:border-red-950 dark:bg-red-900/25 hover:bg-red-800 dark:hover:bg-red-900/25 "} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 [&:hover>#heart]:animate-pulse cursor-pointer`}>
+										className={`flex  items-center gap-2 px-4 py-2 rounded-lg border  border-gray-300 ${
+											isLiked &&
+											"border-red-600 bg-red-100 dark:border-red-950 dark:bg-red-900/25 hover:bg-red-800 dark:hover:bg-red-900/25 "
+										} dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 [&:hover>#heart]:animate-pulse cursor-pointer`}>
 										<Heart
-										id="heart"
+											id="heart"
 											size={20}
 											fill={isLiked ? "#ff0000" : "none"}
 											strokeWidth={2}
