@@ -414,10 +414,9 @@ function Profile() {
 												</li>
 
 												<li>
-													<div className="p-1  whitespace-nowrap flex  transition cursor-pointer  w-full ">
+													<div className="p-1 pl-4 whitespace-nowrap flex  transition cursor-pointer  w-full ">
 														<AlertDialogBasic
 															titleText={`Sign out`}
-															handleLogOut={handleLogOut}
 														/>
 													</div>
 												</li>
@@ -560,7 +559,7 @@ function Profile() {
 			)}
 
 			{/* Posts Section */}
-			<div className="mt-8  mb-40 px-6  sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
+			<div className="mt-8  mb-40   sm:w-full sm:px-4 md:px-0 md:w-1/2 mx-auto border-t dark:border-gray-800">
 				{profileData.ArticleTable && (
 					<UserProfilePosts ArticleTable={profileData.ArticleTable} />
 				)}

@@ -11,25 +11,28 @@ function ProfileFooter() {
 	console.log(theme);
 
 	return (
-		<div className="mt-12 text-sm border-t w-full  pt-4 flex justify-end items-center">
+		<div className=" text-sm border-t w-full pt-2 flex justify-end items-center">
 			{/* The button only shows if the PWA is actually ready to be installed */}
 
-			<div className="text-sm w-full text-gray-400 gap-2 p-1 m-1 flex rounded-md  px-2 mr-4">
+			<div className="text-sm w-full text-gray-400 gap-1 p-1 m-1 flex items-center rounded-md  px-2 mr-2">
+				
+				<span className="font-semibold  text-lg">&#169;</span>
 				<div>All right reserved.  2026</div>
-				<div
+				<span className="font-bold">&#183;</span>
+				<a
 					className="flex"
-					href="https://github.com/kumarr-ankit/Pennat"
+					href="https://github.com/ankitkumar910/Pennat"
 					target="_self"
 					rel="noreferrer">
 					<img
-						className="dark:bg-black/70"
+						className="dark:bg-black/70 object-cover rounded-full mr-1"
 						width="20"
 						height="20"
 						src={theme == "dark" ? githubWhite : githubBlack}
 						alt="github"
 					/>
 					GitHub
-				</div>
+				</a>
 				
 			</div>
 		</div>

@@ -10,6 +10,7 @@ import GoogleComp from "./GoogleComp";
 import LoginDivider from "./LoginDivider";
 import { LoginWithEmail } from "./LoginWithEmail";
 import illustration from "../assets/illu2.svg";
+import ProfileFooter from "./ProfileFooter";
 
 function Login() {
 	const [errorMsg, setErrorMsg] = useState(null);
@@ -73,11 +74,11 @@ function Login() {
 	}
 
 	return (
-		<div className="sm:flex justify-start sm:pl-10 md:pl-2 items-center gap-80 ">
+		<div className="sm:flex overflow-clip justify-start sm:pl-10 md:pl-2 items-center gap-80 ">
 			<div>
 				{!userInfo && (
 					<div>
-						<div className="dark:bg-[#121212] bg-background pb-12  min-h-screen max-w-screen bg-center bg-cover ">
+						<div className="dark:bg-[#121212] bg-background not-sm:min-h   min-h-screen max-w-screen  bg-center bg-cover ">
 							<div className="bg-transparent backdrop-blur-3xl">
 								<h1
 									onClick={() => navi("/")}
@@ -203,6 +204,9 @@ function Login() {
 								</div>
 							</div>
 						</div>
+						<div className="absolute bottom-0 right-0 w-full  ">
+				<ProfileFooter />
+			</div>
 					</div>
 				)}
 
@@ -224,6 +228,9 @@ function Login() {
 					alt="Pennat Illustration"
 				/>
 			</div>
+
+			
+			
 		</div>
 	);
 }

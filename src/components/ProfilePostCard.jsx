@@ -5,6 +5,7 @@ import supabase from "../config/supabaseClient";
 import Loader from "./Loader";
 import { userContext } from "../context/Context";
 import { NavLink } from "react-router-dom";
+import { toast } from "sonner";
 
 function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 	const [loader, setLoader] = useState(false);
@@ -13,7 +14,9 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 
 	if (!article) return null;
 
-	async function handleDelete() {
+	async function handleDelete(e) {
+		e.stopPropagation()
+		e.preventDefault()
 		setLoader(true);
 		const res = await supabase
 			.from("ArticleTable")
@@ -21,7 +24,11 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 			.eq("id", article.id);
 
 		if (!res.error) {
+			toast("Deleted successfully.")
 			setArticle((p) => p.filter((x) => x.id !== article.id));
+		}else{
+			toast("Error while deleting")
+			console.log(res.error)
 		}
 		setLoader(false);
 	}
@@ -33,8 +40,8 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 				e.preventDefault();
 				setOpenMenuId(isOpen ? null : article.id);
 			}}
-			className="group  relative flex flex-col w-full my-1   bg-white dark:bg-[#141414] border  
-			rounded-xl overflow-hidden  duration-300 mx-auto px-4  sm:border sm:mt-2 border-[#d8d1d1] dark:border-[#232225]   sm:rounded-xl transition-all">
+			className="group px-1    relative flex flex-col w-full  bg-white dark:bg-[#141414]  border  
+			 overflow-hidden  duration-300 mx-auto   sm:border sm:mt-2  border-[#ebdede] dark:border-[#232225]    sm:rounded-xl transition-all">
 			{/* Loading Overlay */}
 			{loader && (
 				<div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-[2px]">
@@ -42,18 +49,23 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 				</div>
 			)}
 
-			<div className="flex collapse justify-between items-start p-4 pb-2">
-				<div className="p-2 rounded-lg collapse bg-gray-50 dark:bg-[#252525] text-gray-400">
-					<BookOpen size={16} />
-				</div>
-
+			<div className="flex   justify-between items-start  absolute right-2  top-2">
 				{user_id == article.author_id && (
-					<div className="relative">
+					<div className="relative ">
 						<button
-							onClick={() => setOpenMenuId(isOpen ? null : article.id)}
-							className="p-1.5 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100
-							 dark:hover:bg-[#252525] transition-all cursor-pointer">
-							<Ellipsis size={20} />
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								setOpenMenuId(isOpen ? null : article.id);
+							}}
+							className={`p-1.5 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100
+							 dark:hover:bg-[#252525] ${
+									isOpen && "bg-[#252525]"
+								} transition-all cursor-pointer`}>
+							<Ellipsis
+								size={20}
+								className="hover:scale-110 hover:animate-pulse "
+							/>
 						</button>
 
 						{/* Action Menu */}
@@ -61,15 +73,18 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 							<>
 								{/* Backdrop to close menu on click outside */}
 								<div
-									className="fixed inset-0 z-10"
+									className="relative right-4   inset-0 z-10  "
 									onClick={() => setOpenMenuId(null)}
 								/>
-								<div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#252525] border border-gray-200 dark:border-[#333] rounded-lg  z-20 py-1 animate-in fade-in zoom-in duration-150">
-									<button
-										onClick={handleDelete}
-										className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
-										<Trash2 size={14} />
-										Delete Post
+								<div
+									onClick={handleDelete}
+									className="w-30 p-2  bg-red-300 dark:bg-red-950  border border-gray-400 dark:border-gray-800  text-red-800 dark:text-red-500
+								 rounded-lg  absolute right-8 top-4 ">
+									<button className="  min-w-12 ">
+										<span className="flex flex-row  items-center">
+											<Trash2 size={14} />
+											Delete Post
+										</span>
 									</button>
 								</div>
 							</>

@@ -494,22 +494,26 @@ function ArticleReader() {
 															 *:w-full w-full *:my-2 
 															
 															">
-															<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
-																Title
+															<label className=" flex flex-col *: *: *: ">
+																<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 border-gray-600 pl-2 mb-3 py-0">
+																	Title
+																</span>
 																<input
 																	type="text"
-																	className="  text-gray-800"
+																	className="  text-gray-800 dark:text-gray-200 border rounded-lg py-2 px-4 outline-1 focus:outline-blue-500"
 																	placeholder="title"
 																	defaultValue={title}
 																	ref={titleRef}
 																/>
 															</label>
 
-															<label className="*:border flex flex-col *:px-4 *:py-2 *:rounded-lg ">
-																Article Body
+															<label className="  flex flex-col  ">
+																<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 mt-4 mb-3 border-gray-600 pl-2  py-0">
+																	Article Body
+																</span>
 																<textarea
 																	type="text"
-																	className="text-gray-800 sm:min-h-80  no-scrollbar outline-1 focus:outline-blue-500"
+																	className="text-gray-800 dark:text-gray-200 sm:min-h-80  no-scrollbar outline-1 focus:outline-blue-500 border px-4 rounded-lg py-2"
 																	placeholder="Article body start here.."
 																	defaultValue={body}
 																	ref={bodyRef}
@@ -548,7 +552,7 @@ function ArticleReader() {
 				<div
 					className={`tiptapEditor pb-12  ${
 						reading && "font-serif dark:text-orange-300"
-					}  dark:text-[#E0E0E0] text-xl mb-2`}>
+					}  dark:text-[#E0E0E0] flex flex-col  overflow-x-clip wrap-anywhere  text-xl mb-2`}>
 					{parse(body)}
 				</div>
 
@@ -635,7 +639,7 @@ function ArticleReader() {
 
 							{!userInfo && (
 								<div className="px-4 bg-gray-200 dark:bg-[#1b1b1c] py-2 rounded-md">
-									<div className=" w-full mt-1 justify-start      border text-gray-600 dark:text-gray-400  text-sm inline ">
+									<div className=" w-full mt-1 justify-start       text-gray-600 dark:text-gray-400  text-sm inline ">
 										In order to comment and put your opinion you need to{" "}
 										<NavLink
 											to={"/login"}

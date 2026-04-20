@@ -10,6 +10,7 @@ import LoginDivider from "./LoginDivider";
 import EmailComp from "./EmailComp";
 import { SignWithEmail } from "./SignWithEmail";
 import illustration from "../assets/illu2.svg";
+import ProfileFooter from "./ProfileFooter";
 
 function Signup() {
 	const emailRef = useRef();
@@ -294,7 +295,14 @@ function Signup() {
 						alt="Pennat Illustration"
 					/>
 				</div>
+
+
 			</div>
+
+				<div className="absolute bottom-0 right-0 w-full  ">
+				<ProfileFooter />
+			</div>
+			
 		</div>
 	);
 }

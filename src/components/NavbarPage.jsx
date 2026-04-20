@@ -14,6 +14,7 @@ import { SearchButton } from "./SearchButton";
 import { LogIn } from "lucide-react";
 import { cn } from "./utils/cn";
 import { SignPop } from "./SignPop";
+import { AlertDialogBasic } from "./ui/AlertDialogBasic";
 
 function NavbarPage({ SetSearchQuery }) {
 	const naviagtors = useNavigate();
@@ -190,6 +191,13 @@ function NavbarPage({ SetSearchQuery }) {
 									: "Switch to dark mode"}
 							</span>
 						</span>
+					</li>
+
+					<li>
+						
+						<div className="  whitespace-nowrap flex  transition cursor-pointer  w-full ">
+							<AlertDialogBasic titleText={`Sign out`} />
+						</div>
 					</li>
 				</ul>
 			</div>
