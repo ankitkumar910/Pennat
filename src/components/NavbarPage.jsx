@@ -49,11 +49,11 @@ function NavbarPage({ SetSearchQuery }) {
 			
 			items-center  w-full justify-between 
 			backdrop-blur-sm
-			shadow-xs
+			
 			 px-4
 			 py-2
 	
-		dark:bg-[#0f0f10]
+		dark:bg-[#121212]
 		top-0  z-2  ">
 			<NavLink to={"/home"}>
 				<h1 className="font-bold text-xl text-black dark:text-gray-300  sm:text-2xl mb-2 sm:pl-2">
@@ -186,15 +186,12 @@ function NavbarPage({ SetSearchQuery }) {
 								)}
 							</span>
 							<span className="text-sm text-center flex ">
-								{isDark != "dark"
-									? "Switch to dark mode"
-									: "Switch to dark mode"}
+								{isDark != "dark" ? "Dark Mode" : "Light Mode"}
 							</span>
 						</span>
 					</li>
 
 					<li>
-						
 						<div className="  whitespace-nowrap flex  transition cursor-pointer  w-full ">
 							<AlertDialogBasic titleText={`Sign out`} />
 						</div>

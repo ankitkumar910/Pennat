@@ -114,7 +114,11 @@ function ArticleReader() {
 
 				setArticle(data);
 				setTime(CalculateTime(data.body ?? ""));
-				setCommentCount(data?.comment_count);
+				setCommentCount(data?.CommentTable?.length);
+
+				temporaryCount.current = data?.CommentTable?.length;
+
+				
 
 				setTitle(data?.title);
 				setBody(data?.body);
@@ -676,6 +680,11 @@ function ArticleReader() {
 					</>
 				)}
 			</article>
+
+			<div className="fixed h-8 w-14 bg-red-600 bottom-2 right-3 z-50">
+				
+				Hello {commentCount}
+			</div>
 		</div>
 	);
 }

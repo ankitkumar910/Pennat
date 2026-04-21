@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { FilePenLine, LogIn, PenLine } from "lucide-react";
 import { commentUIContext, dataContext, userContext } from "../context/Context";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 import NoArticles from "./utils/NoArticles";
 import HomeComment from "./HomeComment";
@@ -113,10 +113,15 @@ function Home() {
 						</div>
 					</div>
 
+
+
+							
+
+				
 					<commentUIContext.Provider
 						value={[commentClicked, setCommentClicked, id, setId]}>
 						<div className="box-border">
-							{articles && <ArticlePage />}
+							{articles && <ArticlePage  articles={articles}/>}
 							{!articles && <NoArticles />}
 						</div>
 

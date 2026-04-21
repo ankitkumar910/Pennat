@@ -27,6 +27,8 @@ function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
 
+	console.log("my article ", article);
+
 	let images = article.images ?? [];
 
 	const [userInfo] = useContext(userContext);
@@ -274,9 +276,7 @@ function ArticleCard({ article }) {
 										<span>{likes}</span>
 									</div>
 								}
-
 								title={`Liked this article?`}
-								
 							/>
 						</li>
 						<li
