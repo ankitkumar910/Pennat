@@ -27,8 +27,6 @@ function ArticleCard({ article }) {
 	const { name, username, profile_img } = article.UserTable;
 	let [, , likedArcticles, setLikedArcticles] = useContext(dataContext);
 
-	console.log("my article ", article);
-
 	let images = article.images ?? [];
 
 	const [userInfo] = useContext(userContext);
@@ -37,8 +35,6 @@ function ArticleCard({ article }) {
 	const preview = article?.preview;
 	const [, setCommentClicked, id, setId] = useContext(commentUIContext);
 
-	console.log(article);
-
 	function handleShare(e) {
 		e.stopPropagation();
 	}
@@ -46,8 +42,12 @@ function ArticleCard({ article }) {
 	let author_id = article?.author_id;
 	let articleId = article?.article_id;
 	let user_id = userInfo?.user_id;
-	let comment_count = article?.comment_count ?? 10;
+	let comment_count = article?.comment_count;
 	const navigate = useNavigate();
+	console.log({
+		title : article?.title,
+		comment_count : article?.comment_count
+	})
 
 	async function handleDelete() {
 		if (article?.id) {

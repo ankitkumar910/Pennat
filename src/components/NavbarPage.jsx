@@ -194,6 +194,7 @@ function NavbarPage({ SetSearchQuery }) {
 					<li>
 						<div className="  whitespace-nowrap flex  transition cursor-pointer  w-full ">
 							<AlertDialogBasic titleText={`Sign out`} />
+							
 						</div>
 					</li>
 				</ul>

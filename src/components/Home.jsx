@@ -127,7 +127,7 @@ function Home() {
 
 						{commentClicked && (
 							<div>
-								<HomeComment setCommentUI={setCommentClicked} id={id} />
+								<HomeComment  setCommentUI={setCommentClicked} id={id} />
 							</div>
 						)}
 					</commentUIContext.Provider>

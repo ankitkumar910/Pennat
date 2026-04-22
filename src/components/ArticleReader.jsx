@@ -20,6 +20,7 @@ import {
 	Pencil,
 	Share,
 	Share2,
+	Trash2,
 	User,
 	X,
 } from "lucide-react";
@@ -117,8 +118,6 @@ function ArticleReader() {
 				setCommentCount(data?.CommentTable?.length);
 
 				temporaryCount.current = data?.CommentTable?.length;
-
-				
 
 				setTitle(data?.title);
 				setBody(data?.body);
@@ -384,6 +383,24 @@ function ArticleReader() {
 		setReading((p) => !p);
 	}
 
+	async function handleDelete(e) {
+		e.stopPropagation();
+		e.preventDefault();
+
+		const res = await supabase
+			.from("ArticleTable")
+			.delete()
+			.eq("id", article.id);
+
+		if (!res.error) {
+			toast("Deleted successfully.");
+			setArticle((p) => p.filter((x) => x.id !== article.id));
+		} else {
+			toast("Error while deleting");
+			console.log(res.error);
+		}
+	}
+
 	return (
 		<div className="min-h-screen    no-scrollbar  ">
 			{!reading && (
@@ -478,57 +495,6 @@ function ArticleReader() {
 									
 									
 									">
-										{userId == author?.user_id && (
-											<EditProfileDetails
-												title={"Edit article"}
-												trigger={
-													<li className="flex items-center gap-1">
-														<span>
-															<Pencil size={16} />
-														</span>
-														<span className="text-sm">Edit Article</span>
-													</li>
-												}
-												child={
-													<>
-														<div
-															className="
-															
-															
-															 *:w-full w-full *:my-2 
-															
-															">
-															<label className=" flex flex-col *: *: *: ">
-																<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 border-gray-600 pl-2 mb-3 py-0">
-																	Title
-																</span>
-																<input
-																	type="text"
-																	className="  text-gray-800 dark:text-gray-200 border rounded-lg py-2 px-4 outline-1 focus:outline-blue-500"
-																	placeholder="title"
-																	defaultValue={title}
-																	ref={titleRef}
-																/>
-															</label>
-
-															<label className="  flex flex-col  ">
-																<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 mt-4 mb-3 border-gray-600 pl-2  py-0">
-																	Article Body
-																</span>
-																<textarea
-																	type="text"
-																	className="text-gray-800 dark:text-gray-200 sm:min-h-80  no-scrollbar outline-1 focus:outline-blue-500 border px-4 rounded-lg py-2"
-																	placeholder="Article body start here.."
-																	defaultValue={body}
-																	ref={bodyRef}
-																/>
-															</label>
-														</div>
-													</>
-												}
-												handleEditChanges={handleEditChanges}
-											/>
-										)}
 										<li
 											className="flex items-center gap-1"
 											onClick={handleReader}>
@@ -546,6 +512,74 @@ function ArticleReader() {
 											</span>
 											<span className="text-sm">Share</span>
 										</li>
+
+										{userId == author?.user_id && (
+											<>
+												<EditProfileDetails
+													title={"Edit article"}
+													trigger={
+														<li className="flex items-center gap-1">
+															<span>
+																<Pencil size={16} />
+															</span>
+															<span className="text-sm">Edit Article</span>
+														</li>
+													}
+													child={
+														<>
+															<div
+																className="
+															
+															
+															 *:w-full w-full *:my-2 
+															
+															">
+																<label className=" flex flex-col *: *: *: ">
+																	<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 border-gray-600 pl-2 mb-3 py-0">
+																		Title
+																	</span>
+																	<input
+																		type="text"
+																		className="  text-gray-800 dark:text-gray-200 border rounded-lg py-2 px-4 outline-1 focus:outline-blue-500"
+																		placeholder="title"
+																		defaultValue={title}
+																		ref={titleRef}
+																	/>
+																</label>
+
+																<label className="  flex flex-col  ">
+																	<span className="dark:text-gray-500 text-gray-900 font-semibold  border-l-4 mt-4 mb-3 border-gray-600 pl-2  py-0">
+																		Article Body
+																	</span>
+																	<textarea
+																		type="text"
+																		className="text-gray-800 dark:text-gray-200 sm:min-h-80  no-scrollbar outline-1 focus:outline-blue-500 border px-4 rounded-lg py-2"
+																		placeholder="Article body start here.."
+																		defaultValue={body}
+																		ref={bodyRef}
+																	/>
+																</label>
+															</div>
+														</>
+													}
+													handleEditChanges={handleEditChanges}
+												/>
+
+												<li
+													className="flex items-center gap-1 hover:bg-red-900 
+													dark:hover:bg-red-800 hover:bg-red-900/20 "
+													onClick={handleDelete}>
+													<div className="w-30  text-red-800 dark:text-red-500  rounded-lg">
+														<button className="  min-w-12 ">
+															<span className="flex flex-row  items-center">
+																<Trash2 size={14} />
+																<span className="pl-1">Delete Post</span>
+															</span>
+														</button>
+													</div>
+												</li>
+											</>
+										)}
 									</ul>
 								}
 							/>
@@ -682,7 +716,6 @@ function ArticleReader() {
 			</article>
 
 			<div className="fixed h-8 w-14 bg-red-600 bottom-2 right-3 z-50">
-				
 				Hello {commentCount}
 			</div>
 		</div>

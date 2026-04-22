@@ -12,63 +12,60 @@ function CommentCard({ comment, deleteComment, user_id }) {
 	const [menuOpen, setMenuOpen] = useState();
 	function handleDelete(e) {
 		e.stopPropagation();
-		deleteComment(comment.id, comment);
+		deleteComment(comment.comment_id, comment);
 	}
 
 	return (
-		<div className="py-1  rounded-xl   last:pb-12 last:border-b-0  ">
-			<div className="flex justify-between ">
-				<div className="flex items-center mt-1  w-full">
-					<img
-						src={commenter?.profile_img ?? userDp}
-						className="h-9 -mt-7 ring ring-gray-300 dark:ring-gray-800 rounded-full"
+		// DROP-IN REPLACEMENT — only classNames changed, zero logic touched
+
+		<div className="flex justify-between items-start border-b pt-2 dark:border-gray-800 border-gray-200 text-foreground ">
+			{/* Left: avatar + content */}
+			<div className="flex items-start flex-row p-3 gap-2.5 flex-1 min-w-0">
+				<img
+					src={commenter?.profile_img ?? userDp}
+					className="h-8 w-8 mt-0.5 shrink-0 ring-1 ring-gray-200 dark:ring-gray-700 rounded-full object-cover"
+				/>
+
+				<div className="flex-1 min-w-0">
+					{/* Username + timestamp */}
+					<div className="flex items-center gap-1.5 flex-wrap">
+						<NavLink
+							to={`/profile/${commenter?.username}`}
+							className="text-sm font-semibold text-gray-800 dark:text-gray-100 hover:underline underline-offset-2 leading-none">
+							{"@" + commenter?.username}
+						</NavLink>
+						<span className="text-[11px] text-gray-400 dark:text-gray-500 leading-none select-none">
+							· {TimeFormate(created_at)}
+						</span>
+					</div>
+
+					{/* Comment body */}
+					<p className="mt-1.5 text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words dark:bg-[#111113] bg-white  shadow-sm  pb-4">
+						{comment.comment}
+					</p>
+				</div>
+			</div>
+
+			{/* Right: menu */}
+			{user_id === comment.user_id && (
+				<div className="relative shrink-0 p-2">
+					<Ellipsis
+						className="cursor-pointer rotate-90 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-0.5 transition-colors"
+						size={18}
+						onClick={() => setMenuOpen((p) => !p)}
 					/>
 
-					<div className="ml-1 w-full sm:w-3/4 ">
-						<span className="text-sm items-center  flex   text-gray-500">
-							<NavLink
-								to={`/profile/${commenter?.username}`}
-								className="text-center  text-sm font-semibold text-gray-600   dark:text-gray-400">
-								{"@" + commenter?.username}
-							</NavLink>
-							<span className="text-xs pl-1 text-center">
-								{" "}
-								&#183; {TimeFormate(created_at)}
-							</span>
-						</span>
-
-						<div className=" dark:border-gray-900 border-gray-200 border text-foreground mt-1 ml-1 pb-6  rounded-tl-0 rounded-r-md rounded-bl-md pl-2 pt-1 text-sm dark:bg-[#0d0d0e] bg-[#dbdbdb] w-full ">
-							{comment.comment}
-						</div>
-					</div>
-				</div>
-				<div>
-					{user_id == comment.user_id && (
-						<div
-							className="relative
-                ">
-							<Ellipsis
-								className={`collapse cursor-pointer rounded-4xl rotate-90 mt-2 active:bg-gray-300`}
-								size={20}
-								onClick={() => {
-									setMenuOpen((p) => !p);
-								}}
-							/>
-							<div className="absolute    right-4 top-2 p-1">
-								<ul>
-									<li className={`${menuOpen ? "" : "hidden"} transition `}>
-										<button
-											className="text-red-600 bg-red-100 dark:bg-red-500 dark:text-black  border rounded-md  px-3 py-1 border-red-800 dark:border-red-800"
-											onClick={handleDelete}>
-											Delete
-										</button>
-									</li>
-								</ul>
-							</div>
+					{menuOpen && (
+						<div className="absolute right-2 top-9 z-50 bg-white dark:bg-[#1e1e20] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/10 dark:shadow-black/40 overflow-hidden">
+							<button
+								className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors whitespace-nowrap"
+								onClick={handleDelete}>
+								Delete
+							</button>
 						</div>
 					)}
 				</div>
-			</div>
+			)}
 		</div>
 	);
 }

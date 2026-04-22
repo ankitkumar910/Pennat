@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Ellipsis } from "lucide-react";
 
-export function ReaderMenu({child}) {
+export function ReaderMenu({ child }) {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
