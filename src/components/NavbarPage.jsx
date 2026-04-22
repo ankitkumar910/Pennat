@@ -197,8 +197,12 @@ function NavbarPage({ SetSearchQuery }) {
 							
 						</div>
 					</li>
+
+
 				</ul>
 			</div>
+
+		
 		</nav>
 	);
 }

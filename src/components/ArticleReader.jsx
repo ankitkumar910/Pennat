@@ -35,6 +35,7 @@ import { ReaderMenu } from "./ReaderMenu";
 import { SignDialogue } from "./SignDialogue";
 import NavbarPage from "./NavbarPage";
 import { EditProfileDetails } from "./EditProfileDetails";
+import { AlertDelete } from "./AlertDelete";
 
 function ArticleReader() {
 	const navigate = useNavigate();
@@ -394,7 +395,7 @@ function ArticleReader() {
 
 		if (!res.error) {
 			toast("Deleted successfully.");
-			setArticle((p) => p.filter((x) => x.id !== article.id));
+			navigate("/home");
 		} else {
 			toast("Error while deleting");
 			console.log(res.error);
@@ -565,19 +566,25 @@ function ArticleReader() {
 													handleEditChanges={handleEditChanges}
 												/>
 
-												<li
-													className="flex items-center gap-1 hover:bg-red-900 
-													dark:hover:bg-red-800 hover:bg-red-900/20 "
-													onClick={handleDelete}>
-													<div className="w-30  text-red-800 dark:text-red-500  rounded-lg">
-														<button className="  min-w-12 ">
-															<span className="flex flex-row  items-center">
-																<Trash2 size={14} />
-																<span className="pl-1">Delete Post</span>
-															</span>
-														</button>
-													</div>
-												</li>
+												<AlertDelete
+													handleDelete={handleDelete}
+													trigger={
+														<li
+															onClick={(e) => {
+																e.stopPropagation();
+															}}
+															className="flex items-center gap-1  ">
+															<div className="w-30  text-red-800 dark:text-red-500  rounded-lg">
+																<button type="button" className="  min-w-12 ">
+																	<span className="flex flex-row  items-center">
+																		<Trash2 size={14} />
+																		<span className="pl-1">Delete Post</span>
+																	</span>
+																</button>
+															</div>
+														</li>
+													}
+												/>
 											</>
 										)}
 									</ul>
@@ -714,10 +721,6 @@ function ArticleReader() {
 					</>
 				)}
 			</article>
-
-			<div className="fixed h-8 w-14 bg-red-600 bottom-2 right-3 z-50">
-				Hello {commentCount}
-			</div>
 		</div>
 	);
 }

@@ -45,9 +45,9 @@ function ArticleCard({ article }) {
 	let comment_count = article?.comment_count;
 	const navigate = useNavigate();
 	console.log({
-		title : article?.title,
-		comment_count : article?.comment_count
-	})
+		title: article?.title,
+		comment_count: article?.comment_count,
+	});
 
 	async function handleDelete() {
 		if (article?.id) {
@@ -233,7 +233,7 @@ function ArticleCard({ article }) {
 
 			<div
 				onClick={() => {
-					if (!preview) navigate(`/article?id=${article.id}`);
+					navigate(`/article?id=${article.id}`);
 				}}
 				className="hover:cursor-pointer ">
 				<div className="space-y-2 ">

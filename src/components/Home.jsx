@@ -113,21 +113,16 @@ function Home() {
 						</div>
 					</div>
 
-
-
-							
-
-				
 					<commentUIContext.Provider
 						value={[commentClicked, setCommentClicked, id, setId]}>
 						<div className="box-border">
-							{articles && <ArticlePage  articles={articles}/>}
+							{articles && <ArticlePage articles={articles} />}
 							{!articles && <NoArticles />}
 						</div>
 
 						{commentClicked && (
 							<div>
-								<HomeComment  setCommentUI={setCommentClicked} id={id} />
+								<HomeComment setCommentUI={setCommentClicked} id={id} />
 							</div>
 						)}
 					</commentUIContext.Provider>

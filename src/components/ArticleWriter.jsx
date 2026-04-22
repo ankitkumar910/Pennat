@@ -48,13 +48,17 @@ function ArticleWriter({ setWriter }) {
 			setHtml("");
 
 			let article = {
+				id: data[0]?.id,
+				article_id : data[0]?.article_id,
 				title: title,
 				body: html,
 				UserTable: userInfo,
 				preview: true,
+				created_at: Date.now(),
 			};
 			setArticlesData((p) => [...p, article]);
 			//navigate("/home");
+			setWriter(false);
 		}
 	}
 

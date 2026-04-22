@@ -6,6 +6,7 @@ import Loader from "./Loader";
 import { userContext } from "../context/Context";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
+import { AlertDelete } from "./AlertDelete";
 
 function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 	const [loader, setLoader] = useState(false);
@@ -15,8 +16,8 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 	if (!article) return null;
 
 	async function handleDelete(e) {
-		e.stopPropagation()
-		e.preventDefault()
+		e.stopPropagation();
+		e.preventDefault();
 		setLoader(true);
 		const res = await supabase
 			.from("ArticleTable")
@@ -24,17 +25,17 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 			.eq("id", article.id);
 
 		if (!res.error) {
-			toast("Deleted successfully.")
+			toast("Deleted successfully.");
 			setArticle((p) => p.filter((x) => x.id !== article.id));
-		}else{
-			toast("Error while deleting")
-			console.log(res.error)
+		} else {
+			toast("Error while deleting");
+			console.log(res.error);
 		}
 		setLoader(false);
 	}
 
 	return (
-		<NavLink
+		<div
 			to={`/article?id=${article.id}`}
 			onContextMenu={(e) => {
 				e.preventDefault();
@@ -76,32 +77,40 @@ function ProfilePostCard({ article, setArticle, isOpen, setOpenMenuId }) {
 									className="relative right-4   inset-0 z-10  "
 									onClick={() => setOpenMenuId(null)}
 								/>
-								<div
-									onClick={handleDelete}
-									className="w-30 p-2  bg-red-300 dark:bg-red-950  border border-gray-400 dark:border-gray-800  text-red-800 dark:text-red-500
+
+								<AlertDelete
+									handleDelete={handleDelete}
+									trigger={
+										<div
+											onClick={(e) => {
+												e.stopPropagation();
+											}}
+											className="w-30 p-2  bg-red-300 dark:bg-red-950  border border-gray-400 dark:border-gray-800  text-red-800 dark:text-red-500
 								 rounded-lg  absolute right-8 top-4 ">
-									<button className="  min-w-12 ">
-										<span className="flex flex-row  items-center">
-											<Trash2 size={14} />
-											Delete Post
-										</span>
-									</button>
-								</div>
+											<button type="button" className="  min-w-12 ">
+												<span className="flex flex-row  items-center">
+													<Trash2 size={14} />
+													<span className="ml-1">Delete Post</span>
+												</span>
+											</button>
+										</div>
+									}
+								/>
 							</>
 						)}
 					</div>
 				)}
 			</div>
 
-			<div className="px-5 mt-6 pb-5">
+			<NavLink to={`/article?id=${article?.id}`} className="px-5 mt-6 pb-5">
 				<h3 className=" font-semibold text-gray-800 dark:text-gray-100 text-xl line-clamp-1 mb-2 tracking-tight">
 					{article.title}
 				</h3>
 				<div className="text-sm text-gray-800 dark:text-gray-400 line-clamp-3 leading-relaxed opacity-80 prose-p:m-0">
 					{parse(article.body)}
 				</div>
-			</div>
-		</NavLink>
+			</NavLink>
+		</div>
 	);
 }
 
