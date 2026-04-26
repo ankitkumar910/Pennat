@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" id="favicon" type="image/svg+xml+png" href="./public/favicon.png" />
+  <link rel="icon" id="favicon" type="image/svg+xml+png"
+    href="https://img.icons8.com/?size=100&id=111456&format=png&color=ffffff" />
+
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pennat</title>
@@ -19,26 +21,27 @@
 
 </head>
 
-<body  >
+<body>
 
   <script>
     //Code for favicon Changing on the behave of system theme (dark/light)
     const isDark = window.matchMedia('(prefers-color-scheme:dark)');
     function changeFavicon() {
-      let faviconPath = isDark.matches ? '/favicon-dark.png' : '/favicon.png';
+      let colorFevi = isDark.matches ? 'ffffff' : '000000';
       let color = isDark.matches ? "#0f172b" : "#ffffff";
       let faviconLink = document.getElementById('favicon');
       let statusBar = document.getElementById('statusBar');
       //set favicon
-      if (faviconLink) faviconLink.href = faviconPath;
+      if (faviconLink) faviconLink.href = `https://img.icons8.com/?size=100&id=111456&format=png&color=${colorFevi}`;
     }
     isDark.addEventListener('change', () => {
       changeFavicon();
     })
     changeFavicon();
   </script>
-  <div id="root"  ></div>
 
+
+  <div id="root"></div>
 
   <script type="module" src="/src/main.jsx"></script>
 </body>

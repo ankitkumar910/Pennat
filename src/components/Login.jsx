@@ -13,6 +13,8 @@ import illustration from "../assets/illu2.svg";
 import ProfileFooter from "./ProfileFooter";
 
 function Login() {
+
+	
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [, setSuccess] = useState();
 	const emailRef = useRef();
@@ -21,6 +23,7 @@ function Login() {
 	const [userInfo, , loadUser] = useContext(userContext);
 
 	useEffect(() => {
+		document.title = "Log in | Pennat"
 		if (userInfo) {
 			console.log("Navigatting");
 			navi("/", {

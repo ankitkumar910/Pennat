@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import supabase from "../config/supabaseClient";
 import { AlertColors } from "./ui/AlertColors";
 import { AlertBasic } from "./ui/AlertBasic";
@@ -25,6 +25,10 @@ function Signup() {
 	const [success, setSuccess] = useState(false);
 	const navi = useNavigate();
 
+	useEffect(() => {
+		document.title = "Sign up | Pennat";
+	}, []);
+
 	const clearStatus = () => {
 		setErrorMsg(null);
 		setSuccess(false);
@@ -45,7 +49,7 @@ function Signup() {
 			console.log("Error is here.");
 			setErrorMsg(error);
 
-			console.log(error)
+			console.log(error);
 
 			setUserData(null);
 
@@ -295,14 +299,11 @@ function Signup() {
 						alt="Pennat Illustration"
 					/>
 				</div>
-
-
 			</div>
 
-				<div className="absolute bottom-0 right-0 w-full  ">
+			<div className="absolute bottom-0 right-0 w-full  ">
 				<ProfileFooter />
 			</div>
-			
 		</div>
 	);
 }

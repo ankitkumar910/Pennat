@@ -131,7 +131,7 @@ function Profile() {
 					setFailed(true);
 				} else {
 					setProfileData(res.data);
-
+                     document.title = res.data?.name ?? "Profile - Pennat"
 					usernameRef.current = res.data?.username;
 					nameRef.current = res.data?.name;
 					aboutRef.current = res.data?.about ?? "I am a pennat user.";

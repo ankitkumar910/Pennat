@@ -42,6 +42,7 @@ function Home() {
 			}
 			if (response.data) {
 				setArticlesData(response.data);
+				document.title = "Pennat"
 				console.log(response.data);
 
 				const { data, error } = await supabase.from("LikesTable").select();

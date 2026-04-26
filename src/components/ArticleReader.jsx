@@ -117,7 +117,7 @@ function ArticleReader() {
 				setArticle(data);
 				setTime(CalculateTime(data.body ?? ""));
 				setCommentCount(data?.CommentTable?.length);
-
+                document.title = data?.title ?? "Pennat"
 				temporaryCount.current = data?.CommentTable?.length;
 
 				setTitle(data?.title);
@@ -597,7 +597,7 @@ function ArticleReader() {
 				<div
 					className={`tiptapEditor pb-12  ${
 						reading && "font-serif dark:text-orange-300"
-					}  dark:text-[#E0E0E0] flex flex-col  overflow-x-clip wrap-anywhere  text-xl mb-2`}>
+					}  dark:text-[#E0E0E0] flex flex-col overflow-x-auto  flex-wrap break-normal wrap-break-word max-w-full wrap-anywhere  text-xl mb-2`}>
 					{parse(body)}
 				</div>
 

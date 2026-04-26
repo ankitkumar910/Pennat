@@ -18,7 +18,10 @@ function CommentCard({ comment, deleteComment, user_id }) {
 	return (
 		// DROP-IN REPLACEMENT — only classNames changed, zero logic touched
 
-		<div className="flex justify-between items-start border-b pt-2 dark:border-gray-800 border-gray-200 text-foreground ">
+		<div
+			className={`flex justify-between items-start transition-colors duration-400 hover:dark:bg-gray-100/3 hover:bg-gray-200/90 rounded-xl dark:border-gray-800 border-gray-200 text-foreground ${
+				menuOpen && "dark:bg-gray-800/20 bg-gray-400/40"
+			}`}>
 			{/* Left: avatar + content */}
 			<div className="flex items-start flex-row p-3 gap-2.5 flex-1 min-w-0">
 				<img
@@ -40,7 +43,7 @@ function CommentCard({ comment, deleteComment, user_id }) {
 					</div>
 
 					{/* Comment body */}
-					<p className="mt-1.5 text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words dark:bg-[#111113] bg-white  shadow-sm  pb-4">
+					<p className="mt-1.5 text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words    pb-4">
 						{comment.comment}
 					</p>
 				</div>
@@ -56,12 +59,13 @@ function CommentCard({ comment, deleteComment, user_id }) {
 					/>
 
 					{menuOpen && (
-						<div className="absolute right-2 top-9 z-50 bg-white dark:bg-[#1e1e20] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/10 dark:shadow-black/40 overflow-hidden">
+						<div className="absolute right-8.5 top-2 z-50 bg-white dark:bg-[#1e1e20] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/10 dark:shadow-black/40 gap-2 flex flex-col  overflow-hidden">
 							<button
-								className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors whitespace-nowrap"
+								className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50  dark:hover:bg-red-900/20 transition-colors rounded-lg whitespace-nowrap"
 								onClick={handleDelete}>
 								Delete
 							</button>
+						
 						</div>
 					)}
 				</div>
