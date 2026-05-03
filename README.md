@@ -1,4 +1,4 @@
-# Pennat 📰
+# [Pennat](https://pennat.vercel.app/home) 📰
 
 Welcome to **Pennat** — a modern blogging platform where writing feels fast, reading feels social, and the app can live on your home screen like a real installable product 📲✨
 
@@ -10,7 +10,26 @@ With Pennat you can:
 - Install as a PWA (offline-aware + auto updates)
 - Toggle light/dark themes
 
+<b> 🌐 Checkout : </b>   https://pennat.vercel.app/home 
+
 ---
+
+## Screenshots 📸 
+#### Homepage 
+<img width="800" height="400"  alt="Screenshot 2026-05-03 181026" src="https://github.com/user-attachments/assets/6cfab3e7-a20d-4ee2-81ff-81b1a5544fd8" />
+
+#### Profile Page
+<img width="800" height="400"  alt="Screenshot 2026-05-03 181134" src="https://github.com/user-attachments/assets/40f1a435-82a7-4cc3-9f15-60dcf1102678" />
+
+#### Article Page
+<img width="800" height="400" alt="Screenshot 2026-05-03 181115" src="https://github.com/user-attachments/assets/975e47ca-e0ef-4ce0-baf3-af38cd179c83" />
+
+
+#### Article Reader Mode 
+<img width="800" height="400" alt="Screenshot 2026-05-03 181343" src="https://github.com/user-attachments/assets/05dcdae4-f4d3-4cad-b6fd-681fba7c906b" />
+
+----
+
 
 ## Quick Tour 🚀
 
@@ -27,14 +46,14 @@ With Pennat you can:
 
 ---
 
-## What Pennat is built with 🧰
+## Tech Stack 💻</>
 
-- **React 19** ⚛️ + **React Router** 
-- **Vite** ⚡ + **Vite PWA** 
-- **Tailwind CSS v4** 🎨
+- **React 19** + **React Router** 
+- **Vite**  + **Vite PWA** 
+- **Tailwind CSS v4** 
 - **Supabase** (Auth + Postgres database) 
 - **Cloudinary** (image hosting) 
-- **Tiptap** (editor) 📝
+- **Tiptap** (editor) 
 
 ---
 
